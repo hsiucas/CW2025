@@ -15,7 +15,7 @@
 }
 
 .nextBrickLabel {
-    -fx-font-family: "Let's go Digital";
+    -fx-font-family: "Press Start 2P";
     -fx-padding: 20px 0 0 0;
     -fx-font-size: 16px;
     -fx-text-fill: yellow;
@@ -31,7 +31,7 @@
     -fx-background-radius: 9, 8, 5, 4, 3;
     -fx-padding: 8;
     /*-fx-font-family: "Helvetica";*/
-    -fx-font-family: "Let's go Digital";
+    -fx-font-family: "Press Start 2P";
     -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
@@ -59,13 +59,13 @@
 }
 
 .gameOverStyle {
-    -fx-font-family: "Let's go Digital";
+    -fx-font-family: "Press Start 2P";
     -fx-font-size: 48;
     -fx-background-color: red;
 }
 
 .scoreClass{
-    -fx-font-family: "Let's go Digital";
+    -fx-font-family: "Press Start 2P";
     -fx-font-size: 38;
     -fx-fill: yellow;
     -fx-text-fill: yellow;
