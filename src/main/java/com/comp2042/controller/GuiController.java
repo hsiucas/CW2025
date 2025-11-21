@@ -5,11 +5,14 @@ import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -28,7 +31,6 @@ import com.comp2042.events.*;
 import com.comp2042.logic.DownData;
 import com.comp2042.logic.ViewData;
 
-
 public class GuiController implements Initializable {
 
     private static final int BRICK_SIZE = 20;
@@ -44,6 +46,9 @@ public class GuiController implements Initializable {
 
     @FXML
     private GameOverPanel gameOverPanel;
+
+    @FXML
+    private ToggleButton pauseButton;
 
     private Rectangle[][] displayMatrix;
 
@@ -86,9 +91,26 @@ public class GuiController implements Initializable {
                 if (keyEvent.getCode() == KeyCode.N) {
                     newGame(null);
                 }
+                if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                    pauseButton.selectedProperty().setValue(!pauseButton.selectedProperty().getValue());
+                }
             }
         });
         gameOverPanel.setVisible(false);
+
+        pauseButton.selectedProperty().bindBidirectional(isPause);
+        pauseButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    timeLine.pause();
+                    pauseButton.setText("Resume");
+                } else {
+                    timeLine.play();
+                    pauseButton.setText("Pause");
+                }
+            }
+        });
 
         final Reflection reflection = new Reflection();
         reflection.setFraction(0.8);

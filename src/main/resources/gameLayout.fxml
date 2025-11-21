@@ -15,11 +15,17 @@
         </center>
     </BorderPane>
 
+    <VBox alignment="CENTER" styleClass="vbox" layoutX="243" layoutY="20">
+        <ToggleButton text="Pause" styleClass="ipad-dark-grey" onAction="#pauseGame" prefWidth="160"
+                      fx:id="pauseButton"/>
+    </VBox>
+
     <Group fx:id="groupNotification" layoutX="14" layoutY="203">
         <VBox alignment="CENTER">
             <GameOverPanel fx:id="gameOverPanel"/>
         </VBox>
     </Group>
+
     <stylesheets>
         <URL value="@window_style.css"/>
     </stylesheets>
