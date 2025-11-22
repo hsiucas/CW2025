@@ -16,6 +16,14 @@
     </BorderPane>
 
     <VBox alignment="CENTER" styleClass="vbox" layoutX="243" layoutY="20">
+        <VBox>
+            <BorderPane styleClass="nextBrick" prefWidth="100" prefHeight="70" maxWidth="100">
+                <center>
+                    <GridPane fx:id="nextBrick" alignment="CENTER" hgap="1" vgap="1"/>
+                </center>
+            </BorderPane>
+        </VBox>
+
         <ToggleButton text="Pause" styleClass="ipad-dark-grey" onAction="#pauseGame" prefWidth="160"
                       fx:id="pauseButton"/>
     </VBox>
