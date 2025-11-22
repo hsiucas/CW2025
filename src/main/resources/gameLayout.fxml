@@ -16,6 +16,10 @@
     </BorderPane>
 
     <VBox alignment="CENTER" styleClass="vbox" layoutX="243" layoutY="20">
+        <VBox alignment="CENTER_RIGHT">
+            <Label text="SCORE" styleClass="scoreClass"/>
+            <Text text="Text" fx:id="score" styleClass="scoreClass"/>
+        </VBox>
         <VBox>
             <BorderPane styleClass="nextBrick" prefWidth="100" prefHeight="70" maxWidth="100">
                 <center>

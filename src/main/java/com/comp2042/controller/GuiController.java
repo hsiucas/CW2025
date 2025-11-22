@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -40,6 +41,9 @@ public class GuiController implements Initializable {
 
     @FXML
     private Group groupNotification;
+
+    @FXML
+    private Text score;
 
     @FXML
     private GridPane brickPanel;
@@ -246,6 +250,7 @@ public class GuiController implements Initializable {
     }
 
     public void bindScore(IntegerProperty integerProperty) {
+        score.textProperty().bind(integerProperty.asString());
     }
 
     public void gameOver() {
