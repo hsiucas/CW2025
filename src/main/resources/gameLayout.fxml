@@ -8,20 +8,27 @@
 <?import java.net.URL?>
 <Pane fx:controller="com.comp2042.controller.GuiController"
       xmlns:fx="http://javafx.com/fxml">
-    <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
-    <BorderPane styleClass="gameBoard" fx:id="gameBoard">
-        <center>
-            <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
-        </center>
-    </BorderPane>
 
-    <VBox alignment="CENTER" styleClass="vbox" layoutX="286" layoutY="20">
+    <StackPane fx:id="stackedBoard">
+        <BorderPane fx:id="gameBoard" styleClass="gameBoard"/>
+        <BorderPane fx:id="gameBorder" styleClass="gameBorder">
+            <center>
+                <GridPane fx:id="gamePanel" hgap="1" vgap="1"/>
+            </center>
+        </BorderPane>
+    </StackPane>
+
+    <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
+
+    <VBox alignment="CENTER" styleClass="vbox" layoutX="255" layoutY="20">
         <VBox alignment="CENTER">
             <Label alignment="BASELINE_CENTER" text="SCORE" styleClass="scoreClass"/>
         </VBox>
+
         <VBox alignment="CENTER_RIGHT">
             <Text text="Text" fx:id="score" styleClass="scoreClass"/>
         </VBox>
+
         <VBox>
             <BorderPane styleClass="nextBrick" prefWidth="100" prefHeight="70" maxWidth="100">
                 <center>
@@ -30,11 +37,11 @@
             </BorderPane>
         </VBox>
 
-        <ToggleButton text="Pause" styleClass="ipad-dark-grey" onAction="#pauseGame" prefWidth="160"
+        <ToggleButton text="Pause" styleClass="ipad" onAction="#pauseGame" prefWidth="160"
                       fx:id="pauseButton"/>
     </VBox>
 
-    <Group fx:id="groupNotification" layoutX="14" layoutY="203">
+    <Group fx:id="groupNotification" layoutY="150">
         <VBox alignment="CENTER">
             <GameOverPanel fx:id="gameOverPanel"/>
         </VBox>

@@ -1,16 +1,24 @@
 .root {
-    -fx-background-color: white;
+    -fx-background-color: black;
 }
 
 .nextBrick {
-    -fx-border-width: 6px;
-    -fx-border-color: grey;
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-font-family: "Press Start 2P";
     -fx-border-radius: 8px;
+    -fx-border-color: grey;
+    -fx-border-width: 4px;
 }
 
 .gameBoard {
+    -fx-background-color: white;
+}
+
+.gameBorder {
+    -fx-background-color: transparent;
     -fx-border-color: grey;
-    -fx-border-width: 0 29px 0 29px;
+    -fx-border-width: 0 20px 0 20px;
 }
 
 .nextBrickLabel {
@@ -20,12 +28,12 @@
     -fx-text-fill: yellow;
 }
 
-.ipad-dark-grey {
-    -fx-background-color: black;
+.ipad {
+    -fx-background-color: white;
     -fx-font-family: "Press Start 2P";
     -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-text-fill: white;
+    -fx-text-fill: grey;
     -fx-border-radius: 8px;
 }
 
@@ -45,23 +53,27 @@
 }
 
 .bonusStyle {
-    -fx-font-size: 40px;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 30px;
     -fx-font-weight: bold;
+    -fx-text-fill: black;
 }
 
 .gameOverStyle {
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 48;
+    -fx-font-size: 47;
     -fx-background-color: red;
 }
 
 .scoreClass{
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 30;
+    -fx-font-size: 20;
     -fx-fill: black;
-    -fx-text-fill: black;
-    -fx-border-color: grey;
-    -fx-border-width: 6px;
+    -fx-text-fill: grey;
     -fx-border-radius: 8px;
+    -fx-border-color: grey;
+    -fx-border-width: 4px;
     -fx-padding: 8px;
 }
