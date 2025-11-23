@@ -103,7 +103,8 @@ public class GuiController implements Initializable {
                 }
             }
         });
-        gameOverPanel.setVisible(false);
+        groupNotification.setVisible(false);
+        groupNotification.setManaged(false);
 
         pauseButton.selectedProperty().bindBidirectional(isPause);
         pauseButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -255,7 +256,8 @@ public class GuiController implements Initializable {
 
     public void gameOver() {
         timeLine.stop();
-        gameOverPanel.setVisible(true);
+        groupNotification.setVisible(true);
+        groupNotification.setManaged(true);
         isGameOver.setValue(Boolean.TRUE);
     }
 
