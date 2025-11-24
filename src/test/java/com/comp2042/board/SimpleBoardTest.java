@@ -15,15 +15,19 @@ class SimpleBoardTest {
         assertTrue(moved);
     }
 
-    // Will amend test – issue is due to randomness in brick generation
-//    @Test
-//    void moveBrickDownCollides() {
-//        SimpleBoard board = new SimpleBoard(10,20);
-//        board.getBoardMatrix()[4][3] = 1;
-//        board.createNewBrick();
-//        boolean moved = board.moveBrickDown();
-//        assertFalse(moved);
-//    }
+    // Check when brick hits floor
+    @Test
+    void moveBrickDownCollides() {
+        SimpleBoard board = new SimpleBoard(10,20);
+        board.createNewBrick();
+        assertNotNull(board.getViewData());
+        boolean moved = true;
+        while (moved) {
+            moved = board.moveBrickDown();
+        }
+        boolean result = board.moveBrickDown();
+        assertFalse(result);
+    }
 
     @Test
     void moveBrickLeftFreely() {
@@ -33,15 +37,19 @@ class SimpleBoardTest {
         assertTrue(moved);
     }
 
-    // Will amend test – issue is due to randomness in brick generation
-//    @Test
-//    void moveBrickLeftCollides() {
-//        SimpleBoard board = new SimpleBoard(10,20);
-//        board.getBoardMatrix()[2][1] = 1;
-//        board.createNewBrick();
-//        boolean moved = board.moveBrickLeft();
-//        assertFalse(moved);
-//    }
+    // Check when brick hits wall
+    @Test
+    void moveBrickLeftCollides() {
+        SimpleBoard board = new SimpleBoard(10,20);
+        board.createNewBrick();
+        assertNotNull(board.getViewData());
+        boolean moved = true;
+        while (moved) {
+            moved = board.moveBrickLeft();
+        }
+        boolean result = board.moveBrickLeft();
+        assertFalse(result);
+    }
 
     @Test
     void moveBrickRightFreely() {
@@ -51,15 +59,19 @@ class SimpleBoardTest {
         assertTrue(moved);
     }
 
-    // Will amend test – issue is due to randomness in brick generation
-//    @Test
-//    void moveBrickRightCollides() {
-//        SimpleBoard board = new SimpleBoard(10,20);
-//        board.getBoardMatrix()[4][2] = 1;
-//        board.createNewBrick();
-//        boolean moved = board.moveBrickRight();
-//        assertFalse(moved);
-//    }
+    // Check when brick hits wall
+    @Test
+    void moveBrickRightCollides() {
+        SimpleBoard board = new SimpleBoard(10,20);
+        board.createNewBrick();
+        assertNotNull(board.getViewData());
+        boolean moved = true;
+        while (moved) {
+            moved = board.moveBrickRight();
+        }
+        boolean result = board.moveBrickRight();
+        assertFalse(result);
+    }
 
     @Test
     void rotateFreely() {
@@ -73,7 +85,10 @@ class SimpleBoardTest {
 //    @Test
 //    void rotateCollides() {
 //        SimpleBoard board = new SimpleBoard(10,20);
-//        board.getBoardMatrix()[3][3] = 1;
+//        int[][] matrix = board.getBoardMatrix();
+//        for (int i = 0; i < 10; i++) {
+//            matrix[i][2] = 1;
+//        }
 //        board.createNewBrick();
 //        boolean rotated = board.rotateLeftBrick();
 //        assertFalse(rotated);
