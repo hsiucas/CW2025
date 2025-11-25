@@ -10,8 +10,4 @@ public class BrickLandingHandler {
     public ClearRow handleClearRows(int[][] boardMatrix) {
         return MatrixOperations.checkRemoving(boardMatrix);
     }
-
-    public boolean createNewBrick(int[][] boardMatrix, int[][] brick, Point offset) {
-        return MatrixOperations.intersect(boardMatrix, brick, offset.y, offset.x);
-    }
 }

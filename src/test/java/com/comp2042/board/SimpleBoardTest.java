@@ -98,8 +98,8 @@ class SimpleBoardTest {
     @RepeatedTest(10)
     void createNewBrickShouldNotCollide() {
         SimpleBoard board = new SimpleBoard(20,10);
-        boolean collided = board.createNewBrick();
-        assertFalse(collided);
+        boolean spawned = board.createNewBrick();
+        assertTrue(spawned);
     }
 
     // New error found in code – supposed to collide but does not. Indicates a real issue in logic.
@@ -110,8 +110,8 @@ class SimpleBoardTest {
         for (int col = 0; col < 10; col++) {
             matrix[2][col] = 1;
         }
-        boolean collided = board.createNewBrick();
-        assertTrue(collided);
+        boolean spawned = board.createNewBrick();
+        assertFalse(spawned);
     }
 
     @RepeatedTest(10)

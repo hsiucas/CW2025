@@ -20,6 +20,7 @@ public class SimpleBoard implements Board {
     private final BrickLandingHandler landingHandler;
     private final BrickMoverHandler brickMover;
     private final BrickRotatorHandler brickRotatorHandler;
+    private final BrickSpawnHandler brickSpawnHandler;
 
     public SimpleBoard(int height, int width) {
         this.height = height;
@@ -33,34 +34,53 @@ public class SimpleBoard implements Board {
         landingHandler = new BrickLandingHandler();
         brickMover = new BrickMoverHandler();
         brickRotatorHandler = new BrickRotatorHandler();
-    }
-
-    @Override
-    public boolean moveBrickDown() {
-        return brickMover.moveDown(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, collisionDetector);
-    }
-
-    @Override
-    public boolean moveBrickLeft() {
-        return brickMover.moveLeft(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, collisionDetector);
-    }
-
-    @Override
-    public boolean moveBrickRight() {
-        return brickMover.moveRight(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, collisionDetector);
-    }
-
-    @Override
-    public boolean rotateBrickCounterClockwise() {
-        return brickRotatorHandler.rotateCounterClockwise(currentGameMatrix, brickRotator, currentOffset, collisionDetector);
+        brickSpawnHandler = new BrickSpawnHandler();
     }
 
     @Override
     public boolean createNewBrick() {
         Brick currentBrick = brickGenerator.getBrick();
         brickRotator.setBrick(currentBrick);
-        currentOffset = new Point(3,2);
-        return landingHandler.createNewBrick(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset);
+        int[][] shape = brickRotator.getCurrentShape();
+
+        Point spawn = brickSpawnHandler.getGameboySpawnPoint(currentGameMatrix, width, shape);
+
+        if (spawn == null) { return false; }
+
+        currentOffset = spawn;
+        return true;
+    }
+
+    @Override
+    public boolean moveBrickDown() {
+        return brickMover.moveDown( currentGameMatrix,
+                                    brickRotator.getCurrentShape(),
+                                    currentOffset,
+                                    collisionDetector);
+    }
+
+    @Override
+    public boolean moveBrickLeft() {
+        return brickMover.moveLeft( currentGameMatrix,
+                                    brickRotator.getCurrentShape(),
+                                    currentOffset,
+                                    collisionDetector);
+    }
+
+    @Override
+    public boolean moveBrickRight() {
+        return brickMover.moveRight(currentGameMatrix,
+                                    brickRotator.getCurrentShape(),
+                                    currentOffset,
+                                    collisionDetector);
+    }
+
+    @Override
+    public boolean rotateBrickCounterClockwise() {
+        return brickRotatorHandler.rotateCounterClockwise(  currentGameMatrix,
+                                                            brickRotator,
+                                                            currentOffset,
+                                                            collisionDetector);
     }
 
     @Override
