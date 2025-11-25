@@ -14,8 +14,8 @@ import java.awt.*;
 
 public class SimpleBoard implements Board {
 
-    private final int width;
     private final int height;
+    private final int width;
     private final BrickGenerator brickGenerator;
     private final BrickRotator brickRotator;
     private int[][] currentGameMatrix;
@@ -23,10 +23,10 @@ public class SimpleBoard implements Board {
     private final Score score;
     private final CollisionDetector collisionDetector;
 
-    public SimpleBoard(int width, int height) {
-        this.width = width;
+    public SimpleBoard(int height, int width) {
         this.height = height;
-        currentGameMatrix = new int[width][height];
+        this.width = width;
+        currentGameMatrix = new int[height][width];
         brickGenerator = new RandomBrickGenerator();
         brickRotator = new BrickRotator();
         score = new Score();
@@ -35,7 +35,7 @@ public class SimpleBoard implements Board {
 
     @Override
     public boolean moveBrickDown() {
-        if (collisionDetector.canMove(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, 0, 1)) {
+        if (collisionDetector.canMove(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, 1, 0)) {
             currentOffset.translate(0,1);
             return true;
         }
@@ -44,7 +44,7 @@ public class SimpleBoard implements Board {
 
     @Override
     public boolean moveBrickLeft() {
-        if (collisionDetector.canMove(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, -1, 0)) {
+        if (collisionDetector.canMove(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, 0, -1)) {
             currentOffset.translate(-1,0);
             return true;
         }
@@ -53,7 +53,7 @@ public class SimpleBoard implements Board {
 
     @Override
     public boolean moveBrickRight() {
-        if (collisionDetector.canMove(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, 1, 0)) {
+        if (collisionDetector.canMove(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, 0, 1)) {
             currentOffset.translate(1,0);
             return true;
         }
@@ -75,7 +75,7 @@ public class SimpleBoard implements Board {
         Brick currentBrick = brickGenerator.getBrick();
         brickRotator.setBrick(currentBrick);
         currentOffset = new Point(3, 2);
-        return !collisionDetector.canMove(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, 0, 0);
+        return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset.y, currentOffset.x);
     }
 
     @Override
@@ -85,12 +85,12 @@ public class SimpleBoard implements Board {
 
     @Override
     public ViewData getViewData() {
-        return new ViewData(brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY(), brickGenerator.getNextBrick().getShapeMatrix().get(0));
+        return new ViewData(brickRotator.getCurrentShape(), (int) currentOffset.getY(), (int) currentOffset.getX(), brickGenerator.getNextBrick().getShapeMatrix().get(0));
     }
 
     @Override
     public void mergeBrickToBackground() {
-        currentGameMatrix = MatrixOperations.merge(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+        currentGameMatrix = MatrixOperations.merge(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getY(), (int) currentOffset.getX());
     }
 
     @Override
@@ -108,7 +108,7 @@ public class SimpleBoard implements Board {
 
     @Override
     public void newGame() {
-        currentGameMatrix = new int[width][height];
+        currentGameMatrix = new int[height][width];
         score.reset();
         createNewBrick();
     }

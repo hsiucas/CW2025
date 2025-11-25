@@ -128,22 +128,22 @@ public class GuiController implements Initializable {
 
     public void initGameView(int[][] boardMatrix, ViewData brick) {
         displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
-        for (int i = 2; i < boardMatrix.length; i++) {
-            for (int j = 0; j < boardMatrix[i].length; j++) {
+        for (int row = 2; row < boardMatrix.length; row++) {
+            for (int col = 0; col < boardMatrix[row].length; col++) {
                 Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
                 rectangle.setFill(Color.TRANSPARENT);
-                displayMatrix[i][j] = rectangle;
-                gamePanel.add(rectangle, j, i - 2);
+                displayMatrix[row][col] = rectangle;
+                gamePanel.add(rectangle, col, row - 2);
             }
         }
 
         rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
-        for (int i = 0; i < brick.getBrickData().length; i++) {
-            for (int j = 0; j < brick.getBrickData()[i].length; j++) {
+        for (int row = 0; row < brick.getBrickData().length; row++) {
+            for (int col = 0; col < brick.getBrickData()[row].length; col++) {
                 Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                rectangle.setFill(getFillColor(brick.getBrickData()[i][j]));
-                rectangles[i][j] = rectangle;
-                brickPanel.add(rectangle, j, i);
+                rectangle.setFill(getFillColor(brick.getBrickData()[row][col]));
+                rectangles[row][col] = rectangle;
+                brickPanel.add(rectangle, col, row);
             }
         }
         brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
@@ -195,12 +195,12 @@ public class GuiController implements Initializable {
 
     private void previewPanel(int[][] nextBrickData){
         nextBrick.getChildren().clear();
-        for (int i = 0; i < nextBrickData.length; i++) {
-            for (int j = 0; j < nextBrickData[i].length; j++) {
+        for (int row = 0; row < nextBrickData.length; row++) {
+            for (int col = 0; col < nextBrickData[row].length; col++) {
                 Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                setRectangleData(nextBrickData[i][j], rectangle);
-                if (nextBrickData[i][j] != 0) {
-                    nextBrick.add(rectangle, j, i);
+                setRectangleData(nextBrickData[row][col], rectangle);
+                if (nextBrickData[row][col] != 0) {
+                    nextBrick.add(rectangle, col, row);
                 }
             }
         }
@@ -210,9 +210,9 @@ public class GuiController implements Initializable {
         if (isPause.getValue() == Boolean.FALSE) {
             brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
             brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
-            for (int i = 0; i < brick.getBrickData().length; i++) {
-                for (int j = 0; j < brick.getBrickData()[i].length; j++) {
-                    setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
+            for (int row = 0; row < brick.getBrickData().length; row++) {
+                for (int col = 0; col < brick.getBrickData()[row].length; col++) {
+                    setRectangleData(brick.getBrickData()[row][col], rectangles[row][col]);
                 }
             }
             previewPanel(brick.getNextBrickData());
@@ -220,9 +220,9 @@ public class GuiController implements Initializable {
     }
 
     public void refreshGameBackground(int[][] board) {
-        for (int i = 2; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                setRectangleData(board[i][j], displayMatrix[i][j]);
+        for (int row = 2; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                setRectangleData(board[row][col], displayMatrix[row][col]);
             }
         }
     }

@@ -3,14 +3,14 @@ package com.comp2042.logic;
 public final class ViewData {
 
     private final int[][] brickData;
-    private final int xPosition;
     private final int yPosition;
+    private final int xPosition;
     private final int[][] nextBrickData;
 
-    public ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData) {
+    public ViewData(int[][] brickData, int yPosition, int xPosition, int[][] nextBrickData) {
         this.brickData = brickData;
-        this.xPosition = xPosition;
         this.yPosition = yPosition;
+        this.xPosition = xPosition;
         this.nextBrickData = nextBrickData;
     }
 
@@ -18,12 +18,12 @@ public final class ViewData {
         return MatrixOperations.copy(brickData);
     }
 
-    public int getxPosition() {
-        return xPosition;
-    }
-
     public int getyPosition() {
         return yPosition;
+    }
+
+    public int getxPosition() {
+        return xPosition;
     }
 
     public int[][] getNextBrickData() {
