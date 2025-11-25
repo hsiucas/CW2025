@@ -18,6 +18,7 @@ public class SimpleBoard implements Board {
     private final Score score;
     private final CollisionDetector collisionDetector;
     private final BrickLandingHandler landingHandler;
+    private final BrickMoverHandler brickMover;
 
     public SimpleBoard(int height, int width) {
         this.height = height;
@@ -29,33 +30,22 @@ public class SimpleBoard implements Board {
         score = new Score();
         collisionDetector = new CollisionDetector();
         landingHandler = new BrickLandingHandler();
+        brickMover = new BrickMoverHandler();
     }
 
     @Override
     public boolean moveBrickDown() {
-        if (collisionDetector.canMove(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, 1, 0)) {
-            currentOffset.translate(0,1);
-            return true;
-        }
-        return false;
+        return brickMover.moveDown(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, collisionDetector);
     }
 
     @Override
     public boolean moveBrickLeft() {
-        if (collisionDetector.canMove(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, 0, -1)) {
-            currentOffset.translate(-1,0);
-            return true;
-        }
-        return false;
+        return brickMover.moveLeft(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, collisionDetector);
     }
 
     @Override
     public boolean moveBrickRight() {
-        if (collisionDetector.canMove(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, 0, 1)) {
-            currentOffset.translate(1,0);
-            return true;
-        }
-        return false;
+        return brickMover.moveRight(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset, collisionDetector);
     }
 
     @Override
