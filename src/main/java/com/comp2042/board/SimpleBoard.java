@@ -3,12 +3,7 @@ package com.comp2042.board;
 import com.comp2042.bricks.Brick;
 import com.comp2042.bricks.BrickGenerator;
 import com.comp2042.bricks.RandomBrickGenerator;
-import com.comp2042.logic.BrickRotator;
-import com.comp2042.logic.ClearRow;
-import com.comp2042.logic.MatrixOperations;
-import com.comp2042.logic.Score;
-import com.comp2042.logic.ViewData;
-import com.comp2042.logic.CollisionDetector;
+import com.comp2042.logic.*;
 
 import java.awt.*;
 
@@ -16,12 +11,13 @@ public class SimpleBoard implements Board {
 
     private final int height;
     private final int width;
+    private int[][] currentGameMatrix;
     private final BrickGenerator brickGenerator;
     private final BrickRotator brickRotator;
-    private int[][] currentGameMatrix;
     private Point currentOffset;
     private final Score score;
     private final CollisionDetector collisionDetector;
+    private final BrickLandingHandler landingHandler;
 
     public SimpleBoard(int height, int width) {
         this.height = height;
@@ -29,8 +25,10 @@ public class SimpleBoard implements Board {
         currentGameMatrix = new int[height][width];
         brickGenerator = new RandomBrickGenerator();
         brickRotator = new BrickRotator();
+        currentOffset = new Point(3, 2);
         score = new Score();
         collisionDetector = new CollisionDetector();
+        landingHandler = new BrickLandingHandler();
     }
 
     @Override
@@ -74,8 +72,8 @@ public class SimpleBoard implements Board {
     public boolean createNewBrick() {
         Brick currentBrick = brickGenerator.getBrick();
         brickRotator.setBrick(currentBrick);
-        currentOffset = new Point(3, 2);
-        return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset.y, currentOffset.x);
+        currentOffset = new Point(3,2);
+        return landingHandler.createNewBrick(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset);
     }
 
     @Override
@@ -90,12 +88,12 @@ public class SimpleBoard implements Board {
 
     @Override
     public void mergeBrickToBackground() {
-        currentGameMatrix = MatrixOperations.merge(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset.y, currentOffset.x);
+        currentGameMatrix = landingHandler.mergeBrick(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset);
     }
 
     @Override
     public ClearRow clearRows() {
-        ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
+        ClearRow clearRow = landingHandler.handleClearRows(currentGameMatrix);
         currentGameMatrix = clearRow.getNewMatrix();
         return clearRow;
     }
@@ -104,7 +102,6 @@ public class SimpleBoard implements Board {
     public Score getScore() {
         return score;
     }
-
 
     @Override
     public void newGame() {
