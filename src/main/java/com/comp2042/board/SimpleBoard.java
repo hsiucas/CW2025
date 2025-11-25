@@ -19,6 +19,7 @@ public class SimpleBoard implements Board {
     private final CollisionDetector collisionDetector;
     private final BrickLandingHandler landingHandler;
     private final BrickMoverHandler brickMover;
+    private final BrickRotatorHandler brickRotatorHandler;
 
     public SimpleBoard(int height, int width) {
         this.height = height;
@@ -31,6 +32,7 @@ public class SimpleBoard implements Board {
         collisionDetector = new CollisionDetector();
         landingHandler = new BrickLandingHandler();
         brickMover = new BrickMoverHandler();
+        brickRotatorHandler = new BrickRotatorHandler();
     }
 
     @Override
@@ -49,13 +51,8 @@ public class SimpleBoard implements Board {
     }
 
     @Override
-    public boolean rotateLeftBrick() {
-        int[][] nextShape = brickRotator.getNextShape().getShape();
-        if (collisionDetector.canRotate(currentGameMatrix, nextShape, currentOffset)) {
-            brickRotator.setCurrentShape(brickRotator.getNextShape().getPosition());
-            return true;
-        }
-        return false;
+    public boolean rotateBrickCounterClockwise() {
+        return brickRotatorHandler.rotateCounterClockwise(currentGameMatrix, brickRotator, currentOffset, collisionDetector);
     }
 
     @Override

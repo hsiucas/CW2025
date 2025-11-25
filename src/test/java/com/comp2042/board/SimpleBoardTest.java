@@ -4,8 +4,6 @@ import com.comp2042.logic.ClearRow;
 import com.comp2042.logic.ViewData;
 import org.junit.jupiter.api.RepeatedTest;
 
-import java.awt.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class SimpleBoardTest {
@@ -80,7 +78,7 @@ class SimpleBoardTest {
     void rotateFreely() {
         SimpleBoard board = new SimpleBoard(20,10);
         board.createNewBrick();
-        boolean rotated = board.rotateLeftBrick();
+        boolean rotated = board.rotateBrickCounterClockwise();
         assertTrue(rotated);
     }
 
@@ -93,7 +91,7 @@ class SimpleBoardTest {
 //            matrix[2][col] = 1;
 //        }
 //        board.createNewBrick();
-//        boolean rotated = board.rotateLeftBrick();
+//        boolean rotated = board.rotateBrickCounterClockwise();
 //        assertFalse(rotated);
 //    }
 
