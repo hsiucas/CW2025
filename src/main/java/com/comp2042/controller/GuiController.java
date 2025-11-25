@@ -1,5 +1,7 @@
 package com.comp2042.controller;
 
+import com.comp2042.board.SimpleBoard;
+import com.comp2042.logic.GravityHandler;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -69,6 +71,8 @@ public class GuiController implements Initializable {
 
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
 
+    private GravityHandler gravityHandler;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getClassLoader().getResource("fonts/PressStart2P.ttf").toExternalForm(), 38);
@@ -91,7 +95,8 @@ public class GuiController implements Initializable {
                         keyEvent.consume();
                     }
                     if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S) {
-                        moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
+                        DownData downData = eventListener.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
+                        refreshBrick(downData.getViewData());
                         keyEvent.consume();
                     }
                 }
@@ -153,7 +158,7 @@ public class GuiController implements Initializable {
 
         timeLine = new Timeline(new KeyFrame(
                 Duration.millis(400),
-                ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
+                ae -> handleGravityTick()
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
@@ -233,17 +238,27 @@ public class GuiController implements Initializable {
         rectangle.setArcWidth(9);
     }
 
-    private void moveDown(MoveEvent event) {
-        if (isPause.getValue() == Boolean.FALSE) {
-            DownData downData = eventListener.onDownEvent(event);
-            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
-                NotificationPanel notificationPanel = new NotificationPanel("+" + downData.getClearRow().getScoreBonus());
-                groupNotification.getChildren().add(notificationPanel);
-                notificationPanel.showScore(groupNotification.getChildren());
-            }
+    private void handleGravityTick() {
+        if (!isPause.get() && !isGameOver.get()) {
+            DownData downData = gravityHandler.tick();
+            refreshGameBackground(gravityHandler.getBoardMatrix());
             refreshBrick(downData.getViewData());
+
+            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
+                showScoreNotification(downData.getClearRow().getScoreBonus());
+            }
+
+            if (downData.isGameOver()) {
+                gameOver();
+            }
         }
         gamePanel.requestFocus();
+    }
+
+    private void showScoreNotification(int scoreBonus) {
+        NotificationPanel notificationPanel = new NotificationPanel("+" + scoreBonus);
+        groupNotification.getChildren().add(notificationPanel);
+        notificationPanel.showScore(groupNotification.getChildren());
     }
 
     public void setEventListener(InputEventListener eventListener) {
@@ -273,5 +288,9 @@ public class GuiController implements Initializable {
 
     public void pauseGame(ActionEvent actionEvent) {
         gamePanel.requestFocus();
+    }
+
+    public void setGravityHandler(GravityHandler gravityHandler) {
+        this.gravityHandler = gravityHandler;
     }
 }

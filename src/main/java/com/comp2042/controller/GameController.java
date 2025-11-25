@@ -4,19 +4,21 @@ import com.comp2042.board.*;
 import com.comp2042.events.InputEventListener;
 import com.comp2042.logic.ClearRow;
 import com.comp2042.logic.DownData;
+import com.comp2042.logic.GravityHandler;
 import com.comp2042.logic.ViewData;
 import com.comp2042.events.EventSource;
 import com.comp2042.events.MoveEvent;
 
 public class GameController implements InputEventListener {
 
-    private Board board = new SimpleBoard(20, 10);
-
+    private final Board board = new SimpleBoard(20, 10);
     private final GuiController viewGuiController;
 
     public GameController(GuiController c) {
-        viewGuiController = c;
+        this.viewGuiController = c;
         board.createNewBrick();
+        GravityHandler gravityHandler = new GravityHandler((SimpleBoard) board);
+        viewGuiController.setGravityHandler(gravityHandler);
         viewGuiController.setEventListener(this);
         viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
         viewGuiController.bindScore(board.getScore().scoreProperty());
@@ -26,24 +28,26 @@ public class GameController implements InputEventListener {
     public DownData onDownEvent(MoveEvent event) {
         boolean canMove = board.moveBrickDown();
         ClearRow clearRow = null;
+        boolean isGameOver = false;
         if (!canMove) {
             board.mergeBrickToBackground();
             clearRow = board.clearRows();
+
             if (clearRow.getLinesRemoved() > 0) {
                 board.getScore().add(clearRow.getScoreBonus());
             }
-            if (!board.createNewBrick()) {
+
+            isGameOver = !board.createNewBrick();
+            if (isGameOver) {
                 viewGuiController.gameOver();
             }
 
             viewGuiController.refreshGameBackground(board.getBoardMatrix());
 
-        } else {
-            if (event.getEventSource() == EventSource.USER) {
-                board.getScore().add(1);
-            }
+        } else if (event.getEventSource() == EventSource.USER) {
+            board.getScore().add(1);
         }
-        return new DownData(clearRow, board.getViewData());
+        return new DownData(clearRow, board.getViewData(), isGameOver);
     }
 
     @Override
