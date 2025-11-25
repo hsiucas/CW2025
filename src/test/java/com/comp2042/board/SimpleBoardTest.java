@@ -2,7 +2,7 @@ package com.comp2042.board;
 
 import com.comp2042.logic.ClearRow;
 import com.comp2042.logic.ViewData;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 
 import java.awt.*;
 
@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SimpleBoardTest {
 
-    @Test
+    @RepeatedTest(10)
     void moveBrickDownFreely() {
         SimpleBoard board = new SimpleBoard(20,10);
         board.createNewBrick();
@@ -19,7 +19,7 @@ class SimpleBoardTest {
     }
 
     // Check when brick hits floor
-    @Test
+    @RepeatedTest(10)
     void moveBrickDownCollides() {
         SimpleBoard board = new SimpleBoard(20,10);
         board.createNewBrick();
@@ -32,7 +32,7 @@ class SimpleBoardTest {
         assertFalse(result);
     }
 
-    @Test
+    @RepeatedTest(10)
     void moveBrickLeftFreely() {
         SimpleBoard board = new SimpleBoard(20,10);
         board.createNewBrick();
@@ -41,7 +41,7 @@ class SimpleBoardTest {
     }
 
     // Check when brick hits wall
-    @Test
+    @RepeatedTest(10)
     void moveBrickLeftCollides() {
         SimpleBoard board = new SimpleBoard(20,10);
         board.createNewBrick();
@@ -54,7 +54,7 @@ class SimpleBoardTest {
         assertFalse(result);
     }
 
-    @Test
+    @RepeatedTest(10)
     void moveBrickRightFreely() {
         SimpleBoard board = new SimpleBoard(20,10);
         board.createNewBrick();
@@ -63,7 +63,7 @@ class SimpleBoardTest {
     }
 
     // Check when brick hits wall
-    @Test
+    @RepeatedTest(10)
     void moveBrickRightCollides() {
         SimpleBoard board = new SimpleBoard(20,10);
         board.createNewBrick();
@@ -76,7 +76,7 @@ class SimpleBoardTest {
         assertFalse(result);
     }
 
-    @Test
+    @RepeatedTest(10)
     void rotateFreely() {
         SimpleBoard board = new SimpleBoard(20,10);
         board.createNewBrick();
@@ -85,7 +85,7 @@ class SimpleBoardTest {
     }
 
     // Will amend test – issue is due to randomness in brick generation
-//    @Test
+//    @RepeatedTest20
 //    void rotateCollides() {
 //        SimpleBoard board = new SimpleBoard(20,10);
 //        int[][] matrix = board.getBoardMatrix();
@@ -97,7 +97,7 @@ class SimpleBoardTest {
 //        assertFalse(rotated);
 //    }
 
-    @Test
+    @RepeatedTest(10)
     void createNewBrickShouldNotCollide() {
         SimpleBoard board = new SimpleBoard(20,10);
         boolean collided = board.createNewBrick();
@@ -105,7 +105,7 @@ class SimpleBoardTest {
     }
 
     // New error found in code – supposed to collide but does not. Indicates a real issue in logic.
-    @Test
+    @RepeatedTest(10)
     void createNewBrickShouldCollide() {
         SimpleBoard board = new SimpleBoard(20,10);
         int[][] matrix = board.getBoardMatrix();
@@ -116,7 +116,7 @@ class SimpleBoardTest {
         assertTrue(collided);
     }
 
-    @Test
+    @RepeatedTest(10)
     void getViewData() {
         SimpleBoard board = new SimpleBoard(20,10);
         board.createNewBrick();
@@ -129,17 +129,17 @@ class SimpleBoardTest {
     }
 
     // Brick shouldn't be able to move after it merges to background
-    @Test
+    @RepeatedTest(10)
     void mergeTheBricksToBackgroundTest() {
         SimpleBoard board = new SimpleBoard(20,10);
         board.createNewBrick();
         board.mergeBrickToBackground();
-        boolean moved = board.moveBrickDown();
+        boolean moved = board.moveBrickLeft();
         assertFalse(moved);
     }
 
     // New error found in code – row is supposed to clear. Issue is likely due to the mix of using [cols][rows] and [rows][cols] interchangeably within the game.
-    @Test
+    @RepeatedTest(10)
     void clearRowTest() {
         SimpleBoard board = new SimpleBoard(20,10);
         int[][] matrix = board.getBoardMatrix();
@@ -154,7 +154,7 @@ class SimpleBoardTest {
         }
     }
 
-    @Test
+    @RepeatedTest(10)
     void newGameResetsEverything() {
         SimpleBoard board = new SimpleBoard(20,10);
         board.createNewBrick();
