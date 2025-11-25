@@ -1,37 +1,38 @@
-package com.comp2042.bricks;
+package com.comp2042.bricks.tetromino;
 
-import com.comp2042.logic.MatrixOperations;
+import com.comp2042.bricks.core.Brick;
+import com.comp2042.logic.board.MatrixOperations;
 
 import java.util.ArrayList;
 import java.util.List;
 
-final class TBrick implements Brick {
+final class JBrick implements Brick {
 
     private final List<int[][]> brickMatrix = new ArrayList<>();
 
-    public TBrick() {
+    public JBrick() {
         brickMatrix.add(new int[][]{
                 {0, 0, 0, 0},
-                {6, 6, 6, 0},
-                {0, 6, 0, 0},
+                {2, 2, 2, 0},
+                {0, 0, 2, 0},
                 {0, 0, 0, 0}
         });
         brickMatrix.add(new int[][]{
-                {0, 6, 0, 0},
-                {0, 6, 6, 0},
-                {0, 6, 0, 0},
+                {0, 2, 2, 0},
+                {0, 2, 0, 0},
+                {0, 2, 0, 0},
                 {0, 0, 0, 0}
         });
         brickMatrix.add(new int[][]{
-                {0, 6, 0, 0},
-                {6, 6, 6, 0},
+                {2, 0, 0, 0},
+                {2, 2, 2, 0},
                 {0, 0, 0, 0},
                 {0, 0, 0, 0}
         });
         brickMatrix.add(new int[][]{
-                {0, 6, 0, 0},
-                {6, 6, 0, 0},
-                {0, 6, 0, 0},
+                {0, 2, 0, 0},
+                {0, 2, 0, 0},
+                {2, 2, 0, 0},
                 {0, 0, 0, 0}
         });
     }

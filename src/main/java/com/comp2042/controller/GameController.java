@@ -2,10 +2,11 @@ package com.comp2042.controller;
 
 import com.comp2042.board.*;
 import com.comp2042.events.InputEventListener;
-import com.comp2042.logic.ClearRow;
-import com.comp2042.logic.DownData;
-import com.comp2042.logic.GravityHandler;
-import com.comp2042.logic.ViewData;
+import com.comp2042.view.GuiController;
+import com.comp2042.logic.collision.ClearRow;
+import com.comp2042.logic.gravity.DownData;
+import com.comp2042.logic.gravity.GravityHandler;
+import com.comp2042.logic.board.ViewData;
 import com.comp2042.events.EventSource;
 import com.comp2042.events.MoveEvent;
 

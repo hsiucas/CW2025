@@ -1,6 +1,7 @@
-package com.comp2042.logic;
+package com.comp2042.logic.gravity;
 
 import com.comp2042.board.SimpleBoard;
+import com.comp2042.logic.board.ViewData;
 
 public class GravityHandler {
 

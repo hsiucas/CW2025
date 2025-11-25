@@ -1,4 +1,6 @@
-package com.comp2042.logic;
+package com.comp2042.logic.board;
+
+import com.comp2042.logic.collision.ClearRow;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

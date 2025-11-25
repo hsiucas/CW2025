@@ -1,4 +1,7 @@
-package com.comp2042.bricks;
+package com.comp2042.bricks.tetromino;
+
+import com.comp2042.bricks.core.Brick;
+import com.comp2042.bricks.core.BrickGenerator;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

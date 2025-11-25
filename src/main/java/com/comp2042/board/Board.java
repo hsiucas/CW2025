@@ -1,8 +1,8 @@
 package com.comp2042.board;
 
-import com.comp2042.logic.ViewData;
-import com.comp2042.logic.ClearRow;
-import com.comp2042.logic.Score;
+import com.comp2042.logic.board.ViewData;
+import com.comp2042.logic.collision.ClearRow;
+import com.comp2042.logic.scoring.Score;
 
 public interface Board {
 

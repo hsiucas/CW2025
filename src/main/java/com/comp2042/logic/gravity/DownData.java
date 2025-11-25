@@ -1,4 +1,7 @@
-package com.comp2042.logic;
+package com.comp2042.logic.gravity;
+
+import com.comp2042.logic.board.ViewData;
+import com.comp2042.logic.collision.ClearRow;
 
 public final class DownData {
     private final ClearRow clearRow;

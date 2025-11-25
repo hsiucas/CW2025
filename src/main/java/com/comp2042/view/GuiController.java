@@ -1,7 +1,6 @@
-package com.comp2042.controller;
+package com.comp2042.view;
 
-import com.comp2042.board.SimpleBoard;
-import com.comp2042.logic.GravityHandler;
+import com.comp2042.logic.gravity.GravityHandler;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -29,10 +28,9 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.comp2042.gui.*;
 import com.comp2042.events.*;
-import com.comp2042.logic.DownData;
-import com.comp2042.logic.ViewData;
+import com.comp2042.logic.gravity.DownData;
+import com.comp2042.logic.board.ViewData;
 
 public class GuiController implements Initializable {
 

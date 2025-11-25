@@ -1,4 +1,6 @@
-package com.comp2042.logic;
+package com.comp2042.logic.brick;
+
+import com.comp2042.logic.board.MatrixOperations;
 
 import java.awt.*;
 

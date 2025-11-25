@@ -1,38 +1,39 @@
-package com.comp2042.bricks;
+package com.comp2042.bricks.tetromino;
 
-import com.comp2042.logic.MatrixOperations;
+import com.comp2042.bricks.core.Brick;
+import com.comp2042.logic.board.MatrixOperations;
 
 import java.util.ArrayList;
 import java.util.List;
 
-final class IBrick implements Brick {
+final class TBrick implements Brick {
 
     private final List<int[][]> brickMatrix = new ArrayList<>();
 
-    public IBrick() {
+    public TBrick() {
         brickMatrix.add(new int[][]{
                 {0, 0, 0, 0},
-                {1, 1, 1, 1},
+                {6, 6, 6, 0},
+                {0, 6, 0, 0},
+                {0, 0, 0, 0}
+        });
+        brickMatrix.add(new int[][]{
+                {0, 6, 0, 0},
+                {0, 6, 6, 0},
+                {0, 6, 0, 0},
+                {0, 0, 0, 0}
+        });
+        brickMatrix.add(new int[][]{
+                {0, 6, 0, 0},
+                {6, 6, 6, 0},
                 {0, 0, 0, 0},
                 {0, 0, 0, 0}
         });
         brickMatrix.add(new int[][]{
-                {0, 1, 0, 0},
-                {0, 1, 0, 0},
-                {0, 1, 0, 0},
-                {0, 1, 0, 0}
-        });
-        brickMatrix.add(new int[][]{
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {1, 1, 1, 1},
+                {0, 6, 0, 0},
+                {6, 6, 0, 0},
+                {0, 6, 0, 0},
                 {0, 0, 0, 0}
-        });
-        brickMatrix.add(new int[][]{
-                {0, 0, 1, 0},
-                {0, 0, 1, 0},
-                {0, 0, 1, 0},
-                {0, 0, 1, 0}
         });
     }
 
@@ -40,5 +41,4 @@ final class IBrick implements Brick {
     public List<int[][]> getShapeMatrix() {
         return MatrixOperations.deepCopyList(brickMatrix);
     }
-
 }

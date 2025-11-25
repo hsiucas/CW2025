@@ -1,8 +1,9 @@
-package com.comp2042.logic;
+package com.comp2042.logic.brick;
 
-import com.comp2042.bricks.Brick;
+import com.comp2042.bricks.core.Brick;
+import com.comp2042.logic.utility.NextShapeInfo;
 
-public class BrickRotator {
+public class RotationState {
 
     private Brick brick;
     private int currentShape = 0;

@@ -1,8 +1,10 @@
-package com.comp2042.logic;
+package com.comp2042.logic.brick;
+
+import com.comp2042.logic.collision.CollisionDetector;
 
 import java.awt.*;
 
-public class BrickMoverHandler {
+public class BrickMover {
     public boolean moveDown(int[][] boardMatrix, int[][] brick, Point offset, CollisionDetector collisionDetector) {
         if (collisionDetector.canMove(boardMatrix, brick, offset, 1, 0)) {
             offset.translate(0,1);

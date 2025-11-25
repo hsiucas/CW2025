@@ -1,4 +1,4 @@
-package com.comp2042.logic;
+package com.comp2042.logic.board;
 
 public final class ViewData {
 

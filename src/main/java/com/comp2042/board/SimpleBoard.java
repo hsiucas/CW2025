@@ -1,9 +1,14 @@
 package com.comp2042.board;
 
-import com.comp2042.bricks.Brick;
-import com.comp2042.bricks.BrickGenerator;
-import com.comp2042.bricks.RandomBrickGenerator;
-import com.comp2042.logic.*;
+import com.comp2042.bricks.core.Brick;
+import com.comp2042.bricks.core.BrickGenerator;
+import com.comp2042.bricks.tetromino.RandomBrickGenerator;
+import com.comp2042.logic.brick.*;
+import com.comp2042.logic.collision.BrickLandingHandler;
+import com.comp2042.logic.collision.ClearRow;
+import com.comp2042.logic.collision.CollisionDetector;
+import com.comp2042.logic.scoring.Score;
+import com.comp2042.logic.board.ViewData;
 
 import java.awt.*;
 
@@ -13,13 +18,13 @@ public class SimpleBoard implements Board {
     private final int width;
     private int[][] currentGameMatrix;
     private final BrickGenerator brickGenerator;
-    private final BrickRotator brickRotator;
+    private final RotationState rotationState;
     private Point currentOffset;
     private final Score score;
     private final CollisionDetector collisionDetector;
     private final BrickLandingHandler landingHandler;
-    private final BrickMoverHandler brickMover;
-    private final BrickRotatorHandler brickRotatorHandler;
+    private final BrickMover brickMover;
+    private final BrickRotator brickRotator;
     private final BrickSpawnHandler brickSpawnHandler;
 
     public SimpleBoard(int height, int width) {
@@ -27,21 +32,21 @@ public class SimpleBoard implements Board {
         this.width = width;
         currentGameMatrix = new int[height][width];
         brickGenerator = new RandomBrickGenerator();
-        brickRotator = new BrickRotator();
+        rotationState = new RotationState();
         currentOffset = new Point(3, 2);
         score = new Score();
         collisionDetector = new CollisionDetector();
         landingHandler = new BrickLandingHandler();
-        brickMover = new BrickMoverHandler();
-        brickRotatorHandler = new BrickRotatorHandler();
+        brickMover = new BrickMover();
+        brickRotator = new BrickRotator();
         brickSpawnHandler = new BrickSpawnHandler();
     }
 
     @Override
     public boolean createNewBrick() {
         Brick currentBrick = brickGenerator.getBrick();
-        brickRotator.setBrick(currentBrick);
-        int[][] shape = brickRotator.getCurrentShape();
+        rotationState.setBrick(currentBrick);
+        int[][] shape = rotationState.getCurrentShape();
 
         Point spawn = brickSpawnHandler.getGameboySpawnPoint(currentGameMatrix, width, shape);
 
@@ -54,7 +59,7 @@ public class SimpleBoard implements Board {
     @Override
     public boolean moveBrickDown() {
         return brickMover.moveDown( currentGameMatrix,
-                                    brickRotator.getCurrentShape(),
+                                    rotationState.getCurrentShape(),
                                     currentOffset,
                                     collisionDetector);
     }
@@ -62,7 +67,7 @@ public class SimpleBoard implements Board {
     @Override
     public boolean moveBrickLeft() {
         return brickMover.moveLeft( currentGameMatrix,
-                                    brickRotator.getCurrentShape(),
+                                    rotationState.getCurrentShape(),
                                     currentOffset,
                                     collisionDetector);
     }
@@ -70,15 +75,15 @@ public class SimpleBoard implements Board {
     @Override
     public boolean moveBrickRight() {
         return brickMover.moveRight(currentGameMatrix,
-                                    brickRotator.getCurrentShape(),
+                                    rotationState.getCurrentShape(),
                                     currentOffset,
                                     collisionDetector);
     }
 
     @Override
     public boolean rotateBrickCounterClockwise() {
-        return brickRotatorHandler.rotateCounterClockwise(  currentGameMatrix,
-                                                            brickRotator,
+        return brickRotator.rotateCounterClockwise(  currentGameMatrix,
+                rotationState,
                                                             currentOffset,
                                                             collisionDetector);
     }
@@ -90,12 +95,12 @@ public class SimpleBoard implements Board {
 
     @Override
     public ViewData getViewData() {
-        return new ViewData(brickRotator.getCurrentShape(), currentOffset.y, currentOffset.x, brickGenerator.getNextBrick().getShapeMatrix().get(0));
+        return new ViewData(rotationState.getCurrentShape(), currentOffset.y, currentOffset.x, brickGenerator.getNextBrick().getShapeMatrix().get(0));
     }
 
     @Override
     public void mergeBrickToBackground() {
-        currentGameMatrix = landingHandler.mergeBrick(currentGameMatrix, brickRotator.getCurrentShape(), currentOffset);
+        currentGameMatrix = landingHandler.mergeBrick(currentGameMatrix, rotationState.getCurrentShape(), currentOffset);
     }
 
     @Override

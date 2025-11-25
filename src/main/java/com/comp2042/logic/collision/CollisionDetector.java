@@ -1,4 +1,6 @@
-package com.comp2042.logic;
+package com.comp2042.logic.collision;
+
+import com.comp2042.logic.board.MatrixOperations;
 
 import java.awt.Point;
 

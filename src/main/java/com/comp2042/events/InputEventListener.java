@@ -1,7 +1,7 @@
 package com.comp2042.events;
 
-import com.comp2042.logic.DownData;
-import com.comp2042.logic.ViewData;
+import com.comp2042.logic.gravity.DownData;
+import com.comp2042.logic.board.ViewData;
 
 public interface InputEventListener {
 
