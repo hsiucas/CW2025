@@ -2,6 +2,7 @@ package com.comp2042.board;
 
 import com.comp2042.logic.collision.ClearRow;
 import com.comp2042.logic.board.ViewData;
+import com.comp2042.model.board.SimpleBoard;
 import org.junit.jupiter.api.RepeatedTest;
 
 import static org.junit.jupiter.api.Assertions.*;

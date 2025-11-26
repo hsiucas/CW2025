@@ -1,4 +1,4 @@
-package com.comp2042.board;
+package com.comp2042.model.board;
 
 import com.comp2042.logic.board.ViewData;
 import com.comp2042.logic.collision.ClearRow;

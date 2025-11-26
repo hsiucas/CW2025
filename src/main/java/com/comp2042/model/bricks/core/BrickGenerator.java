@@ -1,4 +1,4 @@
-package com.comp2042.bricks.core;
+package com.comp2042.model.bricks.core;
 
 public interface BrickGenerator {
 

@@ -1,8 +1,8 @@
-package com.comp2042.board;
+package com.comp2042.model.board;
 
-import com.comp2042.bricks.core.Brick;
-import com.comp2042.bricks.core.BrickGenerator;
-import com.comp2042.bricks.tetromino.RandomBrickGenerator;
+import com.comp2042.model.bricks.core.Brick;
+import com.comp2042.model.bricks.core.BrickGenerator;
+import com.comp2042.model.bricks.tetromino.RandomBrickGenerator;
 import com.comp2042.logic.brick.*;
 import com.comp2042.logic.collision.BrickLandingHandler;
 import com.comp2042.logic.collision.ClearRow;
