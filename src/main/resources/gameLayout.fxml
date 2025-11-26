@@ -37,7 +37,7 @@
             </BorderPane>
         </VBox>
 
-        <ToggleButton text="Pause" styleClass="ipad" onAction="#pauseGame" prefWidth="160"
+        <ToggleButton text="Pause" styleClass="ipad" prefWidth="160"
                       fx:id="pauseButton"/>
     </VBox>
 

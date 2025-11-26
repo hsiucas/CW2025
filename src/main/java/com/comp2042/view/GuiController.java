@@ -1,22 +1,20 @@
 package com.comp2042.view;
 
-import com.comp2042.logic.gravity.GravityHandler;
+import com.comp2042.controller.GameController;
+import com.comp2042.model.events.EventSource;
+import com.comp2042.model.events.EventType;
+import com.comp2042.model.events.InputEventListener;
+import com.comp2042.model.events.MoveEvent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -28,7 +26,6 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.comp2042.events.*;
 import com.comp2042.logic.gravity.DownData;
 import com.comp2042.logic.board.ViewData;
 
@@ -36,221 +33,173 @@ public class GuiController implements Initializable {
 
     private static final int BRICK_SIZE = 20;
 
-    @FXML
-    private GridPane gamePanel;
-
-    @FXML
-    private Group groupNotification;
-
-    @FXML
-    private Text score;
-
-    @FXML
-    private GridPane brickPanel;
-
-    @FXML
-    private GridPane nextBrick;
-
-    @FXML
-    private GameOverPanel gameOverPanel;
-
-    @FXML
-    private ToggleButton pauseButton;
+    @FXML private GridPane gamePanel;
+    @FXML private GridPane brickPanel;
+    @FXML private GridPane nextBrick;
+    @FXML private Group groupNotification;
+    @FXML private Text score;
+    @FXML private ToggleButton pauseButton;
 
     private Rectangle[][] displayMatrix;
-
-    private InputEventListener eventListener;
-
     private Rectangle[][] rectangles;
 
     private Timeline timeLine;
+    private InputEventListener eventListener;
 
     private final BooleanProperty isPause = new SimpleBooleanProperty();
-
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
-
-    private GravityHandler gravityHandler;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getClassLoader().getResource("fonts/PressStart2P.ttf").toExternalForm(), 38);
         gamePanel.setFocusTraversable(true);
-        gamePanel.requestFocus();
-        gamePanel.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if (isPause.getValue() == Boolean.FALSE && isGameOver.getValue() == Boolean.FALSE) {
-                    if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A) {
-                        refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER)));
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.RIGHT || keyEvent.getCode() == KeyCode.D) {
-                        refreshBrick(eventListener.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER)));
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W) {
-                        refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER)));
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S) {
-                        DownData downData = eventListener.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
-                        refreshBrick(downData.getViewData());
-                        keyEvent.consume();
-                    }
-                }
-                if (keyEvent.getCode() == KeyCode.N) {
-                    newGame(null);
-                }
-                if (keyEvent.getCode() == KeyCode.ESCAPE) {
-                    pauseButton.selectedProperty().setValue(!pauseButton.selectedProperty().getValue());
-                }
-            }
-        });
         groupNotification.setVisible(false);
         groupNotification.setManaged(false);
+        brickPanel.setManaged(false);
 
         pauseButton.selectedProperty().bindBidirectional(isPause);
-        pauseButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    timeLine.pause();
-                    pauseButton.setText("Resume");
-                } else {
-                    timeLine.play();
-                    pauseButton.setText("Pause");
-                }
+        pauseButton.selectedProperty().addListener((obs,  oldValue, newValue) -> {
+            if (timeLine != null) {
+                if (newValue) { timeLine.pause(); }
+                else timeLine.play();
             }
+            pauseButton.setText(newValue ? "Resume" : "Pause");
         });
 
-        final Reflection reflection = new Reflection();
-        reflection.setFraction(0.8);
-        reflection.setTopOpacity(0.9);
-        reflection.setTopOffset(-12);
+        inputHandling();
     }
 
-    public void initGameView(int[][] boardMatrix, ViewData brick) {
-        displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
-        for (int row = 2; row < boardMatrix.length; row++) {
-            for (int col = 0; col < boardMatrix[row].length; col++) {
-                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                rectangle.setFill(Color.TRANSPARENT);
-                displayMatrix[row][col] = rectangle;
-                gamePanel.add(rectangle, col, row - 2);
-            }
-        }
+    public void setEventListener(InputEventListener eventListener) {
+        this.eventListener = eventListener;
+    }
 
-        rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
-        for (int row = 0; row < brick.getBrickData().length; row++) {
-            for (int col = 0; col < brick.getBrickData()[row].length; col++) {
-                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                rectangle.setFill(getFillColor(brick.getBrickData()[row][col]));
-                rectangles[row][col] = rectangle;
-                brickPanel.add(rectangle, col, row);
-            }
-        }
-        brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
-        brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
+    public void startGameLoop() {
+        timeLine = new Timeline(new KeyFrame(Duration.millis(400), e -> {
+            if (isPause.get() || isGameOver.get()) return;
 
-        previewPanel(brick.getNextBrickData());
+            DownData downData = eventListener.onTick();
+            int[][] matrix = ((GameController) eventListener).getBoardMatrix();
+            refreshGameBackground(matrix);
+            refreshBrick(downData.getViewData());
 
-        timeLine = new Timeline(new KeyFrame(
-                Duration.millis(400),
-                ae -> handleGravityTick()
-        ));
+            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0)
+                showScoreNotification(downData.getClearRow().getScoreBonus());
+
+            if (downData.isGameOver()) gameOver();
+
+        }));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
     }
 
-    private Paint getFillColor(int i) {
-        Paint returnPaint;
-        switch (i) {
-            case 0:
-                returnPaint = Color.TRANSPARENT;
-                break;
-            case 1:
-                returnPaint = Color.AQUA;
-                break;
-            case 2:
-                returnPaint = Color.BLUEVIOLET;
-                break;
-            case 3:
-                returnPaint = Color.DARKGREEN;
-                break;
-            case 4:
-                returnPaint = Color.YELLOW;
-                break;
-            case 5:
-                returnPaint = Color.RED;
-                break;
-            case 6:
-                returnPaint = Color.BEIGE;
-                break;
-            case 7:
-                returnPaint = Color.BURLYWOOD;
-                break;
-            default:
-                returnPaint = Color.WHITE;
-                break;
+    public void initGameView(int[][] boardMatrix, ViewData brick) {
+        initBackground(boardMatrix);
+        initBrick(brick);
+        previewPanel(brick.getNextBrickData());
+        refreshBrick(brick);
+    }
+
+    public void initBackground(int[][] boardMatrix) {
+        displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
+        gamePanel.getChildren().clear();
+        for (int row = 2; row < boardMatrix.length; row++)
+            for (int col = 0; col < boardMatrix[row].length; col++) {
+                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE, getFillColor(boardMatrix[row][col]));
+                displayMatrix[row][col] = rectangle;
+                gamePanel.add(rectangle, col, row - 2);
+            }
+    }
+
+    public void initBrick(ViewData brick) {
+        brickPanel.getChildren().clear();
+        rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
+
+        for (int row = 0; row < brick.getBrickData().length; row++)
+            for (int col = 0; col < brick.getBrickData()[row].length; col++) {
+                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE, getFillColor(brick.getBrickData()[row][col]));
+                rectangles[row][col] = rectangle;
+                brickPanel.add(rectangle, col, row);
+            }
+    }
+
+    public void inputHandling() {
+        gamePanel.setOnKeyPressed(keyEvent -> {
+            if (isPause.get() || isGameOver.get()) { return; }
+
+            MoveEvent event = null;
+
+            if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A)
+                event = new MoveEvent(EventType.LEFT, EventSource.USER);
+            else if (keyEvent.getCode() == KeyCode.RIGHT || keyEvent.getCode() == KeyCode.D)
+                event = new MoveEvent(EventType.RIGHT, EventSource.USER);
+            else if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W)
+                event = new MoveEvent(EventType.ROTATE, EventSource.USER);
+            else if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S)
+                event = new MoveEvent(EventType.DOWN, EventSource.USER);
+            else if (keyEvent.getCode() == KeyCode.N)
+                eventListener.createNewGame();
+            else if (keyEvent.getCode() == KeyCode.ESCAPE)
+                pauseButton.setSelected(!pauseButton.isSelected());
+
+            if (event != null) {
+                if (event.getEventType() == EventType.DOWN) {
+                    DownData down = eventListener.onDownEvent(event);
+                    refreshBrick(down.getViewData());
+                } else {
+                    handleMoveEvent(event);
+                }
+            }
+
+            keyEvent.consume();
+        });
+    }
+
+    public void handleMoveEvent(MoveEvent event) {
+        ViewData data = switch (event.getEventType()) {
+            case LEFT -> eventListener.onLeftEvent(event);
+            case RIGHT -> eventListener.onRightEvent(event);
+            case ROTATE -> eventListener.onRotateEvent(event);
+            default -> null;
+        };
+        if (data != null) refreshBrick(data);
+    }
+
+    public void refreshGameBackground(int[][] board) {
+        for (int row = 2; row < board.length; row++)
+            for (int col = 0; col < board[row].length; col++)
+                displayMatrix[row][col].setFill(getFillColor(board[row][col]));
+    }
+
+    private void refreshBrick(ViewData brick) {
+        if (isPause.getValue()) return;
+
+        double xPos = gamePanel.getLayoutX() + brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
+        double yPos = -42 + gamePanel.getLayoutY() + brick.getyPosition() * (BRICK_SIZE + brickPanel.getVgap());
+
+        brickPanel.setLayoutX(xPos);
+        brickPanel.setLayoutY(yPos);
+
+        if (rectangles.length != brick.getBrickData().length || rectangles[0].length != brick.getBrickData()[0].length) {
+            initBrick(brick);
         }
-        return returnPaint;
+
+        for (int row = 0; row < brick.getBrickData().length; row++)
+            for (int col = 0; col < brick.getBrickData()[row].length; col++)
+                rectangles[row][col].setFill(getFillColor(brick.getBrickData()[row][col]));
+
+        previewPanel(brick.getNextBrickData());
     }
 
     private void previewPanel(int[][] nextBrickData){
         nextBrick.getChildren().clear();
-        for (int row = 0; row < nextBrickData.length; row++) {
-            for (int col = 0; col < nextBrickData[row].length; col++) {
-                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                setRectangleData(nextBrickData[row][col], rectangle);
-                if (nextBrickData[row][col] != 0) {
-                    nextBrick.add(rectangle, col, row);
-                }
-            }
-        }
+        for (int row = 0; row < nextBrickData.length; row++)
+            for (int col = 0; col < nextBrickData[row].length; col++)
+                if (nextBrickData[row][col] != 0)
+                    nextBrick.add(new Rectangle(BRICK_SIZE, BRICK_SIZE, getFillColor(nextBrickData[row][col])), col, row);
     }
 
-    private void refreshBrick(ViewData brick) {
-        if (isPause.getValue() == Boolean.FALSE) {
-            brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
-            brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
-            for (int row = 0; row < brick.getBrickData().length; row++) {
-                for (int col = 0; col < brick.getBrickData()[row].length; col++) {
-                    setRectangleData(brick.getBrickData()[row][col], rectangles[row][col]);
-                }
-            }
-            previewPanel(brick.getNextBrickData());
-        }
-    }
-
-    public void refreshGameBackground(int[][] board) {
-        for (int row = 2; row < board.length; row++) {
-            for (int col = 0; col < board[row].length; col++) {
-                setRectangleData(board[row][col], displayMatrix[row][col]);
-            }
-        }
-    }
-
-    private void setRectangleData(int color, Rectangle rectangle) {
-        rectangle.setFill(getFillColor(color));
-        rectangle.setArcHeight(9);
-        rectangle.setArcWidth(9);
-    }
-
-    private void handleGravityTick() {
-        if (!isPause.get() && !isGameOver.get()) {
-            DownData downData = gravityHandler.tick();
-            refreshGameBackground(gravityHandler.getBoardMatrix());
-            refreshBrick(downData.getViewData());
-
-            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
-                showScoreNotification(downData.getClearRow().getScoreBonus());
-            }
-
-            if (downData.isGameOver()) {
-                gameOver();
-            }
-        }
-        gamePanel.requestFocus();
+    public void bindScore(IntegerProperty scoreProperty) {
+        score.textProperty().bind(scoreProperty.asString());
     }
 
     private void showScoreNotification(int scoreBonus) {
@@ -259,36 +208,24 @@ public class GuiController implements Initializable {
         notificationPanel.showScore(groupNotification.getChildren());
     }
 
-    public void setEventListener(InputEventListener eventListener) {
-        this.eventListener = eventListener;
-    }
-
-    public void bindScore(IntegerProperty integerProperty) {
-        score.textProperty().bind(integerProperty.asString());
-    }
-
     public void gameOver() {
         timeLine.stop();
         groupNotification.setVisible(true);
         groupNotification.setManaged(true);
-        isGameOver.setValue(Boolean.TRUE);
+        isGameOver.set(true);
     }
 
-    public void newGame(ActionEvent actionEvent) {
-        timeLine.stop();
-        gameOverPanel.setVisible(false);
-        eventListener.createNewGame();
-        gamePanel.requestFocus();
-        timeLine.play();
-        isPause.setValue(Boolean.FALSE);
-        isGameOver.setValue(Boolean.FALSE);
-    }
-
-    public void pauseGame(ActionEvent actionEvent) {
-        gamePanel.requestFocus();
-    }
-
-    public void setGravityHandler(GravityHandler gravityHandler) {
-        this.gravityHandler = gravityHandler;
+    private Paint getFillColor(int i) {
+        return switch (i) {
+            case 0 -> Color.TRANSPARENT;
+            case 1 -> Color.AQUA;
+            case 2 -> Color.BLUEVIOLET;
+            case 3 -> Color.DARKGREEN;
+            case 4 -> Color.YELLOWGREEN;
+            case 5 -> Color.RED;
+            case 6 -> Color.FIREBRICK;
+            case 7 -> Color.BURLYWOOD;
+            default -> Color.WHITE;
+        };
     }
 }

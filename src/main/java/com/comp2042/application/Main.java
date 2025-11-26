@@ -1,4 +1,4 @@
-package com.comp2042;
+package com.comp2042.application;
 
 import com.comp2042.controller.GameController;
 import com.comp2042.view.GuiController;
@@ -17,8 +17,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
-        ResourceBundle resources = null;
-        FXMLLoader fxmlLoader = new FXMLLoader(location, resources);
+//        ResourceBundle resources = null;
+//        FXMLLoader fxmlLoader = new FXMLLoader(location, resources);
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root = fxmlLoader.load();
         GuiController c = fxmlLoader.getController();
 
@@ -29,7 +30,10 @@ public class Main extends Application {
         primaryStage.show();
         primaryStage.setResizable(false);
 
-        new GameController(c);
+        GameController gameController = new GameController(c);
+        c.setEventListener(gameController);
+        c.initGameView(gameController.getBoardMatrix(), gameController.getViewData());
+        c.startGameLoop();
     }
 
 

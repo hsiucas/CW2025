@@ -1,54 +1,64 @@
 package com.comp2042.controller;
 
-import com.comp2042.board.*;
-import com.comp2042.events.InputEventListener;
+import com.comp2042.model.board.*;
+import com.comp2042.model.events.InputEventListener;
+import com.comp2042.model.board.Board;
+import com.comp2042.model.board.SimpleBoard;
 import com.comp2042.view.GuiController;
 import com.comp2042.logic.collision.ClearRow;
 import com.comp2042.logic.gravity.DownData;
 import com.comp2042.logic.gravity.GravityHandler;
 import com.comp2042.logic.board.ViewData;
-import com.comp2042.events.EventSource;
-import com.comp2042.events.MoveEvent;
+import com.comp2042.model.events.EventSource;
+import com.comp2042.model.events.MoveEvent;
+import javafx.beans.property.IntegerProperty;
 
 public class GameController implements InputEventListener {
 
     private final Board board = new SimpleBoard(20, 10);
-    private final GuiController viewGuiController;
 
     public GameController(GuiController c) {
-        this.viewGuiController = c;
         board.createNewBrick();
-        GravityHandler gravityHandler = new GravityHandler((SimpleBoard) board);
-        viewGuiController.setGravityHandler(gravityHandler);
-        viewGuiController.setEventListener(this);
-        viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
-        viewGuiController.bindScore(board.getScore().scoreProperty());
+    }
+
+    @Override
+    public DownData onTick() {
+        boolean moved = board.moveBrickDown();
+
+        if (moved) {
+            return new DownData(null, board.getViewData(), false);
+        }
+
+        board.mergeBrickToBackground();
+        ClearRow clear = board.clearRows();
+
+        if (clear.getLinesRemoved() > 0)
+            board.getScore().add(clear.getScoreBonus());
+
+        boolean gameOver = !board.createNewBrick();
+
+        return new DownData(clear, board.getViewData(), gameOver);
     }
 
     @Override
     public DownData onDownEvent(MoveEvent event) {
-        boolean canMove = board.moveBrickDown();
-        ClearRow clearRow = null;
-        boolean isGameOver = false;
-        if (!canMove) {
-            board.mergeBrickToBackground();
-            clearRow = board.clearRows();
+        boolean moved = board.moveBrickDown();
 
-            if (clearRow.getLinesRemoved() > 0) {
-                board.getScore().add(clearRow.getScoreBonus());
-            }
+        if (moved) {
+            if (event.getEventSource() == EventSource.USER)
+                board.getScore().add(1);
 
-            isGameOver = !board.createNewBrick();
-            if (isGameOver) {
-                viewGuiController.gameOver();
-            }
-
-            viewGuiController.refreshGameBackground(board.getBoardMatrix());
-
-        } else if (event.getEventSource() == EventSource.USER) {
-            board.getScore().add(1);
+            return new DownData(null, board.getViewData(), false);
         }
-        return new DownData(clearRow, board.getViewData(), isGameOver);
+
+        board.mergeBrickToBackground();
+        ClearRow clear = board.clearRows();
+
+        if (clear.getLinesRemoved() > 0)
+            board.getScore().add(clear.getScoreBonus());
+
+        boolean isGameOver = !board.createNewBrick();
+        return new DownData(clear, board.getViewData(), isGameOver);
     }
 
     @Override
@@ -69,10 +79,20 @@ public class GameController implements InputEventListener {
         return board.getViewData();
     }
 
-
     @Override
     public void createNewGame() {
         board.newGame();
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+    }
+
+    public int[][] getBoardMatrix() {
+        return board.getBoardMatrix();
+    }
+
+    public ViewData getViewData() {
+        return board.getViewData();
+    }
+
+    public IntegerProperty scoreProperty() {
+        return board.getScore().scoreProperty();
     }
 }
