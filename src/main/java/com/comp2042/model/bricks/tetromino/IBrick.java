@@ -1,14 +1,8 @@
 package com.comp2042.model.bricks.tetromino;
 
-import com.comp2042.model.bricks.core.Brick;
-import com.comp2042.logic.board.MatrixOperations;
+import com.comp2042.model.bricks.core.Tetromino;
 
-import java.util.ArrayList;
-import java.util.List;
-
-final class IBrick implements Brick {
-
-    private final List<int[][]> brickMatrix = new ArrayList<>();
+final class IBrick extends Tetromino {
 
     public IBrick() {
         brickMatrix.add(new int[][]{
@@ -36,10 +30,4 @@ final class IBrick implements Brick {
                 {0, 0, 1, 0}
         });
     }
-
-    @Override
-    public List<int[][]> getShapeMatrix() {
-        return MatrixOperations.deepCopyList(brickMatrix);
-    }
-
 }
