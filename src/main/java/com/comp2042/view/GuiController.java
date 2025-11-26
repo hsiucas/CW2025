@@ -1,8 +1,7 @@
 package com.comp2042.view;
 
 import com.comp2042.controller.GameController;
-import com.comp2042.model.events.EventSource;
-import com.comp2042.model.events.EventType;
+import com.comp2042.controller.KeyInputHandler;
 import com.comp2042.model.events.InputEventListener;
 import com.comp2042.model.events.MoveEvent;
 import javafx.beans.property.BooleanProperty;
@@ -12,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -57,8 +55,6 @@ public class GuiController implements Initializable, GameLoopListener {
             }
             pauseButton.setText(newValue ? "Resume" : "Pause");
         });
-
-        inputHandling();
     }
 
     @Override
@@ -74,6 +70,15 @@ public class GuiController implements Initializable, GameLoopListener {
 
     public void setEventListener(InputEventListener eventListener) {
         this.eventListener = eventListener;
+
+        KeyInputHandler handler = new KeyInputHandler(
+                eventListener,
+                () -> pauseButton.setSelected(!pauseButton.isSelected()),
+                isPause,
+                isGameOver,
+                this
+        );
+        gamePanel.setOnKeyPressed(handler);
     }
 
     public void startGameLoop() {
@@ -86,38 +91,6 @@ public class GuiController implements Initializable, GameLoopListener {
         gameRenderer.initBrick(brick);
         gameRenderer.previewPanel(brick.getNextBrickData());
         gameRenderer.refreshBrick(brick);
-    }
-
-    public void inputHandling() {
-        gamePanel.setOnKeyPressed(keyEvent -> {
-            if (isPause.get() || isGameOver.get()) { return; }
-
-            MoveEvent event = null;
-
-            if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A)
-                event = new MoveEvent(EventType.LEFT, EventSource.USER);
-            else if (keyEvent.getCode() == KeyCode.RIGHT || keyEvent.getCode() == KeyCode.D)
-                event = new MoveEvent(EventType.RIGHT, EventSource.USER);
-            else if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W)
-                event = new MoveEvent(EventType.ROTATE, EventSource.USER);
-            else if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S)
-                event = new MoveEvent(EventType.DOWN, EventSource.USER);
-            else if (keyEvent.getCode() == KeyCode.N)
-                eventListener.createNewGame();
-            else if (keyEvent.getCode() == KeyCode.ESCAPE)
-                pauseButton.setSelected(!pauseButton.isSelected());
-
-            if (event != null) {
-                if (event.getEventType() == EventType.DOWN) {
-                    DownData down = eventListener.onDownEvent(event);
-                    gameRenderer.refreshBrick(down.getViewData());
-                } else {
-                    handleMoveEvent(event);
-                }
-            }
-
-            keyEvent.consume();
-        });
     }
 
     public void handleMoveEvent(MoveEvent event) {
@@ -155,6 +128,4 @@ public class GuiController implements Initializable, GameLoopListener {
     public GameRenderer getRenderer() {
         return this.gameRenderer;
     }
-
-
 }
