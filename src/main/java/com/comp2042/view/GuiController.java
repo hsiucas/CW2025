@@ -16,9 +16,6 @@ import javafx.scene.Group;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -31,8 +28,6 @@ import com.comp2042.logic.board.ViewData;
 
 public class GuiController implements Initializable {
 
-    private static final int BRICK_SIZE = 20;
-
     @FXML private GridPane gamePanel;
     @FXML private GridPane brickPanel;
     @FXML private GridPane nextBrick;
@@ -40,9 +35,7 @@ public class GuiController implements Initializable {
     @FXML private Text score;
     @FXML private ToggleButton pauseButton;
 
-    private Rectangle[][] displayMatrix;
-    private Rectangle[][] rectangles;
-
+    private GameRenderer gameRenderer;
     private Timeline timeLine;
     private InputEventListener eventListener;
 
@@ -51,6 +44,8 @@ public class GuiController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.gameRenderer = new GameRenderer(gamePanel, brickPanel, nextBrick);
+
         Font.loadFont(getClass().getClassLoader().getResource("fonts/PressStart2P.ttf").toExternalForm(), 38);
         gamePanel.setFocusTraversable(true);
         groupNotification.setVisible(false);
@@ -79,8 +74,8 @@ public class GuiController implements Initializable {
 
             DownData downData = eventListener.onTick();
             int[][] matrix = ((GameController) eventListener).getBoardMatrix();
-            refreshGameBackground(matrix);
-            refreshBrick(downData.getViewData());
+            gameRenderer.refreshGameBackground(matrix);
+            gameRenderer.refreshBrick(downData.getViewData());
 
             if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0)
                 showScoreNotification(downData.getClearRow().getScoreBonus());
@@ -93,33 +88,10 @@ public class GuiController implements Initializable {
     }
 
     public void initGameView(int[][] boardMatrix, ViewData brick) {
-        initBackground(boardMatrix);
-        initBrick(brick);
-        previewPanel(brick.getNextBrickData());
-        refreshBrick(brick);
-    }
-
-    public void initBackground(int[][] boardMatrix) {
-        displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
-        gamePanel.getChildren().clear();
-        for (int row = 2; row < boardMatrix.length; row++)
-            for (int col = 0; col < boardMatrix[row].length; col++) {
-                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE, getFillColor(boardMatrix[row][col]));
-                displayMatrix[row][col] = rectangle;
-                gamePanel.add(rectangle, col, row - 2);
-            }
-    }
-
-    public void initBrick(ViewData brick) {
-        brickPanel.getChildren().clear();
-        rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
-
-        for (int row = 0; row < brick.getBrickData().length; row++)
-            for (int col = 0; col < brick.getBrickData()[row].length; col++) {
-                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE, getFillColor(brick.getBrickData()[row][col]));
-                rectangles[row][col] = rectangle;
-                brickPanel.add(rectangle, col, row);
-            }
+        gameRenderer.initBackground(boardMatrix);
+        gameRenderer.initBrick(brick);
+        gameRenderer.previewPanel(brick.getNextBrickData());
+        gameRenderer.refreshBrick(brick);
     }
 
     public void inputHandling() {
@@ -144,7 +116,7 @@ public class GuiController implements Initializable {
             if (event != null) {
                 if (event.getEventType() == EventType.DOWN) {
                     DownData down = eventListener.onDownEvent(event);
-                    refreshBrick(down.getViewData());
+                    gameRenderer.refreshBrick(down.getViewData());
                 } else {
                     handleMoveEvent(event);
                 }
@@ -161,41 +133,7 @@ public class GuiController implements Initializable {
             case ROTATE -> eventListener.onRotateEvent(event);
             default -> null;
         };
-        if (data != null) refreshBrick(data);
-    }
-
-    public void refreshGameBackground(int[][] board) {
-        for (int row = 2; row < board.length; row++)
-            for (int col = 0; col < board[row].length; col++)
-                displayMatrix[row][col].setFill(getFillColor(board[row][col]));
-    }
-
-    private void refreshBrick(ViewData brick) {
-        if (isPause.getValue()) return;
-
-        double xPos = gamePanel.getLayoutX() + brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
-        double yPos = -42 + gamePanel.getLayoutY() + brick.getyPosition() * (BRICK_SIZE + brickPanel.getVgap());
-
-        brickPanel.setLayoutX(xPos);
-        brickPanel.setLayoutY(yPos);
-
-        if (rectangles.length != brick.getBrickData().length || rectangles[0].length != brick.getBrickData()[0].length) {
-            initBrick(brick);
-        }
-
-        for (int row = 0; row < brick.getBrickData().length; row++)
-            for (int col = 0; col < brick.getBrickData()[row].length; col++)
-                rectangles[row][col].setFill(getFillColor(brick.getBrickData()[row][col]));
-
-        previewPanel(brick.getNextBrickData());
-    }
-
-    private void previewPanel(int[][] nextBrickData){
-        nextBrick.getChildren().clear();
-        for (int row = 0; row < nextBrickData.length; row++)
-            for (int col = 0; col < nextBrickData[row].length; col++)
-                if (nextBrickData[row][col] != 0)
-                    nextBrick.add(new Rectangle(BRICK_SIZE, BRICK_SIZE, getFillColor(nextBrickData[row][col])), col, row);
+        if (data != null) gameRenderer.refreshBrick(data);
     }
 
     public void bindScore(IntegerProperty scoreProperty) {
@@ -215,17 +153,7 @@ public class GuiController implements Initializable {
         isGameOver.set(true);
     }
 
-    private Paint getFillColor(int i) {
-        return switch (i) {
-            case 0 -> Color.TRANSPARENT;
-            case 1 -> Color.AQUA;
-            case 2 -> Color.BLUEVIOLET;
-            case 3 -> Color.DARKGREEN;
-            case 4 -> Color.YELLOWGREEN;
-            case 5 -> Color.RED;
-            case 6 -> Color.FIREBRICK;
-            case 7 -> Color.BURLYWOOD;
-            default -> Color.WHITE;
-        };
+    public GameRenderer getRenderer() {
+        return this.gameRenderer;
     }
 }

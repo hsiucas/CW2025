@@ -4,10 +4,10 @@ import com.comp2042.model.board.*;
 import com.comp2042.model.events.InputEventListener;
 import com.comp2042.model.board.Board;
 import com.comp2042.model.board.SimpleBoard;
+import com.comp2042.view.GameRenderer;
 import com.comp2042.view.GuiController;
 import com.comp2042.logic.collision.ClearRow;
 import com.comp2042.logic.gravity.DownData;
-import com.comp2042.logic.gravity.GravityHandler;
 import com.comp2042.logic.board.ViewData;
 import com.comp2042.model.events.EventSource;
 import com.comp2042.model.events.MoveEvent;
@@ -16,8 +16,12 @@ import javafx.beans.property.IntegerProperty;
 public class GameController implements InputEventListener {
 
     private final Board board = new SimpleBoard(20, 10);
+    private final GuiController viewGuiController;
+    private final GameRenderer gameRenderer;
 
     public GameController(GuiController c) {
+        this.viewGuiController = c;
+        this.gameRenderer = c.getRenderer();
         board.createNewBrick();
     }
 
@@ -58,6 +62,7 @@ public class GameController implements InputEventListener {
             board.getScore().add(clear.getScoreBonus());
 
         boolean isGameOver = !board.createNewBrick();
+        gameRenderer.refreshGameBackground(board.getBoardMatrix());
         return new DownData(clear, board.getViewData(), isGameOver);
     }
 
@@ -82,6 +87,7 @@ public class GameController implements InputEventListener {
     @Override
     public void createNewGame() {
         board.newGame();
+        gameRenderer.refreshGameBackground(board.getBoardMatrix());
     }
 
     public int[][] getBoardMatrix() {
