@@ -5,8 +5,6 @@ import com.comp2042.model.events.EventSource;
 import com.comp2042.model.events.EventType;
 import com.comp2042.model.events.InputEventListener;
 import com.comp2042.model.events.MoveEvent;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -18,7 +16,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,7 +23,7 @@ import java.util.ResourceBundle;
 import com.comp2042.logic.gravity.DownData;
 import com.comp2042.logic.board.ViewData;
 
-public class GuiController implements Initializable {
+public class GuiController implements Initializable, GameLoopListener {
 
     @FXML private GridPane gamePanel;
     @FXML private GridPane brickPanel;
@@ -35,8 +32,8 @@ public class GuiController implements Initializable {
     @FXML private Text score;
     @FXML private ToggleButton pauseButton;
 
+    private GameLooper gameLooper;
     private GameRenderer gameRenderer;
-    private Timeline timeLine;
     private InputEventListener eventListener;
 
     private final BooleanProperty isPause = new SimpleBooleanProperty();
@@ -54,9 +51,9 @@ public class GuiController implements Initializable {
 
         pauseButton.selectedProperty().bindBidirectional(isPause);
         pauseButton.selectedProperty().addListener((obs,  oldValue, newValue) -> {
-            if (timeLine != null) {
-                if (newValue) { timeLine.pause(); }
-                else timeLine.play();
+            if (gameLooper != null) {
+                if (newValue) { gameLooper.pause(); }
+                else gameLooper.resume();
             }
             pauseButton.setText(newValue ? "Resume" : "Pause");
         });
@@ -64,27 +61,24 @@ public class GuiController implements Initializable {
         inputHandling();
     }
 
+    @Override
+    public void onTick(DownData downData) {
+        if (isPause.get() || isGameOver.get()) return;
+        int[][] matrix = ((GameController) eventListener).getBoardMatrix();
+        gameRenderer.refreshGameBackground(matrix);
+        gameRenderer.refreshBrick(downData.getViewData());
+
+        if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0)
+            showScoreNotification(downData.getClearRow().getScoreBonus());
+    }
+
     public void setEventListener(InputEventListener eventListener) {
         this.eventListener = eventListener;
     }
 
     public void startGameLoop() {
-        timeLine = new Timeline(new KeyFrame(Duration.millis(400), e -> {
-            if (isPause.get() || isGameOver.get()) return;
-
-            DownData downData = eventListener.onTick();
-            int[][] matrix = ((GameController) eventListener).getBoardMatrix();
-            gameRenderer.refreshGameBackground(matrix);
-            gameRenderer.refreshBrick(downData.getViewData());
-
-            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0)
-                showScoreNotification(downData.getClearRow().getScoreBonus());
-
-            if (downData.isGameOver()) gameOver();
-
-        }));
-        timeLine.setCycleCount(Timeline.INDEFINITE);
-        timeLine.play();
+        this.gameLooper = new GameLooper(this, eventListener);
+        gameLooper.start();
     }
 
     public void initGameView(int[][] boardMatrix, ViewData brick) {
@@ -146,8 +140,13 @@ public class GuiController implements Initializable {
         notificationPanel.showScore(groupNotification.getChildren());
     }
 
+    @Override
+    public void onGameOver() {
+        gameOver();
+    }
+
     public void gameOver() {
-        timeLine.stop();
+        if (gameLooper != null) gameLooper.stop();
         groupNotification.setVisible(true);
         groupNotification.setManaged(true);
         isGameOver.set(true);
@@ -156,4 +155,6 @@ public class GuiController implements Initializable {
     public GameRenderer getRenderer() {
         return this.gameRenderer;
     }
+
+
 }
