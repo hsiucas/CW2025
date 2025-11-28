@@ -2,6 +2,7 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
@@ -16,15 +17,15 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane prefHeight="377.0" prefWidth="419.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.comp2042.view.GuiController">
+<Pane onKeyPressed="#handleKey" prefHeight="377.0" prefWidth="419.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.comp2042.controller.StartScreenController">
 
     <stylesheets>
         <URL value="@window_style.css" />
     </stylesheets>
    <children>
-      <StackPane prefHeight="377.0" prefWidth="419.0">
+      <StackPane prefHeight="150.0" prefWidth="200.0">
          <children>
-            <Rectangle fill="#014473" height="377.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="419.0" />
+            <Rectangle fill="#0341ae" height="377.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="419.0" />
             <VBox alignment="CENTER" prefHeight="373.0" prefWidth="415.0">
                <children>
                   <StackPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="135.0" prefWidth="419.0">
@@ -60,7 +61,7 @@
                               </RadialGradient>
                            </stroke>
                         </Rectangle>
-                        <Label alignment="BOTTOM_CENTER" prefHeight="149.0" prefWidth="377.0" text="Т Е Т Р И С" textAlignment="JUSTIFY">
+                        <Label alignment="BOTTOM_CENTER" prefHeight="149.0" prefWidth="377.0" text="Т Е Т Р И С" textAlignment="JUSTIFY" textFill="#0341ae">
                            <font>
                               <Font name="TT Carvist Trial Bold" size="129.0" />
                            </font>
@@ -95,7 +96,7 @@
                         <Insets bottom="10.0" top="10.0" />
                      </VBox.margin>
                      <effect>
-                        <InnerShadow choke="0.2" height="15.0" radius="7.0" width="15.0">
+                        <InnerShadow blurType="GAUSSIAN" choke="0.2" height="29.0" radius="6.75" width="0.0">
                            <color>
                               <Color red="0.003921568859368563" green="0.239215686917305" blue="0.4588235318660736" />
                            </color>
@@ -117,4 +118,7 @@
          </children>
       </StackPane>
    </children>
+   <cursor>
+      <Cursor fx:constant="DISAPPEAR" />
+   </cursor>
 </Pane>
