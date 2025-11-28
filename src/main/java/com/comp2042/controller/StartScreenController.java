@@ -17,7 +17,7 @@ public class StartScreenController {
     private void handleKey(KeyEvent event) {
         if (isLocked) {
             isLocked = false;
-            navigator.loadGameScene();
+            navigator.toMainMenu();
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.comp2042.application;
 
 import com.comp2042.controller.GameController;
+import com.comp2042.controller.MainMenuController;
 import com.comp2042.controller.StartScreenController;
 import com.comp2042.view.GuiController;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +24,18 @@ public class AppNavigator {
         loadScene("startScreen.fxml");
     }
 
+    public void toMainMenu() {
+        loadScene("mainMenu.fxml");
+    }
+
+    public void toGameModeSelection() {
+        loadScene("gameSelectionLayout.fxml");
+    }
+
+    public void toInstructionsScreen() {
+        loadScene("instructionsLayout.fxml");
+    }
+
     private void loadScene(String fxmlPath) {
         try {
             URL location = getClass().getClassLoader().getResource(fxmlPath);
@@ -30,37 +43,36 @@ public class AppNavigator {
             Parent root = fxmlLoader.load();
 
             Object controller = fxmlLoader.getController();
+
             if (controller instanceof StartScreenController) {
                 ((StartScreenController) controller).setNavigator(this);
+            } else if (controller instanceof MainMenuController) {
+                ((MainMenuController) controller).setNavigator(this);
             }
 
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            root.requestFocus();
             stage.show();
+            root.requestFocus();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void loadGameScene() {
-        try {
-            URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
-            FXMLLoader fxmlLoader = new FXMLLoader(location);
-            Parent root = fxmlLoader.load();
-            GuiController controller = fxmlLoader.getController();
+    public void loadGameScene() throws Exception {
+        URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        Parent root = fxmlLoader.load();
+        GuiController controller = fxmlLoader.getController();
 
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
 
-            GameController gameController = new GameController(controller);
-            controller.setEventListener(gameController);
-            controller.bindScore(gameController.scoreProperty());
-            controller.bindLines(gameController.linesProperty());
-            controller.initGameView(gameController.getBoardMatrix(), gameController.getViewData());
-            controller.startGameLoop();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        GameController gameController = new GameController(controller);
+        controller.setEventListener(gameController);
+        controller.bindScore(gameController.scoreProperty());
+        controller.bindLines(gameController.linesProperty());
+        controller.initGameView(gameController.getBoardMatrix(), gameController.getViewData());
+        controller.startGameLoop();
     }
 }
