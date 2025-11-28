@@ -89,7 +89,7 @@
                      <Insets />
                   </StackPane.margin>
                </BorderPane>
-                  <Text fx:id="score" styleClass="scoreText" text="Text" textAlignment="RIGHT" wrappingWidth="120.0">
+                  <Text fx:id="score" styleClass="scoreText" text="0" textAlignment="RIGHT" wrappingWidth="120.0">
                   <StackPane.margin>
                      <Insets top="35.0" />
                   </StackPane.margin>
@@ -126,7 +126,7 @@
                         <children>
                            <Label alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="135.0" styleClass="ipadBackground" text="LINES" textAlignment="CENTER" textOverrun="CLIP" />
                            <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="130.0" styleClass="ipadBorder" />
-                           <Text fx:id="score11" styleClass="scoreText" text="Text" textAlignment="RIGHT" wrappingWidth="120.0">
+                           <Text fx:id="lines" styleClass="scoreText" text="0" textAlignment="RIGHT" wrappingWidth="120.0">
                               <StackPane.margin>
                                  <Insets top="20.0" />
                               </StackPane.margin>

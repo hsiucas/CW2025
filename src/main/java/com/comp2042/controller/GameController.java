@@ -101,4 +101,8 @@ public class GameController implements InputEventListener {
     public IntegerProperty scoreProperty() {
         return board.getScore().scoreProperty();
     }
+
+    public IntegerProperty linesProperty() {
+        return ((SimpleBoard) board).getlines().linesProperty();
+    }
 }

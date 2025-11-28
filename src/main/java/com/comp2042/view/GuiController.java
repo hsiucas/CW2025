@@ -27,6 +27,7 @@ public class GuiController implements Initializable, GameLoopListener {
     @FXML private GridPane nextBrick;
     @FXML private Group groupNotification;
     @FXML private Text score;
+    @FXML private Text lines;
 
     private GameLooper gameLooper;
     private GameRenderer gameRenderer;
@@ -102,6 +103,10 @@ public class GuiController implements Initializable, GameLoopListener {
 
     public void bindScore(IntegerProperty scoreProperty) {
         score.textProperty().bind(scoreProperty.asString());
+    }
+
+    public void bindLines(IntegerProperty linesProperty) {
+        lines.textProperty().bind(linesProperty.asString());
     }
 
     private void showScoreNotification(int scoreBonus) {

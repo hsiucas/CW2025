@@ -32,6 +32,7 @@ public class Main extends Application {
         GameController gameController = new GameController(c);
         c.setEventListener(gameController);
         c.bindScore(gameController.scoreProperty());
+        c.bindLines(gameController.linesProperty());
         c.initGameView(gameController.getBoardMatrix(), gameController.getViewData());
         c.startGameLoop();
     }

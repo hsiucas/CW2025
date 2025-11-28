@@ -1,5 +1,6 @@
 package com.comp2042.model.board;
 
+import com.comp2042.logic.scoring.Lines;
 import com.comp2042.model.bricks.core.Brick;
 import com.comp2042.model.bricks.core.BrickGenerator;
 import com.comp2042.model.bricks.tetromino.RandomBrickGenerator;
@@ -21,6 +22,7 @@ public class SimpleBoard implements Board {
     private final RotationState rotationState;
     private Point currentOffset;
     private final Score score;
+    private final Lines lines;
     private final CollisionDetector collisionDetector;
     private final BrickLandingHandler landingHandler;
     private final BrickMover brickMover;
@@ -35,6 +37,7 @@ public class SimpleBoard implements Board {
         rotationState = new RotationState();
         currentOffset = new Point(3, 2);
         score = new Score();
+        lines = new Lines();
         collisionDetector = new CollisionDetector();
         landingHandler = new BrickLandingHandler();
         brickMover = new BrickMover();
@@ -107,6 +110,9 @@ public class SimpleBoard implements Board {
     public ClearRow clearRows() {
         ClearRow clearRow = landingHandler.handleClearRows(currentGameMatrix);
         currentGameMatrix = clearRow.getNewMatrix();
+        if (clearRow.getLinesRemoved() > 0) {
+            lines.add(clearRow.getLinesRemoved());
+        }
         return clearRow;
     }
 
@@ -115,10 +121,15 @@ public class SimpleBoard implements Board {
         return score;
     }
 
+    public Lines getlines() {
+        return lines;
+    }
+
     @Override
     public void newGame() {
         currentGameMatrix = new int[height][width];
         score.reset();
+        lines.reset();
         createNewBrick();
     }
 }
