@@ -10,7 +10,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -28,7 +27,6 @@ public class GuiController implements Initializable, GameLoopListener {
     @FXML private GridPane nextBrick;
     @FXML private Group groupNotification;
     @FXML private Text score;
-    @FXML private ToggleButton pauseButton;
 
     private GameLooper gameLooper;
     private GameRenderer gameRenderer;
@@ -47,13 +45,12 @@ public class GuiController implements Initializable, GameLoopListener {
         groupNotification.setManaged(false);
         brickPanel.setManaged(false);
 
-        pauseButton.selectedProperty().bindBidirectional(isPause);
-        pauseButton.selectedProperty().addListener((obs,  oldValue, newValue) -> {
+        isPause.addListener((obs,  oldValue, newValue) -> {
             if (gameLooper != null) {
-                if (newValue) { gameLooper.pause(); }
-                else gameLooper.resume();
+                if (newValue) {
+                    gameLooper.pause();
+                } else gameLooper.resume();
             }
-            pauseButton.setText(newValue ? "Resume" : "Pause");
         });
     }
 
@@ -73,7 +70,7 @@ public class GuiController implements Initializable, GameLoopListener {
 
         KeyInputHandler handler = new KeyInputHandler(
                 eventListener,
-                () -> pauseButton.setSelected(!pauseButton.isSelected()),
+                () -> isPause.set(!isPause.get()),
                 isPause,
                 isGameOver,
                 this
