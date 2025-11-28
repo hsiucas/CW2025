@@ -8,6 +8,7 @@ import javafx.scene.shape.Rectangle;
 
 public class GameRenderer {
     private static final int BRICK_SIZE = 20;
+    private static final double X_LAYOUT_ADJUSTMENT = 20;
     private static final double Y_LAYOUT_ADJUSTMENT = -42;
     private static final int GAMEBOY_SPAWN = 2;
 
@@ -56,7 +57,7 @@ public class GameRenderer {
     public void refreshBrick(ViewData brick) {
 //        if (isPause.getValue()) return;
 
-        double xPos = gamePanel.getLayoutX() + brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
+        double xPos = X_LAYOUT_ADJUSTMENT + gamePanel.getLayoutX() + brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
         double yPos = Y_LAYOUT_ADJUSTMENT + gamePanel.getLayoutY() + brick.getyPosition() * (BRICK_SIZE + brickPanel.getVgap());
 
         brickPanel.setLayoutX(xPos);

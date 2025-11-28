@@ -1,53 +1,61 @@
-<?import com.comp2042.view.GameOverPanel?>
-<?import javafx.scene.control.Button?>
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.Group?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<?import java.net.URL?>
-<Pane fx:controller="com.comp2042.view.GuiController"
-      xmlns:fx="http://javafx.com/fxml">
+<?import javafx.scene.Group?>
 
-    <StackPane fx:id="stackedBoard">
-        <BorderPane fx:id="gameBoard" styleClass="gameBoard"/>
-        <BorderPane fx:id="gameBorder" styleClass="gameBorder">
+<Pane prefHeight="377.0" prefWidth="419.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.comp2042.view.GuiController">
+
+    <StackPane fx:id="stackedBoard" layoutX="20.0" prefHeight="377.0" prefWidth="249.0">
+        <BorderPane fx:id="gameBoard" prefHeight="377.0" prefWidth="249.0" styleClass="gameBoard" />
+        <BorderPane fx:id="gameBorder" prefHeight="377.0" prefWidth="249.0" styleClass="gameBorder">
             <center>
-                <GridPane fx:id="gamePanel" hgap="1" vgap="1"/>
+                <GridPane fx:id="gamePanel" layoutX="20.0" hgap="1" vgap="1" />
             </center>
         </BorderPane>
     </StackPane>
 
-    <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
+    <GridPane fx:id="brickPanel" hgap="1" layoutX="20.0" prefHeight="377.0" prefWidth="249.0" vgap="1" />
 
-    <VBox alignment="CENTER" styleClass="vbox" layoutX="255" layoutY="20">
-        <VBox alignment="CENTER">
-            <Label alignment="BASELINE_CENTER" text="SCORE" styleClass="scoreClass"/>
-        </VBox>
-
-        <VBox alignment="CENTER_RIGHT">
-            <Text text="Text" fx:id="score" styleClass="scoreClass"/>
-        </VBox>
-
-        <VBox>
-            <BorderPane styleClass="nextBrick" prefWidth="100" prefHeight="70" maxWidth="100">
-                <center>
-                    <GridPane fx:id="nextBrick" alignment="CENTER" hgap="1" vgap="1"/>
-                </center>
+    <VBox layoutX="270.0" prefHeight="377.0" prefWidth="148.0">
+      <children>
+            <Label alignment="BOTTOM_CENTER" prefHeight="46.0" prefWidth="151.0" styleClass="scoreClass" text="SCORE" textAlignment="CENTER" textOverrun="CLIP" />
+            <Text fx:id="score" fill="WHITE" styleClass="scoreText" text="Text" textAlignment="RIGHT" wrappingWidth="148.0">
+            <VBox.margin>
+               <Insets bottom="20.0" top="20.0" />
+            </VBox.margin>
+         </Text>
+            <BorderPane maxHeight="80.0" maxWidth="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="nextBrick">
+            <center>
+                    <GridPane fx:id="nextBrick" alignment="CENTER" hgap="1" maxHeight="80.0" maxWidth="80.0" prefHeight="80.0" prefWidth="80.0" vgap="1" BorderPane.alignment="CENTER">
+                  <BorderPane.margin>
+                     <Insets />
+                  </BorderPane.margin>
+               </GridPane>
+            </center>
+            <VBox.margin>
+               <Insets bottom="20.0" />
+            </VBox.margin>
             </BorderPane>
-        </VBox>
 
-        <ToggleButton text="Pause" styleClass="ipad" prefWidth="160"
-                      fx:id="pauseButton"/>
-    </VBox>
+           <ToggleButton fx:id="pauseButton" prefWidth="149.0" styleClass="ipad" text="Pause" textOverrun="CLIP" />
+      </children>
+   </VBox>
 
     <Group fx:id="groupNotification" layoutY="150">
         <VBox alignment="CENTER">
-            <GameOverPanel fx:id="gameOverPanel"/>
+            <Label fx:id="gameOverPanel" text="GAME OVER" styleClass="gameOverStyle" />
         </VBox>
     </Group>
 
     <stylesheets>
-        <URL value="@window_style.css"/>
+        <URL value="@window_style.css" />
     </stylesheets>
 </Pane>
