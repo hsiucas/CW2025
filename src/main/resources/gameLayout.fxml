@@ -34,9 +34,9 @@
             </ImageView>
          </children>
       </VBox>
-        <BorderPane fx:id="gameBoard" maxWidth="-Infinity" prefHeight="377.0" prefWidth="210.0" styleClass="gameBoard">
+        <BorderPane fx:id="gameBoard" layoutX="20.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="377.0" prefWidth="209.0" styleClass="gameBoard">
          <center>
-                <GridPane fx:id="gamePanel" hgap="1" vgap="1" BorderPane.alignment="CENTER" />
+                <GridPane fx:id="gamePanel" hgap="1" layoutX="20.0" prefHeight="377.0" prefWidth="209.0" vgap="1" BorderPane.alignment="CENTER" />
          </center></BorderPane>
     </StackPane>
 
@@ -63,7 +63,7 @@
                            </Rectangle>
                            <Rectangle fill="#757575" height="1.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="150.0">
                               <StackPane.margin>
-                                 <Insets bottom="2.0" />
+                                 <Insets bottom="5.0" />
                               </StackPane.margin>
                            </Rectangle>
                         </children>
@@ -80,7 +80,7 @@
                   <top>
                      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="148.0" BorderPane.alignment="CENTER">
                         <children>
-                              <Label alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="135.0" styleClass="ipadBackground" text="SCORE" textAlignment="CENTER" textOverrun="CLIP">
+                              <Label alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="34.0" prefWidth="135.0" styleClass="ipadBackground" text="SCORE" textAlignment="CENTER" textOverrun="CLIP">
                               <StackPane.margin>
                                  <Insets />
                               </StackPane.margin>
@@ -88,7 +88,7 @@
                                  <Insets bottom="55.0" />
                               </padding>
                            </Label>
-                           <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="130.0" styleClass="ipadBorder">
+                           <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="29.0" prefWidth="130.0" styleClass="ipadBorder">
                               <padding>
                                  <Insets bottom="55.0" />
                               </padding>
@@ -120,8 +120,14 @@
                               <opaqueInsets>
                                  <Insets />
                               </opaqueInsets>
+                              <StackPane.margin>
+                                 <Insets />
+                              </StackPane.margin>
                            </Label>
-                           <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="130.0" styleClass="ipadBorder" />
+                           <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="130.0" styleClass="ipadBorder">
+                              <StackPane.margin>
+                                 <Insets />
+                              </StackPane.margin></Pane>
                            <Text fx:id="score1" styleClass="scoreText" text="Text" textAlignment="RIGHT" wrappingWidth="120.0">
                               <StackPane.margin>
                                  <Insets top="20.0" />

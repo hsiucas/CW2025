@@ -10,8 +10,9 @@ import java.util.List;
 
 public class GameRenderer {
     private static final int BRICK_SIZE = 20;
-    private static final int SMALLER_BRICK_SIZE = 8;
-    private static final double X_LAYOUT_ADJUSTMENT = 20;
+    private static final int SMALL_BRICK_SIZE = 19;
+    private static final int SMALLER_BRICK_SIZE = 7;
+    private static final double X_LAYOUT_ADJUSTMENT = 40;
     private static final double Y_LAYOUT_ADJUSTMENT = -42;
     private static final int GAMEBOY_SPAWN = 2;
 
@@ -62,7 +63,7 @@ public class GameRenderer {
     }
 
     public void refreshBrick(ViewData brick) {
-        double xPos = X_LAYOUT_ADJUSTMENT + gamePanel.getLayoutX() + brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
+        double xPos = X_LAYOUT_ADJUSTMENT + brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
         double yPos = Y_LAYOUT_ADJUSTMENT + gamePanel.getLayoutY() + brick.getyPosition() * (BRICK_SIZE + brickPanel.getVgap());
 
         brickPanel.setLayoutX(xPos);
@@ -84,7 +85,7 @@ public class GameRenderer {
         nextBrick2.getChildren().clear();
         nextBrick3.getChildren().clear();
         if (nextBrickData.size() > 0) {
-            singlePreview(nextBrick, nextBrickData.getFirst(), BRICK_SIZE);
+            singlePreview(nextBrick, nextBrickData.getFirst(), SMALL_BRICK_SIZE);
         }
         if (nextBrickData.size() > 1) {
             singlePreview(nextBrick2, nextBrickData.get(1), SMALLER_BRICK_SIZE);
@@ -106,12 +107,12 @@ public class GameRenderer {
         return switch (i) {
             case 0 -> Color.TRANSPARENT;
             case 1 -> Color.AQUA;
-            case 2 -> Color.BLUEVIOLET;
-            case 3 -> Color.DARKGREEN;
-            case 4 -> Color.YELLOWGREEN;
-            case 5 -> Color.RED;
-            case 6 -> Color.FIREBRICK;
-            case 7 -> Color.BURLYWOOD;
+            case 2 -> Color.BLUE;
+            case 3 -> Color.DARKORANGE;
+            case 4 -> Color.GOLD;
+            case 5 -> Color.FORESTGREEN;
+            case 6 -> Color.DARKVIOLET;
+            case 7 -> Color.RED;
             default -> Color.WHITE;
         };
     }
