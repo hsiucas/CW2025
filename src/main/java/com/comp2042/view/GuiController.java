@@ -25,6 +25,8 @@ public class GuiController implements Initializable, GameLoopListener {
     @FXML private GridPane gamePanel;
     @FXML private GridPane brickPanel;
     @FXML private GridPane nextBrick;
+    @FXML private GridPane nextBrick2;
+    @FXML private GridPane nextBrick3;
     @FXML private Group groupNotification;
     @FXML private Text score;
     @FXML private Text lines;
@@ -38,7 +40,7 @@ public class GuiController implements Initializable, GameLoopListener {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.gameRenderer = new GameRenderer(gamePanel, brickPanel, nextBrick);
+        this.gameRenderer = new GameRenderer(gamePanel, brickPanel, nextBrick, nextBrick2, nextBrick3);
 
         Font.loadFont(getClass().getClassLoader().getResource("fonts/PressStart2P.ttf").toExternalForm(), 38);
         gamePanel.setFocusTraversable(true);
@@ -87,7 +89,7 @@ public class GuiController implements Initializable, GameLoopListener {
     public void initGameView(int[][] boardMatrix, ViewData brick) {
         gameRenderer.initBackground(boardMatrix);
         gameRenderer.initBrick(brick);
-        gameRenderer.previewPanel(brick.getNextBrickData());
+        gameRenderer.previewPanel(brick.getNextBricksData());
         gameRenderer.refreshBrick(brick);
     }
 

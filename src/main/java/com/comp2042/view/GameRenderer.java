@@ -6,8 +6,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
+import java.util.List;
+
 public class GameRenderer {
     private static final int BRICK_SIZE = 20;
+    private static final int SMALLER_BRICK_SIZE = 8;
     private static final double X_LAYOUT_ADJUSTMENT = 20;
     private static final double Y_LAYOUT_ADJUSTMENT = -42;
     private static final int GAMEBOY_SPAWN = 2;
@@ -15,14 +18,18 @@ public class GameRenderer {
     private GridPane gamePanel;
     private GridPane brickPanel;
     private GridPane nextBrick;
+    private GridPane nextBrick2;
+    private GridPane nextBrick3;
 
     private Rectangle[][] displayMatrix;
     private Rectangle[][] rectangles;
 
-    public GameRenderer(GridPane gamePanel, GridPane brickPanel, GridPane nextBrick) {
+    public GameRenderer(GridPane gamePanel, GridPane brickPanel, GridPane nextBrick, GridPane nextBrick2, GridPane nextBrick3) {
         this.gamePanel = gamePanel;
         this.brickPanel = brickPanel;
         this.nextBrick = nextBrick;
+        this.nextBrick2 = nextBrick2;
+        this.nextBrick3 = nextBrick3;
     }
 
     public void initBackground(int[][] boardMatrix) {
@@ -55,8 +62,6 @@ public class GameRenderer {
     }
 
     public void refreshBrick(ViewData brick) {
-//        if (isPause.getValue()) return;
-
         double xPos = X_LAYOUT_ADJUSTMENT + gamePanel.getLayoutX() + brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
         double yPos = Y_LAYOUT_ADJUSTMENT + gamePanel.getLayoutY() + brick.getyPosition() * (BRICK_SIZE + brickPanel.getVgap());
 
@@ -71,15 +76,30 @@ public class GameRenderer {
             for (int col = 0; col < brick.getBrickData()[row].length; col++)
                 rectangles[row][col].setFill(getFillColor(brick.getBrickData()[row][col]));
 
-        previewPanel(brick.getNextBrickData());
+        previewPanel(brick.getNextBricksData());
     }
 
-    public void previewPanel(int[][] nextBrickData){
+    public void previewPanel(List<int[][]> nextBrickData){
         nextBrick.getChildren().clear();
-        for (int row = 0; row < nextBrickData.length; row++)
-            for (int col = 0; col < nextBrickData[row].length; col++)
-                if (nextBrickData[row][col] != 0)
-                    nextBrick.add(new Rectangle(BRICK_SIZE, BRICK_SIZE, getFillColor(nextBrickData[row][col])), col, row);
+        nextBrick2.getChildren().clear();
+        nextBrick3.getChildren().clear();
+        if (nextBrickData.size() > 0) {
+            singlePreview(nextBrick, nextBrickData.getFirst(), BRICK_SIZE);
+        }
+        if (nextBrickData.size() > 1) {
+            singlePreview(nextBrick2, nextBrickData.get(1), SMALLER_BRICK_SIZE);
+        }
+        if (nextBrickData.size() > 2) {
+            singlePreview(nextBrick3, nextBrickData.get(2), SMALLER_BRICK_SIZE);
+        }
+    }
+
+    public void singlePreview(GridPane targetGrid, int[][] brick, int brickSize) {
+        targetGrid.getChildren().clear();
+        for (int row = 0; row < brick.length; row++)
+            for (int col = 0; col < brick[row].length; col++)
+                if (brick[row][col] != 0)
+                    targetGrid.add(new Rectangle(brickSize, brickSize, getFillColor(brick[row][col])), col, row);
     }
 
     private Paint getFillColor(int i) {

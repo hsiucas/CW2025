@@ -155,12 +155,12 @@
                   <children>
                      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="47.0" prefWidth="47.0" styleClass="ipadBackground">
                         <center>
-                           <GridPane fx:id="nextBrick1" alignment="CENTER" hgap="1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="nextBrick" vgap="1" BorderPane.alignment="CENTER" />
+                           <GridPane fx:id="nextBrick2" alignment="CENTER" hgap="1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="nextBrick" vgap="1" BorderPane.alignment="CENTER" />
                         </center>
                      </BorderPane>
                      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="47.0" prefWidth="47.0" styleClass="ipadBackground" GridPane.rowIndex="1">
                         <center>
-                           <GridPane fx:id="nextBrick2" alignment="CENTER" hgap="1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="nextBrick" vgap="1" BorderPane.alignment="CENTER" />
+                           <GridPane fx:id="nextBrick3" alignment="CENTER" hgap="1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="nextBrick" vgap="1" BorderPane.alignment="CENTER" />
                         </center>
                      </BorderPane>
                   </children>

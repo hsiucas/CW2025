@@ -1,17 +1,19 @@
 package com.comp2042.logic.board;
 
+import java.util.List;
+
 public final class ViewData {
 
     private final int[][] brickData;
     private final int yPosition;
     private final int xPosition;
-    private final int[][] nextBrickData;
+    private final List<int[][]> nextBricksData;
 
-    public ViewData(int[][] brickData, int yPosition, int xPosition, int[][] nextBrickData) {
+    public ViewData(int[][] brickData, int yPosition, int xPosition, List<int[][]> nextBricksData) {
         this.brickData = brickData;
         this.yPosition = yPosition;
         this.xPosition = xPosition;
-        this.nextBrickData = nextBrickData;
+        this.nextBricksData = nextBricksData;
     }
 
     public int[][] getBrickData() {
@@ -26,7 +28,7 @@ public final class ViewData {
         return xPosition;
     }
 
-    public int[][] getNextBrickData() {
-        return MatrixOperations.copy(nextBrickData);
+    public List<int[][]> getNextBricksData() {
+        return nextBricksData;
     }
 }

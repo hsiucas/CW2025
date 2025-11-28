@@ -12,6 +12,7 @@ import com.comp2042.logic.scoring.Score;
 import com.comp2042.logic.board.ViewData;
 
 import java.awt.*;
+import java.util.List;
 
 public class SimpleBoard implements Board {
 
@@ -85,10 +86,10 @@ public class SimpleBoard implements Board {
 
     @Override
     public boolean rotateBrickCounterClockwise() {
-        return brickRotator.rotateCounterClockwise(  currentGameMatrix,
-                rotationState,
-                                                            currentOffset,
-                                                            collisionDetector);
+        return brickRotator.rotateCounterClockwise( currentGameMatrix,
+                                                    rotationState,
+                                                    currentOffset,
+                                                    collisionDetector);
     }
 
     @Override
@@ -98,7 +99,11 @@ public class SimpleBoard implements Board {
 
     @Override
     public ViewData getViewData() {
-        return new ViewData(rotationState.getCurrentShape(), currentOffset.y, currentOffset.x, brickGenerator.getNextBrick().getShapeMatrix().get(0));
+        List<int[][]> nextBricks = ((RandomBrickGenerator) brickGenerator).getNextThreeBricks();
+        return new ViewData(rotationState.getCurrentShape(),
+                            currentOffset.y,
+                            currentOffset.x,
+                            nextBricks);
     }
 
     @Override

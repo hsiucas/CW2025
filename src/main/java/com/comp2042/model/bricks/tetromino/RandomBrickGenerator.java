@@ -3,10 +3,7 @@ package com.comp2042.model.bricks.tetromino;
 import com.comp2042.model.bricks.core.Brick;
 import com.comp2042.model.bricks.core.BrickGenerator;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomBrickGenerator implements BrickGenerator {
@@ -26,14 +23,27 @@ public class RandomBrickGenerator implements BrickGenerator {
         brickList.add(new ZBrick());
         nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
         nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
+        nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
+        nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
     }
 
     @Override
     public Brick getBrick() {
-        if (nextBricks.size() <= 1) {
+        if (nextBricks.size() <= 3) {
             nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
         }
         return nextBricks.poll();
+    }
+
+    public List<int[][]> getNextThreeBricks() {
+        List<int[][]> list = new ArrayList<>();
+        Iterator<Brick> iterator = nextBricks.iterator();
+        int counter = 0;
+        while (iterator.hasNext() && counter < 3) {
+            list.add(iterator.next().getShapeMatrix().get(0));
+            counter++;
+        }
+        return list;
     }
 
     @Override
