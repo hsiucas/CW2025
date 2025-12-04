@@ -1,5 +1,6 @@
 package com.comp2042.controller;
 
+import com.comp2042.logic.rules.SurvivalModeRules;
 import com.comp2042.model.bricks.tetromino.RandomBrickGenerator;
 import com.comp2042.model.events.InputEventListener;
 import com.comp2042.model.board.Board;
@@ -12,7 +13,10 @@ import com.comp2042.logic.board.ViewData;
 import com.comp2042.logic.rules.GameModeRules;
 import com.comp2042.model.events.EventSource;
 import com.comp2042.model.events.MoveEvent;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
+import javafx.util.Duration;
 
 public class GameController implements InputEventListener {
 
@@ -21,6 +25,7 @@ public class GameController implements InputEventListener {
     private final GameRenderer gameRenderer;
     private final GameModeRules gameModeRules;
     private double currentSpeed;
+    private Timeline survivalTimer;
 
     public GameController(GuiController c, GameModeRules rules) {
         this.viewGuiController = c;
@@ -28,6 +33,9 @@ public class GameController implements InputEventListener {
         this.gameModeRules = rules;
         ((SimpleBoard) board).setRules(rules);
         this.currentSpeed = rules.getInitialSpeedDelay();
+        if (rules instanceof SurvivalModeRules) {
+            initialiseSurvivalMechanics();
+        }
         board.createNewBrick();
     }
 
@@ -46,6 +54,11 @@ public class GameController implements InputEventListener {
             board.getScore().add(clear.getScoreBonus());
 
         boolean gameOver = !board.createNewBrick();
+
+        if(gameOver) {
+            stopGame();
+        }
+
         checkSpeed();
         return new DownData(clear, board.getViewData(), gameOver);
     }
@@ -69,6 +82,11 @@ public class GameController implements InputEventListener {
 
         boolean isGameOver = !board.createNewBrick();
         gameRenderer.refreshGameBackground(board.getBoardMatrix());
+
+        if(isGameOver) {
+            stopGame();
+        }
+
         checkSpeed();
         return new DownData(clear, board.getViewData(), isGameOver);
     }
@@ -123,6 +141,28 @@ public class GameController implements InputEventListener {
         if (newSpeed < currentSpeed) {
             currentSpeed = newSpeed;
             viewGuiController.updateSpeed(newSpeed);
+        }
+    }
+
+    private void initialiseSurvivalMechanics() {
+        survivalTimer = new Timeline(new KeyFrame(Duration.seconds(15), e -> {
+            if (viewGuiController != null) {
+                boolean died = ((SimpleBoard) board).addGarbageRow(false);
+                if (died) {
+                    stopGame();
+                    viewGuiController.gameOver();
+                } else gameRenderer.refreshGameBackground(board.getBoardMatrix());
+            }
+        }));
+
+        survivalTimer.setCycleCount(Timeline.INDEFINITE);
+        survivalTimer.play();
+    }
+
+    public void stopGame() {
+        if (survivalTimer != null) {
+            survivalTimer.stop();
+            survivalTimer = null;
         }
     }
 }

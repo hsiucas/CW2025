@@ -1,5 +1,6 @@
 package com.comp2042.model.board;
 
+import com.comp2042.logic.board.MatrixOperations;
 import com.comp2042.logic.rules.GameModeRules;
 import com.comp2042.logic.scoring.Level;
 import com.comp2042.logic.scoring.Lines;
@@ -153,5 +154,19 @@ public class SimpleBoard implements Board {
     public void setRules(GameModeRules rules) {
         this.rules = rules;
         level.levelProperty().set(rules.getInitialLevel());
+    }
+
+    public boolean addGarbageRow(boolean isIndestructible) {
+        if (MatrixOperations.isGameOver(currentGameMatrix)) {
+            return true;
+        }
+
+        this.currentGameMatrix = MatrixOperations.addGarbageRow(currentGameMatrix, isIndestructible);
+
+        if (currentOffset.y > 0) {
+            currentOffset.translate(0, -1);
+        }
+
+        return MatrixOperations.isGameOver(currentGameMatrix);
     }
 }

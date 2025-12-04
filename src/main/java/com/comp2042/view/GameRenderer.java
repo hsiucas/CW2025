@@ -113,7 +113,9 @@ public class GameRenderer {
             case 5 -> Color.FORESTGREEN;
             case 6 -> Color.DARKVIOLET;
             case 7 -> Color.RED;
-            default -> Color.WHITE;
+            case 8 -> Color.GRAY;
+            case 9 -> Color.DARKGRAY;
+            default -> Color.DEEPPINK;
         };
     }
 }

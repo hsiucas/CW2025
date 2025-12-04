@@ -4,9 +4,11 @@ import com.comp2042.logic.collision.ClearRow;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MatrixOperations {
 
@@ -66,7 +68,7 @@ public class MatrixOperations {
             int[] tmpRow = new int[matrix[i].length];
             boolean rowToClear = true;
             for (int j = 0; j < matrix[0].length; j++) {
-                if (matrix[i][j] == 0) {
+                if (matrix[i][j] == 0 || matrix[i][j] == 9) {
                     rowToClear = false;
                 }
                 tmpRow[j] = matrix[i][j];
@@ -93,4 +95,29 @@ public class MatrixOperations {
         return list.stream().map(MatrixOperations::copy).collect(Collectors.toList());
     }
 
+    public static int[][] addGarbageRow(int[][] originalMatrix, boolean isIndestructible) {
+        int height = originalMatrix.length;
+        int width = originalMatrix[0].length;
+        int [][] newMatrix = new int[height][width];
+
+        for (int row = 0; row < height - 1; row++) {
+            System.arraycopy(originalMatrix[row + 1], 0, newMatrix[row], 0, width);
+        }
+
+        if (isIndestructible) {
+            Arrays.fill(newMatrix[height - 1], 9);
+        } else {
+            Arrays.fill(newMatrix[height - 1], 8);
+            int gapIndex = ThreadLocalRandom.current().nextInt(width);
+            newMatrix[height - 1][gapIndex] = 0;
+        }
+        return newMatrix;
+    }
+
+    public static boolean isGameOver(int[][] matrix) {
+        for (int col = 0; col < matrix[0].length; col++) {
+            if (matrix[0][col] != 0) return true;
+        }
+        return false;
+    }
 }
