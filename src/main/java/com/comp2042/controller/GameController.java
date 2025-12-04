@@ -1,6 +1,5 @@
 package com.comp2042.controller;
 
-import com.comp2042.model.board.*;
 import com.comp2042.model.events.InputEventListener;
 import com.comp2042.model.board.Board;
 import com.comp2042.model.board.SimpleBoard;
@@ -19,11 +18,15 @@ public class GameController implements InputEventListener {
     private final Board board = new SimpleBoard(20, 10);
     private final GuiController viewGuiController;
     private final GameRenderer gameRenderer;
+    private final GameModeRules gameModeRules;
+    private double currentSpeed;
 
     public GameController(GuiController c, GameModeRules rules) {
         this.viewGuiController = c;
         this.gameRenderer = c.getRenderer();
+        this.gameModeRules = rules;
         ((SimpleBoard) board).setRules(rules);
+        this.currentSpeed = rules.getInitialSpeedDelay();
         board.createNewBrick();
     }
 
@@ -42,7 +45,7 @@ public class GameController implements InputEventListener {
             board.getScore().add(clear.getScoreBonus());
 
         boolean gameOver = !board.createNewBrick();
-
+        checkSpeed();
         return new DownData(clear, board.getViewData(), gameOver);
     }
 
@@ -65,6 +68,7 @@ public class GameController implements InputEventListener {
 
         boolean isGameOver = !board.createNewBrick();
         gameRenderer.refreshGameBackground(board.getBoardMatrix());
+        checkSpeed();
         return new DownData(clear, board.getViewData(), isGameOver);
     }
 
@@ -105,6 +109,19 @@ public class GameController implements InputEventListener {
     }
 
     public IntegerProperty linesProperty() {
-        return ((SimpleBoard) board).getlines().linesProperty();
+        return ((SimpleBoard) board).getLines().linesProperty();
+    }
+
+    public IntegerProperty levelProperty() {
+        return ((SimpleBoard) board).getLevel().levelProperty();
+    }
+
+    public void checkSpeed() {
+        int currentLevel = levelProperty().get();
+        double newSpeed = gameModeRules.getSpeedDelay(currentLevel);
+        if (newSpeed < currentSpeed) {
+            currentSpeed = newSpeed;
+            viewGuiController.updateSpeed(newSpeed);
+        }
     }
 }

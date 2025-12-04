@@ -128,7 +128,7 @@
                               <StackPane.margin>
                                  <Insets />
                               </StackPane.margin></Pane>
-                           <Text fx:id="level" styleClass="scoreText" text="0" textAlignment="RIGHT" wrappingWidth="120.0">
+                           <Text fx:id="level" styleClass="scoreText" text="1" textAlignment="RIGHT" wrappingWidth="120.0">
                               <StackPane.margin>
                                  <Insets top="20.0" />
                               </StackPane.margin>

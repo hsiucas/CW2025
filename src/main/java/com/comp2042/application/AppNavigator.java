@@ -88,6 +88,7 @@ public class AppNavigator {
             controller.setEventListener(gameController);
             controller.bindScore(gameController.scoreProperty());
             controller.bindLines(gameController.linesProperty());
+            controller.bindLevel(gameController.levelProperty());
             controller.initGameView(gameController.getBoardMatrix(), gameController.getViewData());
             controller.startGameLoop(speed);
         } catch (Exception e) {

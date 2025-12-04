@@ -30,6 +30,7 @@ public class GuiController implements Initializable, GameLoopListener {
     @FXML private Group groupNotification;
     @FXML private Text score;
     @FXML private Text lines;
+    @FXML private Text level;
 
     private GameLooper gameLooper;
     private GameRenderer gameRenderer;
@@ -111,6 +112,10 @@ public class GuiController implements Initializable, GameLoopListener {
         lines.textProperty().bind(linesProperty.asString());
     }
 
+    public void bindLevel(IntegerProperty levelProperty) {
+        level.textProperty().bind(levelProperty.asString());
+    }
+
     private void showScoreNotification(int scoreBonus) {
         NotificationPanel notificationPanel = new NotificationPanel("+" + scoreBonus);
         groupNotification.getChildren().add(notificationPanel);
@@ -131,5 +136,13 @@ public class GuiController implements Initializable, GameLoopListener {
 
     public GameRenderer getRenderer() {
         return this.gameRenderer;
+    }
+
+    public void updateSpeed(double newSpeed) {
+        if (gameLooper != null) {
+            gameLooper.stop();
+        }
+        this.gameLooper = new GameLooper(this, eventListener, newSpeed);
+        gameLooper.start();
     }
 }

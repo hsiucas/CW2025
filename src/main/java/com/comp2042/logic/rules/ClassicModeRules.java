@@ -14,7 +14,7 @@ public class ClassicModeRules implements GameModeRules {
 
     @Override
     public Boolean shouldLevelUp(int linesCleared, int currentLevel) {
-        return linesCleared >= (currentLevel + 1) * LINES_PER_LEVEL;
+        return linesCleared >= (currentLevel) * LINES_PER_LEVEL;
     }
 
     @Override

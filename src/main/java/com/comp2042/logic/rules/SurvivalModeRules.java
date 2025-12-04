@@ -2,6 +2,7 @@ package com.comp2042.logic.rules;
 
 public class SurvivalModeRules implements GameModeRules {
     private static final double SURVIVAL_DELAY = 300;
+    private static final int LINES_PER_LEVEL = 10;
 
     @Override
     public double getInitialSpeedDelay() {
@@ -10,7 +11,7 @@ public class SurvivalModeRules implements GameModeRules {
 
     @Override
     public Boolean shouldLevelUp(int linesCleared, int currentLevel) {
-        return false;
+        return linesCleared >= (currentLevel) * LINES_PER_LEVEL;
     }
 
     @Override
