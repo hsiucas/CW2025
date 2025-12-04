@@ -2,7 +2,7 @@ package com.comp2042.model.bricks.tetromino;
 
 import com.comp2042.model.bricks.core.Tetromino;
 
-final class LBrick extends Tetromino {
+public final class LBrick extends Tetromino {
 
     public LBrick() {
         brickMatrix.add(new int[][]{

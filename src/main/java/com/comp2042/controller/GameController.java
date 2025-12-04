@@ -1,5 +1,6 @@
 package com.comp2042.controller;
 
+import com.comp2042.model.bricks.tetromino.RandomBrickGenerator;
 import com.comp2042.model.events.InputEventListener;
 import com.comp2042.model.board.Board;
 import com.comp2042.model.board.SimpleBoard;
@@ -15,7 +16,7 @@ import javafx.beans.property.IntegerProperty;
 
 public class GameController implements InputEventListener {
 
-    private final Board board = new SimpleBoard(20, 10);
+    private final Board board = new SimpleBoard(20, 10, new RandomBrickGenerator());
     private final GuiController viewGuiController;
     private final GameRenderer gameRenderer;
     private final GameModeRules gameModeRules;

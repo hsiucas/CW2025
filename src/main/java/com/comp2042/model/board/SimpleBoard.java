@@ -34,11 +34,11 @@ public class SimpleBoard implements Board {
     private GameModeRules rules;
     private final Level level;
 
-    public SimpleBoard(int height, int width) {
+    public SimpleBoard(int height, int width, BrickGenerator brickGenerator) {
         this.height = height;
         this.width = width;
         currentGameMatrix = new int[height][width];
-        brickGenerator = new RandomBrickGenerator();
+        this.brickGenerator = brickGenerator;
         rotationState = new RotationState();
         currentOffset = new Point(3, 2);
         score = new Score();
