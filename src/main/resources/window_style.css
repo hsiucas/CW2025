@@ -82,7 +82,7 @@
 
 .menuButton{
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 36;
+    -fx-font-size: 29;
     -fx-text-fill: wheat;
     -fx-padding: 8px;
     -fx-border-radius: 4px;
@@ -94,7 +94,7 @@
 
 .menuButton:focused{
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 36;
+    -fx-font-size: 30;
     -fx-text-fill: #0341ae;
     -fx-padding: 8px;
     -fx-border-radius: 4px;

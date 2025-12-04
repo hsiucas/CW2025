@@ -1,6 +1,7 @@
 package com.comp2042.application;
 
 import com.comp2042.controller.GameController;
+import com.comp2042.controller.GameModeController;
 import com.comp2042.controller.MainMenuController;
 import com.comp2042.controller.StartScreenController;
 import com.comp2042.view.GuiController;
@@ -48,6 +49,8 @@ public class AppNavigator {
                 ((StartScreenController) controller).setNavigator(this);
             } else if (controller instanceof MainMenuController) {
                 ((MainMenuController) controller).setNavigator(this);
+            } else if (controller instanceof GameModeController) {
+                ((GameModeController) controller).setNavigator(this);
             }
 
             Scene scene = new Scene(root);
@@ -59,20 +62,24 @@ public class AppNavigator {
         }
     }
 
-    public void loadGameScene() throws Exception {
-        URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
-        Parent root = fxmlLoader.load();
-        GuiController controller = fxmlLoader.getController();
+    public void loadGameScene(String gameMode) {
+        try {
+            URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(location);
+            Parent root = fxmlLoader.load();
+            GuiController controller = fxmlLoader.getController();
 
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
 
-        GameController gameController = new GameController(controller);
-        controller.setEventListener(gameController);
-        controller.bindScore(gameController.scoreProperty());
-        controller.bindLines(gameController.linesProperty());
-        controller.initGameView(gameController.getBoardMatrix(), gameController.getViewData());
-        controller.startGameLoop();
+            GameController gameController = new GameController(controller);
+            controller.setEventListener(gameController);
+            controller.bindScore(gameController.scoreProperty());
+            controller.bindLines(gameController.linesProperty());
+            controller.initGameView(gameController.getBoardMatrix(), gameController.getViewData());
+            controller.startGameLoop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
