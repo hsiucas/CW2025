@@ -81,8 +81,8 @@ public class GuiController implements Initializable, GameLoopListener {
         gamePanel.setOnKeyPressed(handler);
     }
 
-    public void startGameLoop() {
-        this.gameLooper = new GameLooper(this, eventListener);
+    public void startGameLoop(double speed) {
+        this.gameLooper = new GameLooper(this, eventListener, speed);
         gameLooper.start();
     }
 

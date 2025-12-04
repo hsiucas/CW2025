@@ -1,5 +1,6 @@
 package com.comp2042.model.board;
 
+import com.comp2042.logic.rules.GameModeRules;
 import com.comp2042.logic.scoring.Lines;
 import com.comp2042.model.bricks.core.Brick;
 import com.comp2042.model.bricks.core.BrickGenerator;
@@ -29,6 +30,8 @@ public class SimpleBoard implements Board {
     private final BrickMover brickMover;
     private final BrickRotator brickRotator;
     private final BrickSpawnHandler brickSpawnHandler;
+    private GameModeRules rules;
+    private int currentLevel;
 
     public SimpleBoard(int height, int width) {
         this.height = height;
@@ -44,6 +47,7 @@ public class SimpleBoard implements Board {
         brickMover = new BrickMover();
         brickRotator = new BrickRotator();
         brickSpawnHandler = new BrickSpawnHandler();
+        currentLevel = 1;
     }
 
     @Override
@@ -117,6 +121,9 @@ public class SimpleBoard implements Board {
         currentGameMatrix = clearRow.getNewMatrix();
         if (clearRow.getLinesRemoved() > 0) {
             lines.add(clearRow.getLinesRemoved());
+            if (rules.shouldLevelUp(lines.getLines(), currentLevel)) {
+                currentLevel++;
+            }
         }
         return clearRow;
     }
@@ -136,5 +143,10 @@ public class SimpleBoard implements Board {
         score.reset();
         lines.reset();
         createNewBrick();
+    }
+
+    public void setRules(GameModeRules rules) {
+        this.rules = rules;
+        this.currentLevel = rules.getInitialLevel();
     }
 }

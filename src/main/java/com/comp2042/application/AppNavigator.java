@@ -4,6 +4,10 @@ import com.comp2042.controller.GameController;
 import com.comp2042.controller.GameModeController;
 import com.comp2042.controller.MainMenuController;
 import com.comp2042.controller.StartScreenController;
+import com.comp2042.logic.rules.ClassicModeRules;
+import com.comp2042.logic.rules.GameModeRules;
+import com.comp2042.logic.rules.SurvivalModeRules;
+import com.comp2042.logic.rules.ZenModeRules;
 import com.comp2042.view.GuiController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -63,6 +67,13 @@ public class AppNavigator {
     }
 
     public void loadGameScene(String gameMode) {
+        GameModeRules rules = createRules(gameMode);
+
+        if (rules == null) {
+            System.err.println("Invalid game mode!");
+            return;
+        }
+
         try {
             URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(location);
@@ -72,14 +83,24 @@ public class AppNavigator {
             Scene scene = new Scene(root);
             stage.setScene(scene);
 
-            GameController gameController = new GameController(controller);
+            GameController gameController = new GameController(controller, rules);
+            double speed = rules.getInitialSpeedDelay();
             controller.setEventListener(gameController);
             controller.bindScore(gameController.scoreProperty());
             controller.bindLines(gameController.linesProperty());
             controller.initGameView(gameController.getBoardMatrix(), gameController.getViewData());
-            controller.startGameLoop();
+            controller.startGameLoop(speed);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private GameModeRules createRules(String gameMode) {
+        return switch(gameMode.toUpperCase()) {
+            case "CLASSIC"  -> new ClassicModeRules();
+            case "ZEN"      -> new ZenModeRules();
+            case "SURVIVAL" -> new SurvivalModeRules();
+            default -> null;
+        };
     }
 }

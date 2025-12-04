@@ -18,4 +18,8 @@ public final class Lines {
     public void reset() {
         lines.setValue(0);
     }
+
+    public int getLines(){
+        return lines.get();
+    }
 }

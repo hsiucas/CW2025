@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="419.0" stylesheets="@window_style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.comp2042.controller.MainMenuController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="419.0" stylesheets="@window_style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.comp2042.controller.GameModeController">
    <children>
       <StackPane prefHeight="377.0" prefWidth="419.0">
          <children>
@@ -15,22 +15,22 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fce9d4" height="361.0" layoutX="18.0" layoutY="18.0" stroke="#cd0000" strokeType="INSIDE" strokeWidth="4.0" width="403.0" />
             <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="301.0" prefWidth="343.0">
                <children>
-                  <Button fx:id="exitButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleExitButton" prefHeight="73.0" prefWidth="343.0" styleClass="menuButton" text="CLASSIC" textOverrun="CLIP">
+                  <Button fx:id="classicButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleClassicButton" prefHeight="73.0" prefWidth="343.0" styleClass="menuButton" text="CLASSIC" textOverrun="CLIP">
                      <VBox.margin>
                         <Insets bottom="3.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handlePlayButton" prefHeight="73.0" prefWidth="343.0" styleClass="menuButton" text="ZEN" textAlignment="JUSTIFY">
+                  <Button fx:id="zenButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleZenButton" prefHeight="73.0" prefWidth="343.0" styleClass="menuButton" text="ZEN" textAlignment="JUSTIFY">
                      <VBox.margin>
                         <Insets bottom="3.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="instructionsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleInstructionsButton" prefHeight="73.0" prefWidth="343.0" styleClass="menuButton" text="SURVIVAL">
+                  <Button fx:id="survivalButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleSurvivalButton" prefHeight="73.0" prefWidth="343.0" styleClass="menuButton" text="SURVIVAL">
                      <VBox.margin>
                         <Insets bottom="3.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="exitButton1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleExitButton" prefHeight="73.0" prefWidth="343.0" styleClass="menuButton" text="4-WAY" />
+                  <Button fx:id="4WayButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handle4WayButton" prefHeight="73.0" prefWidth="343.0" styleClass="menuButton" text="4-WAY" />
                </children>
             </VBox>
          </children>

@@ -8,17 +8,15 @@ import javafx.util.Duration;
 
 public class GameLooper {
 
-    private static final double DEFAULT_SPEED_IN_MS = 400;
-
     private final Timeline timeLine;
     private final InputEventListener eventListener;
     private final GameLoopListener listener;
 
-    public GameLooper(GameLoopListener listener, InputEventListener eventListener) {
+    public GameLooper(GameLoopListener listener, InputEventListener eventListener, double speed) {
         this.listener = listener;
         this.eventListener = eventListener;
 
-        this.timeLine = new Timeline(new KeyFrame(Duration.millis(DEFAULT_SPEED_IN_MS), e -> {
+        this.timeLine = new Timeline(new KeyFrame(Duration.millis(speed), e -> {
             DownData downData = eventListener.onTick();
             listener.onTick(downData);
 

@@ -9,6 +9,7 @@ import com.comp2042.view.GuiController;
 import com.comp2042.logic.collision.ClearRow;
 import com.comp2042.logic.gravity.DownData;
 import com.comp2042.logic.board.ViewData;
+import com.comp2042.logic.rules.GameModeRules;
 import com.comp2042.model.events.EventSource;
 import com.comp2042.model.events.MoveEvent;
 import javafx.beans.property.IntegerProperty;
@@ -19,9 +20,10 @@ public class GameController implements InputEventListener {
     private final GuiController viewGuiController;
     private final GameRenderer gameRenderer;
 
-    public GameController(GuiController c) {
+    public GameController(GuiController c, GameModeRules rules) {
         this.viewGuiController = c;
         this.gameRenderer = c.getRenderer();
+        ((SimpleBoard) board).setRules(rules);
         board.createNewBrick();
     }
 
