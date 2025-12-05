@@ -2,7 +2,6 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -40,7 +39,7 @@
          </center></BorderPane>
     </StackPane>
 
-    <GridPane fx:id="brickPanel" hgap="1" layoutX="20.0" prefHeight="377.0" prefWidth="249.0" vgap="1" />
+                   <GridPane fx:id="brickPanel" hgap="1" layoutX="20.0" prefHeight="377.0" prefWidth="249.0" vgap="1" />
 
     <VBox layoutX="269.0" prefHeight="377.0" prefWidth="149.0">
       <children>
@@ -189,12 +188,7 @@
          </HBox>
       </children>
    </VBox>
-
-    <Group fx:id="groupNotification" layoutY="150" visible="false">
-        <VBox alignment="CENTER" prefWidth="419.0">
-            <Label fx:id="gameOverPanel" styleClass="gameOverStyle" text="GAME OVER" textAlignment="CENTER" />
-        </VBox>
-    </Group>
+   <Label fx:id="pauseLabel" visible="false" styleClass="pauseButton" text="||" />
 
     <stylesheets>
         <URL value="@window_style.css" />

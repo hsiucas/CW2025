@@ -1,15 +1,18 @@
 package com.comp2042.view;
 
+import com.comp2042.application.AppNavigator;
 import com.comp2042.controller.GameController;
 import com.comp2042.controller.KeyInputHandler;
 import com.comp2042.model.events.InputEventListener;
 import com.comp2042.model.events.MoveEvent;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -19,6 +22,7 @@ import java.util.ResourceBundle;
 
 import com.comp2042.logic.gravity.DownData;
 import com.comp2042.logic.board.ViewData;
+import javafx.util.Duration;
 
 public class GuiController implements Initializable, GameLoopListener {
 
@@ -27,7 +31,7 @@ public class GuiController implements Initializable, GameLoopListener {
     @FXML private GridPane nextBrick;
     @FXML private GridPane nextBrick2;
     @FXML private GridPane nextBrick3;
-    @FXML private Group groupNotification;
+    @FXML private Label pauseLabel;
     @FXML private Text score;
     @FXML private Text lines;
     @FXML private Text level;
@@ -35,6 +39,7 @@ public class GuiController implements Initializable, GameLoopListener {
     private GameLooper gameLooper;
     private GameRenderer gameRenderer;
     private InputEventListener eventListener;
+    private AppNavigator navigator;
 
     private final BooleanProperty isPause = new SimpleBooleanProperty();
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
@@ -45,15 +50,17 @@ public class GuiController implements Initializable, GameLoopListener {
 
         Font.loadFont(getClass().getClassLoader().getResource("fonts/PressStart2P.ttf").toExternalForm(), 38);
         gamePanel.setFocusTraversable(true);
-        groupNotification.setVisible(false);
-        groupNotification.setManaged(false);
         brickPanel.setManaged(false);
 
         isPause.addListener((obs,  oldValue, newValue) -> {
             if (gameLooper != null) {
                 if (newValue) {
                     gameLooper.pause();
-                } else gameLooper.resume();
+                    pauseLabel.setVisible(true);
+                } else {
+                    gameLooper.resume();
+                    pauseLabel.setVisible(false);
+                }
             }
         });
     }
@@ -64,9 +71,6 @@ public class GuiController implements Initializable, GameLoopListener {
         int[][] matrix = ((GameController) eventListener).getBoardMatrix();
         gameRenderer.refreshGameBackground(matrix);
         gameRenderer.refreshBrick(downData.getViewData());
-
-        if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0)
-            showScoreNotification(downData.getClearRow().getScoreBonus());
     }
 
     public void setEventListener(InputEventListener eventListener) {
@@ -116,12 +120,6 @@ public class GuiController implements Initializable, GameLoopListener {
         level.textProperty().bind(levelProperty.asString());
     }
 
-    private void showScoreNotification(int scoreBonus) {
-        NotificationPanel notificationPanel = new NotificationPanel("+" + scoreBonus);
-        groupNotification.getChildren().add(notificationPanel);
-        notificationPanel.showScore(groupNotification.getChildren());
-    }
-
     @Override
     public void onGameOver() {
         gameOver();
@@ -129,9 +127,14 @@ public class GuiController implements Initializable, GameLoopListener {
 
     public void gameOver() {
         if (gameLooper != null) gameLooper.stop();
-        groupNotification.setVisible(true);
-        groupNotification.setManaged(true);
         isGameOver.set(true);
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            if (navigator != null) {
+                navigator.toGameModeSelection();
+            }
+        });
+        delay.play();
     }
 
     public GameRenderer getRenderer() {
@@ -144,5 +147,9 @@ public class GuiController implements Initializable, GameLoopListener {
         }
         this.gameLooper = new GameLooper(this, eventListener, newSpeed);
         gameLooper.start();
+    }
+
+    public void setNavigator(AppNavigator navigator) {
+        this.navigator = navigator;
     }
 }
