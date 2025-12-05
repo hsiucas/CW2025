@@ -12,6 +12,7 @@ public class GameRenderer {
     private static final int BRICK_SIZE = 20;
     private static final int SMALL_BRICK_SIZE = 19;
     private static final int SMALLER_BRICK_SIZE = 7;
+    private static final int HOLD_BRICK_SIZE = 13;
     private static final double X_LAYOUT_ADJUSTMENT = 40;
     private static final double Y_LAYOUT_ADJUSTMENT = -42;
     private static final int GAMEBOY_SPAWN = 2;
@@ -21,16 +22,18 @@ public class GameRenderer {
     private GridPane nextBrick;
     private GridPane nextBrick2;
     private GridPane nextBrick3;
+    private GridPane holdBrick;
 
     private Rectangle[][] displayMatrix;
     private Rectangle[][] rectangles;
 
-    public GameRenderer(GridPane gamePanel, GridPane brickPanel, GridPane nextBrick, GridPane nextBrick2, GridPane nextBrick3) {
+    public GameRenderer(GridPane gamePanel, GridPane brickPanel, GridPane nextBrick, GridPane nextBrick2, GridPane nextBrick3, GridPane holdBrick) {
         this.gamePanel = gamePanel;
         this.brickPanel = brickPanel;
         this.nextBrick = nextBrick;
         this.nextBrick2 = nextBrick2;
         this.nextBrick3 = nextBrick3;
+        this.holdBrick = holdBrick;
     }
 
     public void initBackground(int[][] boardMatrix) {
@@ -78,6 +81,7 @@ public class GameRenderer {
                 rectangles[row][col].setFill(getFillColor(brick.getBrickData()[row][col]));
 
         previewPanel(brick.getNextBricksData());
+        renderHoldBrick(brick.getHeldBrickData());
     }
 
     public void previewPanel(List<int[][]> nextBrickData){
@@ -102,5 +106,15 @@ public class GameRenderer {
                 if (brick[row][col] != 0)
                     targetGrid.add(new Rectangle(brickSize, brickSize, getFillColor(brick[row][col])), col, row);
 
+    }
+
+    public void renderHoldBrick(int[][] heldBrickData) {
+        if (holdBrick != null) {
+            holdBrick.getChildren().clear();
+        }
+        if (heldBrickData == null) {
+            return;
+        }
+        singlePreview(holdBrick, heldBrickData, HOLD_BRICK_SIZE);
     }
 }

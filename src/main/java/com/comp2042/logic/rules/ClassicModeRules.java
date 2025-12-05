@@ -31,4 +31,7 @@ public class ClassicModeRules implements GameModeRules {
     public int getInitialLevel() {
         return 1;
     }
+
+    @Override
+    public boolean isHoldBrickAllowed() { return false; }
 }

@@ -110,6 +110,13 @@ public class GameController implements InputEventListener {
     }
 
     @Override
+    public ViewData onHoldBrickEvent(MoveEvent event) {
+        if (!gameModeRules.isHoldBrickAllowed()) return board.getViewData();
+        ((SimpleBoard) board).holdBrick();
+        return board.getViewData();
+    }
+
+    @Override
     public void createNewGame() {
         board.newGame();
         gameRenderer.refreshGameBackground(board.getBoardMatrix());

@@ -28,6 +28,7 @@ public class GuiController implements Initializable, GameLoopListener {
     @FXML private GridPane nextBrick;
     @FXML private GridPane nextBrick2;
     @FXML private GridPane nextBrick3;
+    @FXML private GridPane holdBrick;
     @FXML private Label pauseLabel;
     @FXML private Text score;
     @FXML private Text lines;
@@ -43,7 +44,7 @@ public class GuiController implements Initializable, GameLoopListener {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.gameRenderer = new GameRenderer(gamePanel, brickPanel, nextBrick, nextBrick2, nextBrick3);
+        this.gameRenderer = new GameRenderer(gamePanel, brickPanel, nextBrick, nextBrick2, nextBrick3, holdBrick);
 
         Font.loadFont(getClass().getClassLoader().getResource("fonts/PressStart2P.ttf").toExternalForm(), 38);
         gamePanel.setFocusTraversable(true);

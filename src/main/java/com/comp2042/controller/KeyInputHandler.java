@@ -1,5 +1,6 @@
 package com.comp2042.controller;
 
+import com.comp2042.logic.board.ViewData;
 import com.comp2042.logic.gravity.DownData;
 import com.comp2042.model.events.EventSource;
 import com.comp2042.model.events.EventType;
@@ -45,6 +46,8 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
             event = new MoveEvent(EventType.ROTATE, EventSource.USER);
         else if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S)
             event = new MoveEvent(EventType.DOWN, EventSource.USER);
+        else if (keyEvent.getCode() == KeyCode.SHIFT || keyEvent.getCode() == KeyCode.TAB)
+            event = new MoveEvent(EventType.HOLD, EventSource.USER);
         else if (keyEvent.getCode() == KeyCode.N)
             eventListener.createNewGame();
         else if (keyEvent.getCode() == KeyCode.ESCAPE)
@@ -54,6 +57,9 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
             if (event.getEventType() == EventType.DOWN) {
                 DownData down = eventListener.onDownEvent(event);
                 guiController.getRenderer().refreshBrick(down.getViewData());
+            } else if (event.getEventType() == EventType.HOLD) {
+                ViewData data = eventListener.onHoldBrickEvent(event);
+                guiController.getRenderer().refreshBrick(data);
             } else {
                 guiController.handleMoveEvent(event);
             }

@@ -39,6 +39,7 @@ public class SimpleBoard implements Board {
     private final BrickSpawnHandler brickSpawnHandler;
     private GameModeRules rules;
     private final Level level;
+    private final BrickHolder brickHolder;
 
     public SimpleBoard(int height, int width, BrickGenerator brickGenerator) {
         this.height = height;
@@ -55,10 +56,12 @@ public class SimpleBoard implements Board {
         brickRotator = new BrickRotator();
         brickSpawnHandler = new BrickSpawnHandler();
         level = new Level();
+        this.brickHolder = new BrickHolder();
     }
 
     @Override
     public boolean createNewBrick() {
+        brickHolder.resetHold();
         Brick currentBrick = brickGenerator.getBrick();
         rotationState.setBrick(currentBrick);
         int[][] shape = rotationState.getCurrentShape();
@@ -114,7 +117,8 @@ public class SimpleBoard implements Board {
         return new ViewData(rotationState.getCurrentShape(),
                             currentOffset.y,
                             currentOffset.x,
-                            nextBricks);
+                            nextBricks,
+                            brickHolder.getHeldBrickMatrix());
     }
 
     @Override
@@ -183,5 +187,10 @@ public class SimpleBoard implements Board {
         if (row >= 0 && row < height) {
             Arrays.fill(currentGameMatrix[row], value);
         }
+    }
+
+    public void holdBrick() {
+        boolean swapped = brickHolder.holdBrick(rotationState, brickGenerator);
+        if (swapped) currentOffset = brickSpawnHandler.getGameboySpawnPoint(currentGameMatrix, width, rotationState.getCurrentShape());
     }
 }

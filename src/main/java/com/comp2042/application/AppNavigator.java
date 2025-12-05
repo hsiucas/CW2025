@@ -75,7 +75,11 @@ public class AppNavigator {
         }
 
         try {
-            URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
+            String fxmlFileName = "gameLayout.fxml";
+            if (mode == GameMode.CLASSIC) {
+                fxmlFileName = "classicModeLayout.fxml";
+            }
+            URL location = getClass().getClassLoader().getResource(fxmlFileName);
             FXMLLoader fxmlLoader = new FXMLLoader(location);
             Parent root = fxmlLoader.load();
             GuiController controller = fxmlLoader.getController();
