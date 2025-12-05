@@ -20,6 +20,10 @@ import java.util.List;
 
 public class SimpleBoard implements Board {
 
+    private static final int X_SPAWN_OFFSET = 3;
+    private static final int Y_SPAWN_OFFSET = 2;
+    private static final int Y_OFFSET_IN_GARBAGE_ROW = -1;
+
     private final int height;
     private final int width;
     private int[][] currentGameMatrix;
@@ -42,7 +46,7 @@ public class SimpleBoard implements Board {
         currentGameMatrix = new int[height][width];
         this.brickGenerator = brickGenerator;
         rotationState = new RotationState();
-        currentOffset = new Point(3, 2);
+        currentOffset = new Point(X_SPAWN_OFFSET, Y_SPAWN_OFFSET);
         score = new Score();
         lines = new Lines();
         collisionDetector = new CollisionDetector();
@@ -165,7 +169,7 @@ public class SimpleBoard implements Board {
         this.currentGameMatrix = MatrixOperations.addGarbageRow(currentGameMatrix, isIndestructible);
 
         if (currentOffset.y > 0) {
-            currentOffset.translate(0, -1);
+            currentOffset.translate(0, Y_OFFSET_IN_GARBAGE_ROW);
         }
 
         return MatrixOperations.isGameOver(currentGameMatrix);

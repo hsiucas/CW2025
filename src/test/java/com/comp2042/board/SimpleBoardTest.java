@@ -1,6 +1,7 @@
 package com.comp2042.board;
 
 import com.comp2042.logic.collision.ClearRow;
+import com.comp2042.controller.GameConfiguration;
 import com.comp2042.logic.board.ViewData;
 import com.comp2042.logic.rules.ClassicModeRules;
 import com.comp2042.logic.rules.SurvivalModeRules;
@@ -18,7 +19,7 @@ class SimpleBoardTest {
 
     @Test
     void moveBrickDownFreely() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.createNewBrick();
         boolean moved = board.moveBrickDown();
         assertTrue(moved);
@@ -27,7 +28,7 @@ class SimpleBoardTest {
     // Check when brick hits floor
     @Test
     void moveBrickDownCollides() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.createNewBrick();
         assertNotNull(board.getViewData());
         boolean moved = true;
@@ -40,7 +41,7 @@ class SimpleBoardTest {
 
     @Test
     void moveBrickLeftFreely() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.createNewBrick();
         boolean moved = board.moveBrickLeft();
         assertTrue(moved);
@@ -49,7 +50,7 @@ class SimpleBoardTest {
     // Check when brick hits wall
     @Test
     void moveBrickLeftCollides() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.createNewBrick();
         assertNotNull(board.getViewData());
         boolean moved = true;
@@ -62,7 +63,7 @@ class SimpleBoardTest {
 
     @Test
     void moveBrickRightFreely() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.createNewBrick();
         boolean moved = board.moveBrickRight();
         assertTrue(moved);
@@ -71,7 +72,7 @@ class SimpleBoardTest {
     // Check when brick hits wall
     @Test
     void moveBrickRightCollides() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.createNewBrick();
         assertNotNull(board.getViewData());
         boolean moved = true;
@@ -84,7 +85,7 @@ class SimpleBoardTest {
 
     @Test
     void rotateFreely() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.createNewBrick();
         boolean rotated = board.rotateBrickCounterClockwise();
         assertTrue(rotated);
@@ -104,9 +105,9 @@ class SimpleBoardTest {
                 return new IBrick();
             }
         };
-        SimpleBoard board = new SimpleBoard(20, 10, forceBrick);
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT,  GameConfiguration.BOARD_WIDTH, forceBrick);
         int[][] matrix = board.getBoardMatrix();
-        for (int col = 0; col < 10; col++) {
+        for (int col = 0; col < GameConfiguration.BOARD_WIDTH; col++) {
             matrix[3][col] = 1;
         }
         board.createNewBrick();
@@ -116,7 +117,7 @@ class SimpleBoardTest {
 
     @Test
     void createNewBrickShouldNotCollide() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         boolean spawned = board.createNewBrick();
         assertTrue(spawned);
     }
@@ -124,10 +125,10 @@ class SimpleBoardTest {
     // New error found in code – supposed to collide but does not. Indicates a real issue in logic.
     @Test
     void createNewBrickShouldCollide() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         int[][] matrix = board.getBoardMatrix();
-        for (int row = 0; row < 20; row++) {
-            for (int col = 0; col < 10; col++) {
+        for (int row = 0; row < GameConfiguration.BOARD_HEIGHT; row++) {
+            for (int col = 0; col < GameConfiguration.BOARD_WIDTH; col++) {
                 matrix[row][col] = 1;
             }
         }
@@ -137,20 +138,20 @@ class SimpleBoardTest {
 
     @Test
     void getViewData() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.createNewBrick();
         ViewData viewData = board.getViewData();
         assertNotNull(viewData);
         assertNotNull(viewData.getBrickData());
         assertTrue(viewData.getBrickData().length > 0);
-        assertTrue(viewData.getxPosition() >= 0 && viewData.getxPosition() < 10);
-        assertTrue(viewData.getyPosition() >= 0 && viewData.getyPosition() < 20);
+        assertTrue(viewData.getxPosition() >= 0 && viewData.getxPosition() < GameConfiguration.BOARD_WIDTH);
+        assertTrue(viewData.getyPosition() >= 0 && viewData.getyPosition() < GameConfiguration.BOARD_HEIGHT);
     }
 
     // Brick shouldn't be able to move after it merges to background
     @Test
     void mergeTheBricksToBackgroundTest() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.createNewBrick();
         board.mergeBrickToBackground();
         boolean moved = board.moveBrickLeft();
@@ -160,23 +161,23 @@ class SimpleBoardTest {
     // New error found in code – row is supposed to clear. Issue is likely due to the mix of using [cols][rows] and [rows][cols] interchangeably within the game.
     @Test
     void clearRowTest() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.setRules(new ClassicModeRules());
         int[][] matrix = board.getBoardMatrix();
-        for (int col = 0; col < 10; col++) {
+        for (int col = 0; col < GameConfiguration.BOARD_WIDTH; col++) {
             matrix[19][col] = 1;
         }
         ClearRow result = board.clearRows();
         assertEquals(1, result.getLinesRemoved());
         int[][] updated = board.getBoardMatrix();
-        for (int col = 0; col < 10; col++) {
+        for (int col = 0; col < GameConfiguration.BOARD_WIDTH; col++) {
             assertEquals(0, updated[19][col]);
         }
     }
 
     @Test
     void newGameResetsEverything() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.createNewBrick();
         board.mergeBrickToBackground();
         board.newGame();
@@ -193,11 +194,11 @@ class SimpleBoardTest {
 
     @Test
     void classicLinesAndLevelUpdate() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.setRules(new ClassicModeRules());
         int[][] matrix = board.getBoardMatrix();
         for (int row = 0; row < 10; row++) {
-            for (int col = 0; col < 10; col++) {
+            for (int col = 0; col < GameConfiguration.BOARD_WIDTH; col++) {
                 matrix[row][col] = 1;
             }
         }
@@ -208,11 +209,11 @@ class SimpleBoardTest {
 
     @Test
     void zenLinesAndLevelUpdate() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.setRules(new ZenModeRules());
         int[][] matrix = board.getBoardMatrix();
         for (int row = 0; row < 10; row++) {
-            for (int col = 0; col < 10; col++) {
+            for (int col = 0; col < GameConfiguration.BOARD_WIDTH; col++) {
                 matrix[row][col] = 1;
             }
         }
@@ -223,11 +224,11 @@ class SimpleBoardTest {
 
     @Test
     void survivalLinesAndLevelUpdate() {
-        SimpleBoard board = new SimpleBoard(20,10, new RandomBrickGenerator());
+        SimpleBoard board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
         board.setRules(new SurvivalModeRules());
         int[][] matrix = board.getBoardMatrix();
         for (int row = 0; row < 10; row++) {
-            for (int col = 0; col < 10; col++) {
+            for (int col = 0; col < GameConfiguration.BOARD_WIDTH; col++) {
                 matrix[row][col] = 1;
             }
         }

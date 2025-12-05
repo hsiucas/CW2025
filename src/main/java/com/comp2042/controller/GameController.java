@@ -20,7 +20,7 @@ import javafx.util.Duration;
 
 public class GameController implements InputEventListener {
 
-    private final Board board = new SimpleBoard(20, 10, new RandomBrickGenerator());
+    private final Board board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
     private final GuiController viewGuiController;
     private final GameRenderer gameRenderer;
     private final GameModeRules gameModeRules;
