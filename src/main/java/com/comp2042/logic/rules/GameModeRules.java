@@ -5,4 +5,6 @@ public interface GameModeRules {
     Boolean shouldLevelUp(int linesCleared, int currentLevel);
     double getSpeedDelay(int currentLevel);
     int getInitialLevel();
+
+    default boolean isHoldBrickAllowed() { return true; }
 }

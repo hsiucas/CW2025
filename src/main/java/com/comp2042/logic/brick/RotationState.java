@@ -27,5 +27,7 @@ public class RotationState {
         currentShape = 0;
     }
 
-
+    public Brick getCurrentBrick() {
+        return brick;
+    }
 }
