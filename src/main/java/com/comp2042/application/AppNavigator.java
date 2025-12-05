@@ -66,8 +66,8 @@ public class AppNavigator {
         }
     }
 
-    public void loadGameScene(String gameMode) {
-        GameModeRules rules = createRules(gameMode);
+    public void loadGameScene(GameMode mode) {
+        GameModeRules rules = createRules(mode);
 
         if (rules == null) {
             System.err.println("Invalid game mode!");
@@ -97,12 +97,16 @@ public class AppNavigator {
         }
     }
 
-    private GameModeRules createRules(String gameMode) {
-        return switch(gameMode.toUpperCase()) {
-            case "CLASSIC"  -> new ClassicModeRules();
-            case "ZEN"      -> new ZenModeRules();
-            case "SURVIVAL" -> new SurvivalModeRules();
-            default -> null;
+    public enum GameMode {
+        CLASSIC, ZEN, SURVIVAL, FOURWAY
+    }
+
+    public GameModeRules createRules(GameMode mode) {
+        return switch (mode) {
+            case CLASSIC    -> new ClassicModeRules();
+            case ZEN        -> new ZenModeRules();
+            case SURVIVAL   -> new SurvivalModeRules();
+            case FOURWAY    -> new ClassicModeRules();
         };
     }
 }

@@ -13,21 +13,21 @@ public class GameModeController {
 
     @FXML
     private void handleClassicButton(ActionEvent event) {
-        navigator.loadGameScene("CLASSIC");
+        navigator.loadGameScene(AppNavigator.GameMode.CLASSIC);
     }
 
     @FXML
     private void handleZenButton(ActionEvent event) {
-        navigator.loadGameScene("ZEN");
+        navigator.loadGameScene(AppNavigator.GameMode.ZEN);
     }
 
     @FXML
     private void handleSurvivalButton(ActionEvent event) {
-        navigator.loadGameScene("SURVIVAL");
+        navigator.loadGameScene(AppNavigator.GameMode.SURVIVAL);
     }
 
     @FXML
     private void handle4WayButton(ActionEvent event) {
-        navigator.loadGameScene("4-WAY");
+        navigator.loadGameScene(AppNavigator.GameMode.FOURWAY);
     }
 }
