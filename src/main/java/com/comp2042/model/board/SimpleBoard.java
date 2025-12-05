@@ -127,12 +127,16 @@ public class SimpleBoard implements Board {
         ClearRow clearRow = landingHandler.handleClearRows(currentGameMatrix);
         currentGameMatrix = clearRow.getNewMatrix();
         if (clearRow.getLinesRemoved() > 0) {
-            lines.add(clearRow.getLinesRemoved());
-            if (rules.shouldLevelUp(lines.getLines(), level.getLevel())) {
-                level.increment();
-            }
+            handleLevelProgression(clearRow.getLinesRemoved());
         }
         return clearRow;
+    }
+
+    private void handleLevelProgression(int linesRemoved) {
+        lines.add(linesRemoved);
+        if (rules.shouldLevelUp(lines.getLines(), level.getLevel())) {
+            level.increment();
+        }
     }
 
     @Override
