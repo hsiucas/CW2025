@@ -117,6 +117,27 @@ public class GameController implements InputEventListener {
     }
 
     @Override
+    public DownData onHardDropEvent(MoveEvent event) {
+        if (!gameModeRules.isHardDropAllowed()) {
+            return new DownData(null, board.getViewData(), false);
+        }
+        ((SimpleBoard) board).hardDrop();
+        board.mergeBrickToBackground();
+        ClearRow clear = board.clearRows();
+
+        if (clear.getLinesRemoved() > 0) {
+            board.getScore().add(clear.getScoreBonus());
+        }
+
+        boolean isGameOver = !board.createNewBrick();
+
+        gameRenderer.refreshGameBackground(board.getBoardMatrix());
+        checkSpeed();
+
+        return new DownData(clear, board.getViewData(), isGameOver);
+    }
+
+    @Override
     public void createNewGame() {
         board.newGame();
         gameRenderer.refreshGameBackground(board.getBoardMatrix());

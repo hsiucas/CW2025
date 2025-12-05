@@ -7,4 +7,5 @@ public interface GameModeRules {
     int getInitialLevel();
 
     default boolean isHoldBrickAllowed() { return true; }
+    default boolean isHardDropAllowed() { return true; }
 }

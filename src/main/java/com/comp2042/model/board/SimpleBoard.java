@@ -193,4 +193,17 @@ public class SimpleBoard implements Board {
         boolean swapped = brickHolder.holdBrick(rotationState, brickGenerator);
         if (swapped) currentOffset = brickSpawnHandler.getGameboySpawnPoint(currentGameMatrix, width, rotationState.getCurrentShape());
     }
+
+    public void hardDrop() {
+        int rowsFallen = brickMover.hardDrop(
+                currentGameMatrix,
+                rotationState.getCurrentShape(),
+                currentOffset,
+                collisionDetector
+        );
+
+        if (rowsFallen > 0) {
+            score.add(rowsFallen * 2);
+        }
+    }
 }

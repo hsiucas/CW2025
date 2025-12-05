@@ -48,6 +48,8 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
             event = new MoveEvent(EventType.DOWN, EventSource.USER);
         else if (keyEvent.getCode() == KeyCode.SHIFT || keyEvent.getCode() == KeyCode.TAB)
             event = new MoveEvent(EventType.HOLD, EventSource.USER);
+        else if (keyEvent.getCode() == KeyCode.SPACE)
+            event = new MoveEvent(EventType.HARD_DROP, EventSource.USER);
         else if (keyEvent.getCode() == KeyCode.N)
             eventListener.createNewGame();
         else if (keyEvent.getCode() == KeyCode.ESCAPE)
@@ -60,6 +62,9 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
             } else if (event.getEventType() == EventType.HOLD) {
                 ViewData data = eventListener.onHoldBrickEvent(event);
                 guiController.getRenderer().refreshBrick(data);
+            } else if (event.getEventType() == EventType.HARD_DROP) {
+                DownData drop = eventListener.onHardDropEvent(event);
+                guiController.getRenderer().refreshBrick(drop.getViewData());
             } else {
                 guiController.handleMoveEvent(event);
             }

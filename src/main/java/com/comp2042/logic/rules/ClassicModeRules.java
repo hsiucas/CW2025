@@ -34,4 +34,7 @@ public class ClassicModeRules implements GameModeRules {
 
     @Override
     public boolean isHoldBrickAllowed() { return false; }
+
+    @Override
+    public boolean isHardDropAllowed() { return false; }
 }

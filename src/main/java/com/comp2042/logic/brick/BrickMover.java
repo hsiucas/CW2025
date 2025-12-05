@@ -28,4 +28,13 @@ public class BrickMover {
         }
         return false;
     }
+
+    public int hardDrop(int[][] boardMatrix, int[][] brick, Point offset, CollisionDetector collisionDetector) {
+        int rowsDropped = 0;
+        while (collisionDetector.canMove(boardMatrix, brick, offset, 1, 0)) {
+            offset.translate(0, 1);
+            rowsDropped++;
+        }
+        return rowsDropped;
+    }
 }
