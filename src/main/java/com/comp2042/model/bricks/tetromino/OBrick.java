@@ -5,7 +5,7 @@ import com.comp2042.model.bricks.core.Tetromino;
 public final class OBrick extends Tetromino {
 
     public OBrick() {
-        brickMatrix.add(new int[][]{
+        super.brickMatrix.add(new int[][]{
                 {0, 0, 0, 0},
                 {0, 4, 4, 0},
                 {0, 4, 4, 0},
