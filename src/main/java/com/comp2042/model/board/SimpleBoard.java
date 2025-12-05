@@ -15,6 +15,7 @@ import com.comp2042.logic.scoring.Score;
 import com.comp2042.logic.board.ViewData;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 
 public class SimpleBoard implements Board {
@@ -168,5 +169,11 @@ public class SimpleBoard implements Board {
         }
 
         return MatrixOperations.isGameOver(currentGameMatrix);
+    }
+
+    public void rowToValue(int row, int value) {
+        if (row >= 0 && row < height) {
+            Arrays.fill(currentGameMatrix[row], value);
+        }
     }
 }

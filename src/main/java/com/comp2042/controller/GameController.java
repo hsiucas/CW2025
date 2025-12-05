@@ -165,4 +165,8 @@ public class GameController implements InputEventListener {
             survivalTimer = null;
         }
     }
+
+    public void clearRowWhenGameOver(int row) {
+        ((SimpleBoard) board).rowToValue(row, 0);
+    }
 }

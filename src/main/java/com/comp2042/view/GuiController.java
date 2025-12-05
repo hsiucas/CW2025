@@ -5,13 +5,14 @@ import com.comp2042.controller.GameController;
 import com.comp2042.controller.KeyInputHandler;
 import com.comp2042.model.events.InputEventListener;
 import com.comp2042.model.events.MoveEvent;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
@@ -128,13 +129,7 @@ public class GuiController implements Initializable, GameLoopListener {
     public void gameOver() {
         if (gameLooper != null) gameLooper.stop();
         isGameOver.set(true);
-        PauseTransition delay = new PauseTransition(Duration.seconds(2));
-        delay.setOnFinished(event -> {
-            if (navigator != null) {
-                navigator.toGameModeSelection();
-            }
-        });
-        delay.play();
+        gameOverAnimation();
     }
 
     public GameRenderer getRenderer() {
@@ -151,5 +146,39 @@ public class GuiController implements Initializable, GameLoopListener {
 
     public void setNavigator(AppNavigator navigator) {
         this.navigator = navigator;
+    }
+
+    private void wipeAnimation() {
+        int[][] matrix = ((GameController) eventListener).getBoardMatrix();
+        int totalRows = matrix.length;
+
+        Timeline wipeBoard = new Timeline();
+        wipeBoard.setCycleCount(totalRows + 1);
+
+        final int[] currentRow = {0};
+
+        wipeBoard.getKeyFrames().add(new KeyFrame(Duration.millis(60), e -> {
+            int row = currentRow[0];
+            if (row < totalRows) {
+                ((GameController) eventListener).clearRowWhenGameOver(row);
+                gameRenderer.refreshGameBackground(((GameController) eventListener).getBoardMatrix());
+                currentRow[0]++;
+            } else {
+                performDelay(2, () -> {
+                    if (navigator != null) navigator.toGameModeSelection();
+                });
+            }
+        }));
+        wipeBoard.play();
+    }
+
+    private void performDelay (double seconds, Runnable runnable) {
+        PauseTransition delay = new PauseTransition(Duration.seconds(seconds));
+        delay.setOnFinished(event -> runnable.run());
+        delay.play();
+    }
+
+    private void gameOverAnimation() {
+        performDelay(1, () -> wipeAnimation());
     }
 }
