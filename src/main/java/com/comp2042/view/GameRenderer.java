@@ -2,11 +2,11 @@ package com.comp2042.view;
 
 import com.comp2042.logic.board.ViewData;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 import java.util.List;
+
+import static com.comp2042.model.bricks.core.BrickColourFactory.getFillColor;
 
 public class GameRenderer {
     private static final int BRICK_SIZE = 20;
@@ -101,21 +101,6 @@ public class GameRenderer {
             for (int col = 0; col < brick[row].length; col++)
                 if (brick[row][col] != 0)
                     targetGrid.add(new Rectangle(brickSize, brickSize, getFillColor(brick[row][col])), col, row);
-    }
 
-    private Paint getFillColor(int i) {
-        return switch (i) {
-            case 0 -> Color.TRANSPARENT;
-            case 1 -> Color.AQUA;
-            case 2 -> Color.BLUE;
-            case 3 -> Color.DARKORANGE;
-            case 4 -> Color.GOLD;
-            case 5 -> Color.FORESTGREEN;
-            case 6 -> Color.DARKVIOLET;
-            case 7 -> Color.RED;
-            case 8 -> Color.GRAY;
-            case 9 -> Color.DARKGRAY;
-            default -> Color.DEEPPINK;
-        };
     }
 }
