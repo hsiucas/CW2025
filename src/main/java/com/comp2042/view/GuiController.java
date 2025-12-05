@@ -5,9 +5,6 @@ import com.comp2042.controller.GameController;
 import com.comp2042.controller.KeyInputHandler;
 import com.comp2042.model.events.InputEventListener;
 import com.comp2042.model.events.MoveEvent;
-import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -23,7 +20,6 @@ import java.util.ResourceBundle;
 
 import com.comp2042.logic.gravity.DownData;
 import com.comp2042.logic.board.ViewData;
-import javafx.util.Duration;
 
 public class GuiController implements Initializable, GameLoopListener {
 
@@ -40,7 +36,7 @@ public class GuiController implements Initializable, GameLoopListener {
     private GameLooper gameLooper;
     private GameRenderer gameRenderer;
     private InputEventListener eventListener;
-    private AppNavigator navigator;
+    private AppNavigator appNavigator;
 
     private final BooleanProperty isPause = new SimpleBooleanProperty();
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
@@ -129,7 +125,13 @@ public class GuiController implements Initializable, GameLoopListener {
     public void gameOver() {
         if (gameLooper != null) gameLooper.stop();
         isGameOver.set(true);
-        gameOverAnimation();
+        GameOverAnimator animator = new GameOverAnimator(
+                gameRenderer,
+                (GameController) eventListener,
+                appNavigator,
+                gameLooper
+        );
+        animator.play();
     }
 
     public GameRenderer getRenderer() {
@@ -144,41 +146,7 @@ public class GuiController implements Initializable, GameLoopListener {
         gameLooper.start();
     }
 
-    public void setNavigator(AppNavigator navigator) {
-        this.navigator = navigator;
-    }
-
-    private void wipeAnimation() {
-        int[][] matrix = ((GameController) eventListener).getBoardMatrix();
-        int totalRows = matrix.length;
-
-        Timeline wipeBoard = new Timeline();
-        wipeBoard.setCycleCount(totalRows + 1);
-
-        final int[] currentRow = {0};
-
-        wipeBoard.getKeyFrames().add(new KeyFrame(Duration.millis(60), e -> {
-            int row = currentRow[0];
-            if (row < totalRows) {
-                ((GameController) eventListener).clearRowWhenGameOver(row);
-                gameRenderer.refreshGameBackground(((GameController) eventListener).getBoardMatrix());
-                currentRow[0]++;
-            } else {
-                performDelay(2, () -> {
-                    if (navigator != null) navigator.toGameModeSelection();
-                });
-            }
-        }));
-        wipeBoard.play();
-    }
-
-    private void performDelay (double seconds, Runnable runnable) {
-        PauseTransition delay = new PauseTransition(Duration.seconds(seconds));
-        delay.setOnFinished(event -> runnable.run());
-        delay.play();
-    }
-
-    private void gameOverAnimation() {
-        performDelay(1, () -> wipeAnimation());
+    public void setAppNavigator(AppNavigator appNavigator) {
+        this.appNavigator = appNavigator;
     }
 }

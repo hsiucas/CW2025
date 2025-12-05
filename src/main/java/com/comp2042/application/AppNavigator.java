@@ -85,7 +85,7 @@ public class AppNavigator {
 
             GameController gameController = new GameController(controller, rules);
             double speed = rules.getInitialSpeedDelay();
-            controller.setNavigator(this);
+            controller.setAppNavigator(this);
             controller.setEventListener(gameController);
             controller.bindScore(gameController.scoreProperty());
             controller.bindLines(gameController.linesProperty());
