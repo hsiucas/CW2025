@@ -5,6 +5,7 @@ import com.comp2042.logic.board.MatrixOperations;
 import java.awt.*;
 
 public class BrickSpawnHandler {
+
     public Point getGameboySpawnPoint(int[][] boardMatrix, int boardWidth, int[][] brick) {
         int brickWidth = brick[0].length;
         int x = (boardWidth - brickWidth) / 2;
@@ -16,5 +17,19 @@ public class BrickSpawnHandler {
             return null;
         }
         return gameboySpawnPoint;
+    }
+
+    public Point getCenterSpawnPoint(int[][] boardMatrix, int boardWidth, int boardHeight, int[][] brick) {
+        int brickWidth = brick[0].length;
+        int brickHeight = brick.length;
+        int x = (boardWidth - brickWidth) / 2;
+        int y = (boardHeight - brickHeight) / 2;
+
+        Point centerSpawnPoint = new Point(x, y);
+
+        if (MatrixOperations.intersect(boardMatrix, brick, centerSpawnPoint.y, centerSpawnPoint.x)) {
+            return null;
+        }
+        return centerSpawnPoint;
     }
 }

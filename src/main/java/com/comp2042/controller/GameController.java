@@ -1,7 +1,6 @@
 package com.comp2042.controller;
 
 import com.comp2042.logic.rules.SurvivalModeRules;
-import com.comp2042.model.bricks.tetromino.RandomBrickGenerator;
 import com.comp2042.model.events.InputEventListener;
 import com.comp2042.model.board.Board;
 import com.comp2042.model.board.SimpleBoard;
@@ -20,18 +19,21 @@ import javafx.util.Duration;
 
 public class GameController implements InputEventListener {
 
-    private final Board board = new SimpleBoard(GameConfiguration.BOARD_HEIGHT, GameConfiguration.BOARD_WIDTH, new RandomBrickGenerator());
+    private final Board board;
     private final GuiController viewGuiController;
     private final GameRenderer gameRenderer;
     private final GameModeRules gameModeRules;
     private double currentSpeed;
     private Timeline survivalTimer;
 
-    public GameController(GuiController c, GameModeRules rules) {
+    public GameController(GuiController c, GameModeRules rules, Board board) {
         this.viewGuiController = c;
         this.gameRenderer = c.getRenderer();
         this.gameModeRules = rules;
-        ((SimpleBoard) board).setRules(rules);
+        this.board = board;
+        if (board instanceof SimpleBoard){
+            board.setRules(rules);
+        }
         this.currentSpeed = rules.getInitialSpeedDelay();
         if (rules instanceof SurvivalModeRules) {
             initialiseSurvivalMechanics();
@@ -104,6 +106,12 @@ public class GameController implements InputEventListener {
     }
 
     @Override
+    public ViewData onUpEvent(MoveEvent event) {
+        board.moveBrickUp();
+        return board.getViewData();
+    }
+
+    @Override
     public ViewData onRotateEvent(MoveEvent event) {
         board.rotateBrickCounterClockwise();
         return board.getViewData();
@@ -112,7 +120,7 @@ public class GameController implements InputEventListener {
     @Override
     public ViewData onHoldBrickEvent(MoveEvent event) {
         if (!gameModeRules.isHoldBrickAllowed()) return board.getViewData();
-        ((SimpleBoard) board).holdBrick();
+        board.holdBrick();
         return board.getViewData();
     }
 
@@ -156,11 +164,11 @@ public class GameController implements InputEventListener {
     }
 
     public IntegerProperty linesProperty() {
-        return ((SimpleBoard) board).getLines().linesProperty();
+        return board.getLines().linesProperty();
     }
 
     public IntegerProperty levelProperty() {
-        return ((SimpleBoard) board).getLevel().levelProperty();
+        return board.getLevel().levelProperty();
     }
 
     public void checkSpeed() {

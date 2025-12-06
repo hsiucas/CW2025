@@ -1,5 +1,6 @@
 package com.comp2042.controller;
 
+import com.comp2042.application.AppNavigator;
 import com.comp2042.logic.board.ViewData;
 import com.comp2042.logic.gravity.DownData;
 import com.comp2042.model.events.EventSource;
@@ -38,22 +39,30 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
 
         MoveEvent event = null;
 
-        if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A)
+        if      (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A)
             event = new MoveEvent(EventType.LEFT, EventSource.USER);
         else if (keyEvent.getCode() == KeyCode.RIGHT || keyEvent.getCode() == KeyCode.D)
             event = new MoveEvent(EventType.RIGHT, EventSource.USER);
-        else if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W)
-            event = new MoveEvent(EventType.ROTATE, EventSource.USER);
         else if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S)
             event = new MoveEvent(EventType.DOWN, EventSource.USER);
         else if (keyEvent.getCode() == KeyCode.SHIFT || keyEvent.getCode() == KeyCode.TAB)
             event = new MoveEvent(EventType.HOLD, EventSource.USER);
-        else if (keyEvent.getCode() == KeyCode.SPACE)
-            event = new MoveEvent(EventType.HARD_DROP, EventSource.USER);
         else if (keyEvent.getCode() == KeyCode.N)
             eventListener.createNewGame();
         else if (keyEvent.getCode() == KeyCode.ESCAPE)
             pauseToggleAction.run();
+
+        if (guiController.getCurrentGameMode() == AppNavigator.GameMode.FOUR_WAY) {
+            if      (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W)
+                event = new MoveEvent(EventType.UP, EventSource.USER);
+            else if (keyEvent.getCode() == KeyCode.SPACE)
+                event = new MoveEvent(EventType.ROTATE, EventSource.USER);
+        } else {
+            if      (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W)
+                event = new MoveEvent(EventType.ROTATE, EventSource.USER);
+            else if (keyEvent.getCode() == KeyCode.SPACE)
+                event = new MoveEvent(EventType.HARD_DROP, EventSource.USER);
+        }
 
         if (event != null) {
             if (event.getEventType() == EventType.DOWN) {

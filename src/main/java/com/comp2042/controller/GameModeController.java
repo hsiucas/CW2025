@@ -28,6 +28,6 @@ public class GameModeController {
 
     @FXML
     private void handle4WayButton(ActionEvent event) {
-        navigator.loadGameScene(AppNavigator.GameMode.FOURWAY);
+        navigator.loadGameScene(AppNavigator.GameMode.FOUR_WAY);
     }
 }

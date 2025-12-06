@@ -37,4 +37,12 @@ public class BrickMover {
         }
         return rowsDropped;
     }
+
+    public boolean moveUp(int[][] boardMatrix, int[][] brick, Point offset, CollisionDetector collisionDetector) {
+        if (collisionDetector.canMove(boardMatrix, brick, offset, -1, 0)) {
+            offset.translate(0,-1);
+            return true;
+        }
+        return false;
+    }
 }

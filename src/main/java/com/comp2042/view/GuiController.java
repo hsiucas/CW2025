@@ -38,6 +38,7 @@ public class GuiController implements Initializable, GameLoopListener {
     private GameRenderer gameRenderer;
     private InputEventListener eventListener;
     private AppNavigator appNavigator;
+    private AppNavigator.GameMode currentGameMode;
 
     private final BooleanProperty isPause = new SimpleBooleanProperty();
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
@@ -98,10 +99,11 @@ public class GuiController implements Initializable, GameLoopListener {
 
     public void handleMoveEvent(MoveEvent event) {
         ViewData data = switch (event.getEventType()) {
-            case LEFT -> eventListener.onLeftEvent(event);
-            case RIGHT -> eventListener.onRightEvent(event);
+            case LEFT   -> eventListener.onLeftEvent(event);
+            case RIGHT  -> eventListener.onRightEvent(event);
             case ROTATE -> eventListener.onRotateEvent(event);
-            default -> null;
+            case UP     -> eventListener.onUpEvent(event);
+            default     -> null;
         };
         if (data != null) gameRenderer.refreshBrick(data);
     }
@@ -115,7 +117,9 @@ public class GuiController implements Initializable, GameLoopListener {
     }
 
     public void bindLevel(IntegerProperty levelProperty) {
-        level.textProperty().bind(levelProperty.asString());
+        if (level != null) {
+            level.textProperty().bind(levelProperty.asString());
+        }
     }
 
     @Override
@@ -149,5 +153,13 @@ public class GuiController implements Initializable, GameLoopListener {
 
     public void setAppNavigator(AppNavigator appNavigator) {
         this.appNavigator = appNavigator;
+    }
+
+    public void setGameMode(AppNavigator.GameMode mode) {
+        this.currentGameMode = mode;
+    }
+
+    public AppNavigator.GameMode getCurrentGameMode() {
+        return currentGameMode;
     }
 }

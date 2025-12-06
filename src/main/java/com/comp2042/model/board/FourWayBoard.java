@@ -1,6 +1,5 @@
 package com.comp2042.model.board;
 
-import com.comp2042.logic.board.MatrixOperations;
 import com.comp2042.logic.rules.GameModeRules;
 import com.comp2042.logic.scoring.Level;
 import com.comp2042.logic.scoring.Lines;
@@ -15,14 +14,10 @@ import com.comp2042.logic.scoring.Score;
 import com.comp2042.logic.board.ViewData;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 
-public class SimpleBoard implements Board {
-    private static final int Y_OFFSET_IN_GARBAGE_ROW = -1;
-
-    private final int height;
-    private final int width;
+public class FourWayBoard implements Board {
+    private final int size;
     private int[][] currentGameMatrix;
     private final BrickGenerator brickGenerator;
     private final RotationState rotationState;
@@ -35,13 +30,13 @@ public class SimpleBoard implements Board {
     private final BrickRotator brickRotator;
     private final BrickSpawnHandler brickSpawnHandler;
     private GameModeRules rules;
-    private final Level level;
     private final BrickHolder brickHolder;
 
-    public SimpleBoard(int height, int width, BrickGenerator brickGenerator) {
-        this.height = height;
-        this.width = width;
-        currentGameMatrix = new int[height][width];
+    private final Level level;
+
+    public FourWayBoard(int size, BrickGenerator brickGenerator) {
+        this.size = size;
+        currentGameMatrix = new int[size][size];
         this.brickGenerator = brickGenerator;
         rotationState = new RotationState();
         score = new Score();
@@ -51,8 +46,9 @@ public class SimpleBoard implements Board {
         brickMover = new BrickMover();
         brickRotator = new BrickRotator();
         brickSpawnHandler = new BrickSpawnHandler();
-        level = new Level();
         this.brickHolder = new BrickHolder();
+
+        level = new Level();
     }
 
     @Override
@@ -62,7 +58,7 @@ public class SimpleBoard implements Board {
         rotationState.setBrick(currentBrick);
         int[][] shape = rotationState.getCurrentShape();
 
-        Point spawn = brickSpawnHandler.getGameboySpawnPoint(currentGameMatrix, width, shape);
+        Point spawn = brickSpawnHandler.getCenterSpawnPoint(currentGameMatrix, size, size, shape);
 
         if (spawn == null) { return false; }
 
@@ -73,33 +69,41 @@ public class SimpleBoard implements Board {
     @Override
     public boolean moveBrickDown() {
         return brickMover.moveDown( currentGameMatrix,
-                                    rotationState.getCurrentShape(),
-                                    currentOffset,
-                                    collisionDetector);
+                rotationState.getCurrentShape(),
+                currentOffset,
+                collisionDetector);
     }
 
     @Override
     public boolean moveBrickLeft() {
         return brickMover.moveLeft( currentGameMatrix,
-                                    rotationState.getCurrentShape(),
-                                    currentOffset,
-                                    collisionDetector);
+                rotationState.getCurrentShape(),
+                currentOffset,
+                collisionDetector);
     }
 
     @Override
     public boolean moveBrickRight() {
         return brickMover.moveRight(currentGameMatrix,
-                                    rotationState.getCurrentShape(),
-                                    currentOffset,
-                                    collisionDetector);
+                rotationState.getCurrentShape(),
+                currentOffset,
+                collisionDetector);
     }
 
     @Override
     public boolean rotateBrickCounterClockwise() {
         return brickRotator.rotateCounterClockwise( currentGameMatrix,
-                                                    rotationState,
-                                                    currentOffset,
-                                                    collisionDetector);
+                rotationState,
+                currentOffset,
+                collisionDetector);
+    }
+
+    @Override
+    public boolean moveBrickUp() {
+        return brickMover.moveUp(currentGameMatrix,
+                rotationState.getCurrentShape(),
+                currentOffset,
+                collisionDetector);
     }
 
     @Override
@@ -109,13 +113,6 @@ public class SimpleBoard implements Board {
 
     @Override
     public ViewData getViewData() {
-        int ghostY = currentOffset.y;
-        if (rules != null && rules.isGhostBrickAllowed()) {
-            Point ghostOffset = new Point(currentOffset);
-            int drops = brickMover.hardDrop(currentGameMatrix, rotationState.getCurrentShape(), ghostOffset, collisionDetector);
-            ghostY = currentOffset.y + drops;
-        }
-
         List<int[][]> nextBricks = ((RandomBrickGenerator) brickGenerator).getNextThreeBricks();
 
         return new ViewData(
@@ -123,8 +120,8 @@ public class SimpleBoard implements Board {
                 currentOffset.y,
                 currentOffset.x,
                 nextBricks,
-                brickHolder.getHeldBrickMatrix(),
-                ghostY
+                null,
+                currentOffset.y
         );
     }
 
@@ -138,16 +135,9 @@ public class SimpleBoard implements Board {
         ClearRow clearRow = landingHandler.handleClearRows(currentGameMatrix);
         currentGameMatrix = clearRow.getNewMatrix();
         if (clearRow.getLinesRemoved() > 0) {
-            handleLevelProgression(clearRow.getLinesRemoved());
+            lines.add(clearRow.getLinesRemoved());
         }
         return clearRow;
-    }
-
-    private void handleLevelProgression(int linesRemoved) {
-        lines.add(linesRemoved);
-        if (rules.shouldLevelUp(lines.getLines(), level.getLevel())) {
-            level.increment();
-        }
     }
 
     @Override
@@ -161,13 +151,8 @@ public class SimpleBoard implements Board {
     }
 
     @Override
-    public Level getLevel() {
-        return level;
-    }
-
-    @Override
     public void newGame() {
-        currentGameMatrix = new int[height][width];
+        currentGameMatrix = new int[size][size];
         score.reset();
         lines.reset();
         createNewBrick();
@@ -175,44 +160,15 @@ public class SimpleBoard implements Board {
 
     public void setRules(GameModeRules rules) {
         this.rules = rules;
-        level.levelProperty().set(rules.getInitialLevel());
-    }
-
-    public boolean addGarbageRow(boolean isIndestructible) {
-        if (MatrixOperations.isGameOver(currentGameMatrix)) {
-            return true;
-        }
-
-        this.currentGameMatrix = MatrixOperations.addGarbageRow(currentGameMatrix, isIndestructible);
-
-        if (currentOffset.y > 0) {
-            currentOffset.translate(0, Y_OFFSET_IN_GARBAGE_ROW);
-        }
-
-        return MatrixOperations.isGameOver(currentGameMatrix);
-    }
-
-    public void rowToValue(int row, int value) {
-        if (row >= 0 && row < height) {
-            Arrays.fill(currentGameMatrix[row], value);
-        }
     }
 
     public void holdBrick() {
         boolean swapped = brickHolder.holdBrick(rotationState, brickGenerator);
-        if (swapped) currentOffset = brickSpawnHandler.getGameboySpawnPoint(currentGameMatrix, width, rotationState.getCurrentShape());
+        if (swapped) currentOffset = brickSpawnHandler.getCenterSpawnPoint(currentGameMatrix, size, size, rotationState.getCurrentShape());
     }
 
-    public void hardDrop() {
-        int rowsFallen = brickMover.hardDrop(
-                currentGameMatrix,
-                rotationState.getCurrentShape(),
-                currentOffset,
-                collisionDetector
-        );
-
-        if (rowsFallen > 0) {
-            score.add(rowsFallen * 2);
-        }
+    @Override
+    public Level getLevel() {
+        return level;
     }
 }

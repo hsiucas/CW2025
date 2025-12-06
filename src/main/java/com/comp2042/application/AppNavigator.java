@@ -1,13 +1,13 @@
 package com.comp2042.application;
 
+import com.comp2042.controller.GameConfiguration;
 import com.comp2042.controller.GameController;
 import com.comp2042.controller.GameModeController;
 import com.comp2042.controller.MainMenuController;
 import com.comp2042.controller.StartScreenController;
-import com.comp2042.logic.rules.ClassicModeRules;
-import com.comp2042.logic.rules.GameModeRules;
-import com.comp2042.logic.rules.SurvivalModeRules;
-import com.comp2042.logic.rules.ZenModeRules;
+import com.comp2042.logic.rules.*;
+import com.comp2042.model.board.*;
+import com.comp2042.model.bricks.tetromino.RandomBrickGenerator;
 import com.comp2042.view.GuiController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -76,9 +76,13 @@ public class AppNavigator {
 
         try {
             String fxmlFileName = "gameLayout.fxml";
+
             if (mode == GameMode.CLASSIC) {
                 fxmlFileName = "classicModeLayout.fxml";
+            } else if (mode == GameMode.FOUR_WAY) {
+                fxmlFileName = "4WayLayout.fxml";
             }
+
             URL location = getClass().getClassLoader().getResource(fxmlFileName);
             FXMLLoader fxmlLoader = new FXMLLoader(location);
             Parent root = fxmlLoader.load();
@@ -87,7 +91,15 @@ public class AppNavigator {
             Scene scene = new Scene(root);
             stage.setScene(scene);
 
-            GameController gameController = new GameController(controller, rules);
+            Board board;
+            if (mode == GameMode.FOUR_WAY) {
+                board = new FourWayBoard(GameConfiguration.FOUR_WAY_BOARD_LENGTH, new RandomBrickGenerator());
+            } else {
+                board = new SimpleBoard(GameConfiguration.SIMPLE_BOARD_HEIGHT, GameConfiguration.SIMPLE_BOARD_WIDTH, new RandomBrickGenerator());
+            }
+
+            GameController gameController = new GameController(controller, rules, board);
+            controller.setGameMode(mode);
             double speed = rules.getInitialSpeedDelay();
             controller.setAppNavigator(this);
             controller.setEventListener(gameController);
@@ -102,7 +114,7 @@ public class AppNavigator {
     }
 
     public enum GameMode {
-        CLASSIC, ZEN, SURVIVAL, FOURWAY
+        CLASSIC, ZEN, SURVIVAL, FOUR_WAY
     }
 
     public GameModeRules createRules(GameMode mode) {
@@ -110,7 +122,7 @@ public class AppNavigator {
             case CLASSIC    -> new ClassicModeRules();
             case ZEN        -> new ZenModeRules();
             case SURVIVAL   -> new SurvivalModeRules();
-            case FOURWAY    -> new ClassicModeRules();
+            case FOUR_WAY   -> new FourWayRules();
         };
     }
 }

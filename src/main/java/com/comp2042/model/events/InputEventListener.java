@@ -11,5 +11,6 @@ public interface InputEventListener {
     ViewData onRotateEvent(MoveEvent event);
     ViewData onHoldBrickEvent(MoveEvent event);
     DownData onHardDropEvent(MoveEvent event);
+    ViewData onUpEvent(MoveEvent event);
     void createNewGame();
 }

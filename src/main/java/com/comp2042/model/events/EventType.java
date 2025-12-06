@@ -2,5 +2,6 @@ package com.comp2042.model.events;
 
 public enum EventType {
     DOWN, LEFT, RIGHT, ROTATE,
-    HOLD, HARD_DROP
+    HOLD, HARD_DROP,
+    UP
 }

@@ -42,7 +42,7 @@ public class GameRenderer {
     public void initBackground(int[][] boardMatrix) {
         displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
         gamePanel.getChildren().clear();
-        for (int row = 2; row < boardMatrix.length; row++)
+        for (int row = GAME_BOY_SPAWN; row < boardMatrix.length; row++)
             for (int col = 0; col < boardMatrix[row].length; col++) {
                 Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE, getFillColor(boardMatrix[row][col]));
                 displayMatrix[row][col] = rectangle;
@@ -63,14 +63,18 @@ public class GameRenderer {
     }
 
     public void refreshGameBackground(int[][] board) {
-        for (int row = 2; row < board.length; row++)
+        for (int row = GAME_BOY_SPAWN; row < board.length; row++)
             for (int col = 0; col < board[row].length; col++)
                 displayMatrix[row][col].setFill(getFillColor(board[row][col]));
     }
 
     public void refreshBrick(ViewData brick) {
-        double xPos = X_LAYOUT_ADJUSTMENT + brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
-        double yPos = Y_LAYOUT_ADJUSTMENT + gamePanel.getLayoutY() + brick.getyPosition() * (BRICK_SIZE + brickPanel.getVgap());
+//        double xPos = X_LAYOUT_ADJUSTMENT + brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
+//        double yPos = Y_LAYOUT_ADJUSTMENT + gamePanel.getLayoutY() + brick.getyPosition() * (BRICK_SIZE + brickPanel.getVgap());
+
+        double xPos = brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
+        double yPos = gamePanel.getLayoutY() + brick.getyPosition() * (BRICK_SIZE + brickPanel.getVgap());
+
 
         brickPanel.setLayoutX(xPos);
         brickPanel.setLayoutY(yPos);

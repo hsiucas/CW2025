@@ -6,7 +6,15 @@ public interface GameModeRules {
     double getSpeedDelay(int currentLevel);
     int getInitialLevel();
 
-    default boolean isHoldBrickAllowed() { return true; }
-    default boolean isHardDropAllowed() { return true; }
-    default boolean isGhostBrickAllowed() { return true;}
+    default boolean isHoldBrickAllowed() {
+        return true;
+    }
+
+    default boolean isHardDropAllowed() {
+        return true;
+    }
+
+    default boolean isGhostBrickAllowed() {
+        return true;
+    }
 }

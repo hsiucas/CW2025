@@ -2,6 +2,9 @@ package com.comp2042.model.board;
 
 import com.comp2042.logic.board.ViewData;
 import com.comp2042.logic.collision.ClearRow;
+import com.comp2042.logic.rules.GameModeRules;
+import com.comp2042.logic.scoring.Level;
+import com.comp2042.logic.scoring.Lines;
 import com.comp2042.logic.scoring.Score;
 
 public interface Board {
@@ -11,6 +14,10 @@ public interface Board {
     boolean moveBrickLeft();
 
     boolean moveBrickRight();
+
+    default boolean moveBrickUp() {
+        return false;
+    }
 
     boolean rotateBrickCounterClockwise();
 
@@ -25,6 +32,14 @@ public interface Board {
     ClearRow clearRows();
 
     Score getScore();
+
+    Lines getLines();
+
+    Level getLevel();
+
+    void setRules(GameModeRules rules);
+
+    void holdBrick();
 
     void newGame();
 }
