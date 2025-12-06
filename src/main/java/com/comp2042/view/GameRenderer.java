@@ -4,6 +4,7 @@ import com.comp2042.logic.board.ViewData;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.comp2042.model.bricks.core.BrickColourFactory.getFillColor;
@@ -15,7 +16,8 @@ public class GameRenderer {
     private static final int HOLD_BRICK_SIZE = 13;
     private static final double X_LAYOUT_ADJUSTMENT = 40;
     private static final double Y_LAYOUT_ADJUSTMENT = -42;
-    private static final int GAMEBOY_SPAWN = 2;
+    private static final int GAME_BOY_SPAWN = 2;
+    private static final double GHOST_BRICK_OPACITY = 0.1;
 
     private GridPane gamePanel;
     private GridPane brickPanel;
@@ -26,6 +28,7 @@ public class GameRenderer {
 
     private Rectangle[][] displayMatrix;
     private Rectangle[][] rectangles;
+    private final List<Rectangle> ghostBricks = new ArrayList<>();
 
     public GameRenderer(GridPane gamePanel, GridPane brickPanel, GridPane nextBrick, GridPane nextBrick2, GridPane nextBrick3, GridPane holdBrick) {
         this.gamePanel = gamePanel;
@@ -43,7 +46,7 @@ public class GameRenderer {
             for (int col = 0; col < boardMatrix[row].length; col++) {
                 Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE, getFillColor(boardMatrix[row][col]));
                 displayMatrix[row][col] = rectangle;
-                gamePanel.add(rectangle, col, row - GAMEBOY_SPAWN);
+                gamePanel.add(rectangle, col, row - GAME_BOY_SPAWN);
             }
     }
 
@@ -76,12 +79,39 @@ public class GameRenderer {
             initBrick(brick);
         }
 
+        drawGhostBrick(brick);
+
         for (int row = 0; row < brick.getBrickData().length; row++)
             for (int col = 0; col < brick.getBrickData()[row].length; col++)
                 rectangles[row][col].setFill(getFillColor(brick.getBrickData()[row][col]));
 
         previewPanel(brick.getNextBricksData());
         renderHoldBrick(brick.getHeldBrickData());
+    }
+
+    private void drawGhostBrick(ViewData brick) {
+        if (!ghostBricks.isEmpty()) {
+            brickPanel.getChildren().removeAll(ghostBricks);
+            ghostBricks.clear();
+        }
+
+        int[][] shape = brick.getBrickData();
+        int ghostY = brick.getGhostYPosition();
+        int realY = brick.getyPosition();
+
+        double dropDistance = (ghostY - realY) * (BRICK_SIZE + brickPanel.getVgap());
+
+        for (int row = 0; row < shape.length; row++) {
+            for (int col = 0; col < shape[row].length; col++) {
+                if (shape[row][col] != 0) {
+                    Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE, getFillColor(shape[row][col]));
+                    rectangle.setOpacity(GHOST_BRICK_OPACITY);
+                    rectangle.setTranslateY(dropDistance);
+                    brickPanel.add(rectangle, col, row);
+                    ghostBricks.add(rectangle);
+                }
+            }
+        }
     }
 
     public void previewPanel(List<int[][]> nextBrickData){

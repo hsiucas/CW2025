@@ -113,12 +113,23 @@ public class SimpleBoard implements Board {
 
     @Override
     public ViewData getViewData() {
+        int ghostY = currentOffset.y;
+        if (rules != null && rules.isGhostBrickAllowed()) {
+            Point ghostOffset = new Point(currentOffset);
+            int drops = brickMover.hardDrop(currentGameMatrix, rotationState.getCurrentShape(), ghostOffset, collisionDetector);
+            ghostY = currentOffset.y + drops;
+        }
+
         List<int[][]> nextBricks = ((RandomBrickGenerator) brickGenerator).getNextThreeBricks();
-        return new ViewData(rotationState.getCurrentShape(),
-                            currentOffset.y,
-                            currentOffset.x,
-                            nextBricks,
-                            brickHolder.getHeldBrickMatrix());
+
+        return new ViewData(
+                rotationState.getCurrentShape(),
+                currentOffset.y,
+                currentOffset.x,
+                nextBricks,
+                brickHolder.getHeldBrickMatrix(),
+                ghostY
+        );
     }
 
     @Override

@@ -8,4 +8,5 @@ public interface GameModeRules {
 
     default boolean isHoldBrickAllowed() { return true; }
     default boolean isHardDropAllowed() { return true; }
+    default boolean isGhostBrickAllowed() { return true;}
 }
