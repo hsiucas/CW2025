@@ -1,5 +1,6 @@
 package com.comp2042.controller;
 
+import com.comp2042.application.SoundManager;
 import com.comp2042.logic.rules.SurvivalModeRules;
 import com.comp2042.model.board.FourWayBoard;
 import com.comp2042.model.events.InputEventListener;
@@ -14,6 +15,7 @@ import com.comp2042.logic.rules.GameModeRules;
 import com.comp2042.model.events.EventSource;
 import com.comp2042.model.events.MoveEvent;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.util.Duration;
@@ -43,14 +45,25 @@ public class GameController implements InputEventListener {
     }
 
     private DownData handleLocking() {
+        SoundManager.getInstance().playLand();
+
         board.mergeBrickToBackground();
         ClearRow clear = board.clearRows();
-        if (clear.getLinesRemoved() > 0)
+        if (clear.getLinesRemoved() > 0) {
             board.getScore().add(clear.getScoreBonus());
+            SoundManager.getInstance().playClear(clear.getLinesRemoved());
+            SoundManager.getInstance().playGravityFall();
+        }
 
         boolean gameOver = !board.createNewBrick();
         if(gameOver) {
             stopGame();
+            SoundManager.getInstance().playGameOver();
+            PauseTransition delay =  new PauseTransition(Duration.seconds(1));
+            delay.setOnFinished(event -> {
+                SoundManager.getInstance().playGameOverMusic();
+            });
+            delay.play();
         }
 
         gameRenderer.refreshGameBackground(board.getBoardMatrix());
@@ -58,12 +71,14 @@ public class GameController implements InputEventListener {
         return new DownData(clear, board.getViewData(), gameOver);
     }
 
-    private DownData processMovement (boolean moved, boolean isSoftDrop) {
+    private DownData processMovement (boolean moved, boolean isSoftDrop, boolean isUserMovement) {
         if (moved) {
+            if (isUserMovement) {
+                SoundManager.getInstance().playMove();
+            }
             if (isSoftDrop) {
                 board.getScore().add(1);
             }
-
             return new DownData(null, board.getViewData(), false);
         }
         return handleLocking();
@@ -71,7 +86,7 @@ public class GameController implements InputEventListener {
 
     private ViewData handleDirection (boolean directionMoved) {
         if (board instanceof FourWayBoard) {
-            DownData result = processMovement(directionMoved, true);
+            DownData result = processMovement(directionMoved, true, true);
 
             if (result.isGameOver()) {
                 stopGame();
@@ -84,13 +99,13 @@ public class GameController implements InputEventListener {
 
     @Override
     public DownData onTick() {
-        return processMovement(board.moveBrickDown(), false);
+        return processMovement(board.moveBrickDown(), false, false);
     }
 
     @Override
     public DownData onDownEvent(MoveEvent event) {
-        boolean isSoftDrop = (event.getEventSource() == EventSource.USER);
-        return processMovement(board.moveBrickDown(), isSoftDrop);
+        boolean isUser = (event.getEventSource() == EventSource.USER);
+        return processMovement(board.moveBrickDown(), isUser, isUser);
     }
 
     @Override
@@ -110,14 +125,21 @@ public class GameController implements InputEventListener {
 
     @Override
     public ViewData onRotateEvent(MoveEvent event) {
-        board.rotateBrickCounterClockwise();
+        if (board.rotateBrickCounterClockwise()) {
+            SoundManager.getInstance().playRotate();
+        }
         return board.getViewData();
     }
 
     @Override
     public ViewData onHoldBrickEvent(MoveEvent event) {
         if (!gameModeRules.isHoldBrickAllowed()) return board.getViewData();
-        board.holdBrick();
+        boolean held = board.holdBrick();
+
+        if (held) {
+            SoundManager.getInstance().playLand();
+        }
+
         return board.getViewData();
     }
 
@@ -171,6 +193,7 @@ public class GameController implements InputEventListener {
         survivalTimer = new Timeline(new KeyFrame(Duration.seconds(15), e -> {
             if (viewGuiController != null) {
                 boolean died = ((SimpleBoard) board).addGarbageRow(false);
+                SoundManager.getInstance().playGarbage();
                 if (died) {
                     stopGame();
                     viewGuiController.gameOver();

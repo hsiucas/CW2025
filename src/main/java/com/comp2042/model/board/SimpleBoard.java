@@ -198,9 +198,10 @@ public class SimpleBoard implements Board {
         }
     }
 
-    public void holdBrick() {
+    public boolean holdBrick() {
         boolean swapped = brickHolder.holdBrick(rotationState, brickGenerator);
         if (swapped) currentOffset = brickSpawnHandler.getGameboySpawnPoint(currentGameMatrix, width, rotationState.getCurrentShape());
+        return swapped;
     }
 
     public void hardDrop() {

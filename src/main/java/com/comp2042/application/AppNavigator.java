@@ -27,18 +27,22 @@ public class AppNavigator {
 
     public void toStartScreen() {
         loadScene("startScreen.fxml");
+        SoundManager.getInstance().playTitleMusic();
     }
 
     public void toMainMenu() {
         loadScene("mainMenu.fxml");
+        SoundManager.getInstance().playTitleMusic();
     }
 
     public void toGameModeSelection() {
         loadScene("gameSelectionLayout.fxml");
+        SoundManager.getInstance().playTitleMusic();
     }
 
     public void toInstructionsScreen() {
         loadScene("instructionsLayout.fxml");
+        SoundManager.getInstance().playInstructionsMusic();
     }
 
     private void loadScene(String fxmlPath) {
@@ -88,6 +92,8 @@ public class AppNavigator {
             Parent root = fxmlLoader.load();
 
             GuiController controller = fxmlLoader.getController();
+
+            SoundManager.getInstance().playGameModeMusic(mode);
 
             controller.setGameMode(mode);
             Scene scene = new Scene(root);

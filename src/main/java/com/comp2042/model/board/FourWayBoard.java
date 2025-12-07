@@ -166,9 +166,10 @@ public class FourWayBoard implements Board {
         this.rules = rules;
     }
 
-    public void holdBrick() {
+    public boolean holdBrick() {
         boolean swapped = brickHolder.holdBrick(rotationState, brickGenerator);
         if (swapped) currentOffset = brickSpawnHandler.getCenterSpawnPoint(currentGameMatrix, size, size, rotationState.getCurrentShape());
+        return swapped;
     }
 
     @Override

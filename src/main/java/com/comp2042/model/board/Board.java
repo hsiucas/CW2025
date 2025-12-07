@@ -39,7 +39,7 @@ public interface Board {
 
     void setRules(GameModeRules rules);
 
-    void holdBrick();
+    boolean holdBrick();
 
     void newGame();
 
