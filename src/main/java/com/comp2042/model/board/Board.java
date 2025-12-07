@@ -42,4 +42,6 @@ public interface Board {
     void holdBrick();
 
     void newGame();
+
+    void rowToValue(int row, int value);
 }

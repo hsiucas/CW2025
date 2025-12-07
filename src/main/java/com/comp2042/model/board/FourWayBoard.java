@@ -123,7 +123,7 @@ public class FourWayBoard implements Board {
                 currentOffset.y,
                 currentOffset.x,
                 nextBricks,
-                null,
+                brickHolder.getHeldBrickMatrix(),
                 currentOffset.y
         );
     }
@@ -174,5 +174,14 @@ public class FourWayBoard implements Board {
     @Override
     public Level getLevel() {
         return level;
+    }
+
+    @Override
+    public void rowToValue(int row, int value) {
+        if (row >= 0 && row < currentGameMatrix.length) {
+            for (int col = 0; col < currentGameMatrix[row].length; col++) {
+                currentGameMatrix[row][col] = value;
+            }
+        }
     }
 }

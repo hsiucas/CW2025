@@ -71,10 +71,11 @@ public class GameController implements InputEventListener {
 
     private ViewData handleDirection (boolean directionMoved) {
         if (board instanceof FourWayBoard) {
-            DownData result = processMovement(directionMoved, false);
+            DownData result = processMovement(directionMoved, true);
 
             if (result.isGameOver()) {
                 stopGame();
+                viewGuiController.gameOver();
             }
             return result.getViewData();
         }
@@ -189,6 +190,6 @@ public class GameController implements InputEventListener {
     }
 
     public void clearRowWhenGameOver(int row) {
-        ((SimpleBoard) board).rowToValue(row, 0);
+        board.rowToValue(row, 0);
     }
 }
