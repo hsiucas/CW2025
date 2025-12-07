@@ -1,6 +1,7 @@
 package com.comp2042.view;
 
 import com.comp2042.application.AppNavigator;
+import com.comp2042.application.SoundManager;
 import com.comp2042.controller.GameController;
 import com.comp2042.controller.KeyInputHandler;
 import com.comp2042.model.events.InputEventListener;
@@ -56,9 +57,12 @@ public class GuiController implements Initializable, GameLoopListener {
                 if (newValue) {
                     gameLooper.pause();
                     pauseLabel.setVisible(true);
+                    SoundManager.getInstance().playSelectSound();
+                    SoundManager.getInstance().pauseBGM();
                 } else {
                     gameLooper.resume();
                     pauseLabel.setVisible(false);
+                    SoundManager.getInstance().resumeBGM();
                 }
             }
         });

@@ -23,7 +23,7 @@ public class SoundManager {
     private AudioClip gameOverNotifySound;
     private AudioClip selectSound;
 
-    private boolean isMuted = false;
+    private boolean isMusicMuted = false;
 
     private String currentSong = "";
 
@@ -80,7 +80,7 @@ public class SoundManager {
     }
 
     public void playTrack(String path, boolean loop) {
-        if (isMuted) return;
+        if (isMusicMuted) return;
         if (loop && currentSong.equals(path)) return;
 
         stopBackgroundMusic();
@@ -125,7 +125,7 @@ public class SoundManager {
     }
 
     private void playSound(AudioClip audioClip) {
-        if (!isMuted && audioClip != null) {
+        if (!isMusicMuted && audioClip != null) {
             audioClip.play();
         }
     }
@@ -167,6 +167,18 @@ public class SoundManager {
             playSound(clearTetrisSound);
         } else if (lines >= 0) {
             playSound(clearLineSound);
+        }
+    }
+
+    public void pauseBGM() {
+        if (backgroundMusic != null && !isMusicMuted) {
+            backgroundMusic.pause();
+        }
+    }
+
+    public void resumeBGM() {
+        if (backgroundMusic != null && !isMusicMuted) {
+            backgroundMusic.play();
         }
     }
 }

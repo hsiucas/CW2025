@@ -85,6 +85,10 @@ public class GameController implements InputEventListener {
     }
 
     private ViewData handleDirection (boolean directionMoved) {
+        if (directionMoved) {
+            SoundManager.getInstance().playMove();
+        }
+
         if (board instanceof FourWayBoard) {
             DownData result = processMovement(directionMoved, true, true);
 
@@ -137,7 +141,7 @@ public class GameController implements InputEventListener {
         boolean held = board.holdBrick();
 
         if (held) {
-            SoundManager.getInstance().playLand();
+            SoundManager.getInstance().playGravityFall();
         }
 
         return board.getViewData();
