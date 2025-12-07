@@ -49,8 +49,10 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
             event = new MoveEvent(EventType.HOLD, EventSource.USER);
         else if (keyEvent.getCode() == KeyCode.N)
             eventListener.createNewGame();
-        else if (keyEvent.getCode() == KeyCode.ESCAPE)
+        else if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.P)
             pauseToggleAction.run();
+        else if (keyEvent.getCode() == KeyCode.BACK_SPACE)
+            guiController.returnToMenu();
 
         if (guiController.getCurrentGameMode() == AppNavigator.GameMode.FOUR_WAY) {
             if      (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W)

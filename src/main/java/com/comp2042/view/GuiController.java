@@ -176,4 +176,14 @@ public class GuiController implements Initializable, GameLoopListener {
     public AppNavigator.GameMode getCurrentGameMode() {
         return currentGameMode;
     }
+
+    public void returnToMenu() {
+        if (gameLooper != null) gameLooper.stop();
+        if (eventListener instanceof GameController) {
+            ((GameController) eventListener).stopGame();
+        }
+        if (appNavigator != null) {
+            appNavigator.toGameModeSelection();
+        }
+    }
 }
