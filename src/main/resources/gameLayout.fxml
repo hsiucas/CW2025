@@ -35,11 +35,15 @@
       </VBox>
         <BorderPane fx:id="gameBoard" layoutX="20.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="377.0" prefWidth="209.0" styleClass="gameBoard">
          <center>
-                <GridPane fx:id="gamePanel" hgap="1" layoutX="20.0" prefHeight="377.0" prefWidth="209.0" vgap="1" BorderPane.alignment="CENTER" />
+            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+               
+                                  <GridPane fx:id="brickPanel" hgap="1" prefHeight="377.0" prefWidth="209.0" vgap="1" />
+                      <GridPane fx:id="gamePanel" hgap="1" prefHeight="377.0" prefWidth="209.0" vgap="1" />
+               </children>
+            </StackPane>
          </center></BorderPane>
     </StackPane>
-
-                   <GridPane fx:id="brickPanel" hgap="1" layoutX="20.0" prefHeight="377.0" prefWidth="249.0" vgap="1" />
 
     <VBox layoutX="269.0" prefHeight="377.0" prefWidth="149.0">
       <children>

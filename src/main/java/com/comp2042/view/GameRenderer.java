@@ -14,9 +14,6 @@ public class GameRenderer {
     private static final int SMALL_BRICK_SIZE = 19;
     private static final int SMALLER_BRICK_SIZE = 7;
     private static final int HOLD_BRICK_SIZE = 13;
-    private static final double X_LAYOUT_ADJUSTMENT = 40;
-    private static final double Y_LAYOUT_ADJUSTMENT = -42;
-    private static final int GAME_BOY_SPAWN = 2;
     private static final double GHOST_BRICK_OPACITY = 0.1;
 
     private GridPane gamePanel;
@@ -29,24 +26,26 @@ public class GameRenderer {
     private Rectangle[][] displayMatrix;
     private Rectangle[][] rectangles;
     private final List<Rectangle> ghostBricks = new ArrayList<>();
+    private final BoardRenderConfiguration configuration;
 
-    public GameRenderer(GridPane gamePanel, GridPane brickPanel, GridPane nextBrick, GridPane nextBrick2, GridPane nextBrick3, GridPane holdBrick) {
+    public GameRenderer(GridPane gamePanel, GridPane brickPanel, GridPane nextBrick, GridPane nextBrick2, GridPane nextBrick3, GridPane holdBrick, BoardRenderConfiguration configuration) {
         this.gamePanel = gamePanel;
         this.brickPanel = brickPanel;
         this.nextBrick = nextBrick;
         this.nextBrick2 = nextBrick2;
         this.nextBrick3 = nextBrick3;
         this.holdBrick = holdBrick;
+        this.configuration = configuration;
     }
 
     public void initBackground(int[][] boardMatrix) {
         displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
         gamePanel.getChildren().clear();
-        for (int row = GAME_BOY_SPAWN; row < boardMatrix.length; row++)
+        for (int row = configuration.getHiddenTopRows(); row < boardMatrix.length; row++)
             for (int col = 0; col < boardMatrix[row].length; col++) {
                 Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE, getFillColor(boardMatrix[row][col]));
                 displayMatrix[row][col] = rectangle;
-                gamePanel.add(rectangle, col, row - GAME_BOY_SPAWN);
+                gamePanel.add(rectangle, col, row - configuration.getHiddenTopRows());
             }
     }
 
@@ -63,18 +62,19 @@ public class GameRenderer {
     }
 
     public void refreshGameBackground(int[][] board) {
-        for (int row = GAME_BOY_SPAWN; row < board.length; row++)
+        for (int row = configuration.getHiddenTopRows(); row < board.length; row++)
             for (int col = 0; col < board[row].length; col++)
                 displayMatrix[row][col].setFill(getFillColor(board[row][col]));
     }
 
     public void refreshBrick(ViewData brick) {
-//        double xPos = X_LAYOUT_ADJUSTMENT + brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
-//        double yPos = Y_LAYOUT_ADJUSTMENT + gamePanel.getLayoutY() + brick.getyPosition() * (BRICK_SIZE + brickPanel.getVgap());
-
-        double xPos = brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap());
-        double yPos = gamePanel.getLayoutY() + brick.getyPosition() * (BRICK_SIZE + brickPanel.getVgap());
-
+        double xPos = configuration.getxOffset()
+                        + brick.getxPosition()
+                        * (BRICK_SIZE + brickPanel.getHgap());
+        double yPos = configuration.getyOffset()
+                        + gamePanel.getLayoutY()
+                        + (brick.getyPosition() - configuration.getHiddenTopRows())
+                        * (BRICK_SIZE + brickPanel.getVgap());
 
         brickPanel.setLayoutX(xPos);
         brickPanel.setLayoutY(yPos);
