@@ -1,6 +1,7 @@
 package com.comp2042.controller;
 
 import com.comp2042.logic.rules.SurvivalModeRules;
+import com.comp2042.model.board.FourWayBoard;
 import com.comp2042.model.events.InputEventListener;
 import com.comp2042.model.board.Board;
 import com.comp2042.model.board.SimpleBoard;
@@ -41,74 +42,69 @@ public class GameController implements InputEventListener {
         board.createNewBrick();
     }
 
-    @Override
-    public DownData onTick() {
-        boolean moved = board.moveBrickDown();
-
-        if (moved) {
-            return new DownData(null, board.getViewData(), false);
-        }
-
+    private DownData handleLocking() {
         board.mergeBrickToBackground();
         ClearRow clear = board.clearRows();
-
         if (clear.getLinesRemoved() > 0)
             board.getScore().add(clear.getScoreBonus());
 
         boolean gameOver = !board.createNewBrick();
-
         if(gameOver) {
             stopGame();
         }
 
+        gameRenderer.refreshGameBackground(board.getBoardMatrix());
         checkSpeed();
         return new DownData(clear, board.getViewData(), gameOver);
     }
 
-    @Override
-    public DownData onDownEvent(MoveEvent event) {
-        boolean moved = board.moveBrickDown();
-
+    private DownData processMovement (boolean moved, boolean isSoftDrop) {
         if (moved) {
-            if (event.getEventSource() == EventSource.USER)
+            if (isSoftDrop) {
                 board.getScore().add(1);
+            }
 
             return new DownData(null, board.getViewData(), false);
         }
+        return handleLocking();
+    }
 
-        board.mergeBrickToBackground();
-        ClearRow clear = board.clearRows();
+    private ViewData handleDirection (boolean directionMoved) {
+        if (board instanceof FourWayBoard) {
+            DownData result = processMovement(directionMoved, false);
 
-        if (clear.getLinesRemoved() > 0)
-            board.getScore().add(clear.getScoreBonus());
-
-        boolean isGameOver = !board.createNewBrick();
-        gameRenderer.refreshGameBackground(board.getBoardMatrix());
-
-        if(isGameOver) {
-            stopGame();
+            if (result.isGameOver()) {
+                stopGame();
+            }
+            return result.getViewData();
         }
+        return board.getViewData();
+    }
 
-        checkSpeed();
-        return new DownData(clear, board.getViewData(), isGameOver);
+    @Override
+    public DownData onTick() {
+        return processMovement(board.moveBrickDown(), false);
+    }
+
+    @Override
+    public DownData onDownEvent(MoveEvent event) {
+        boolean isSoftDrop = (event.getEventSource() == EventSource.USER);
+        return processMovement(board.moveBrickDown(), isSoftDrop);
     }
 
     @Override
     public ViewData onLeftEvent(MoveEvent event) {
-        board.moveBrickLeft();
-        return board.getViewData();
+        return handleDirection(board.moveBrickLeft());
     }
 
     @Override
     public ViewData onRightEvent(MoveEvent event) {
-        board.moveBrickRight();
-        return board.getViewData();
+        return handleDirection(board.moveBrickRight());
     }
 
     @Override
     public ViewData onUpEvent(MoveEvent event) {
-        board.moveBrickUp();
-        return board.getViewData();
+        return handleDirection(board.moveBrickUp());
     }
 
     @Override
@@ -129,20 +125,10 @@ public class GameController implements InputEventListener {
         if (!gameModeRules.isHardDropAllowed()) {
             return new DownData(null, board.getViewData(), false);
         }
-        ((SimpleBoard) board).hardDrop();
-        board.mergeBrickToBackground();
-        ClearRow clear = board.clearRows();
-
-        if (clear.getLinesRemoved() > 0) {
-            board.getScore().add(clear.getScoreBonus());
+        if (board instanceof SimpleBoard) {
+            ((SimpleBoard) board).hardDrop();
         }
-
-        boolean isGameOver = !board.createNewBrick();
-
-        gameRenderer.refreshGameBackground(board.getBoardMatrix());
-        checkSpeed();
-
-        return new DownData(clear, board.getViewData(), isGameOver);
+        return handleLocking();
     }
 
     @Override
