@@ -2,7 +2,6 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
@@ -118,7 +117,4 @@
          </children>
       </StackPane>
    </children>
-   <cursor>
-      <Cursor fx:constant="DISAPPEAR" />
-   </cursor>
 </Pane>

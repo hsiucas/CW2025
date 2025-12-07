@@ -17,8 +17,6 @@ public class MainMenuController implements Initializable {
 
     @FXML private VBox menuContainer;
     @FXML private Button playButton;
-    @FXML private Button instructionsButton;
-    @FXML private Button exitButton;
 
     public void setNavigator(AppNavigator navigator) {
         this.navigator = navigator;
@@ -26,9 +24,7 @@ public class MainMenuController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Platform.runLater(() -> {
-            playButton.requestFocus();
-        });
+        FocusTraverser.setupKeyboardOnly(menuContainer, playButton);
     }
 
     @FXML

@@ -3,12 +3,27 @@ package com.comp2042.controller;
 import com.comp2042.application.AppNavigator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 
-public class GameModeController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class GameModeController implements Initializable {
+
     private AppNavigator navigator;
+
+    @FXML private VBox gameContainer;
+    @FXML private Button classicButton;
 
     public void setNavigator(AppNavigator navigator) {
         this.navigator = navigator;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        FocusTraverser.setupKeyboardOnly(gameContainer, classicButton);
     }
 
     @FXML
