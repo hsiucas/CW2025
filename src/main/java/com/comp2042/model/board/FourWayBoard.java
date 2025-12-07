@@ -1,5 +1,6 @@
 package com.comp2042.model.board;
 
+import com.comp2042.logic.collision.FourWayClearHandler;
 import com.comp2042.logic.rules.GameModeRules;
 import com.comp2042.logic.scoring.Level;
 import com.comp2042.logic.scoring.Lines;
@@ -31,6 +32,7 @@ public class FourWayBoard implements Board {
     private final BrickSpawnHandler brickSpawnHandler;
     private GameModeRules rules;
     private final BrickHolder brickHolder;
+    private final FourWayClearHandler fourWayClearHandler;
 
     private final Level level;
 
@@ -47,6 +49,7 @@ public class FourWayBoard implements Board {
         brickRotator = new BrickRotator();
         brickSpawnHandler = new BrickSpawnHandler();
         this.brickHolder = new BrickHolder();
+        this.fourWayClearHandler = new FourWayClearHandler();
 
         level = new Level();
     }
@@ -132,10 +135,11 @@ public class FourWayBoard implements Board {
 
     @Override
     public ClearRow clearRows() {
-        ClearRow clearRow = landingHandler.handleClearRows(currentGameMatrix);
+        ClearRow clearRow = fourWayClearHandler.handleClearFourWay(currentGameMatrix);
         currentGameMatrix = clearRow.getNewMatrix();
         if (clearRow.getLinesRemoved() > 0) {
             lines.add(clearRow.getLinesRemoved());
+            score.add(clearRow.getScoreBonus());
         }
         return clearRow;
     }
