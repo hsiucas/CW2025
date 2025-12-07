@@ -45,4 +45,9 @@ public class GameModeController implements Initializable {
     private void handle4WayButton(ActionEvent event) {
         navigator.loadGameScene(AppNavigator.GameMode.FOUR_WAY);
     }
+
+    @FXML
+    private void handleReturnButton(ActionEvent event) {
+        navigator.toMainMenu();
+    }
 }
