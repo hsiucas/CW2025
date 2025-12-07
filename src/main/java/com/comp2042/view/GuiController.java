@@ -23,6 +23,8 @@ import com.comp2042.logic.board.ViewData;
 
 public class GuiController implements Initializable, GameLoopListener {
 
+    private static final int FONT_SIZE = 38;
+
     @FXML private GridPane gamePanel;
     @FXML private GridPane brickPanel;
     @FXML private GridPane nextBrick;
@@ -45,9 +47,7 @@ public class GuiController implements Initializable, GameLoopListener {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.gameRenderer = new GameRenderer(gamePanel, brickPanel, nextBrick, nextBrick2, nextBrick3, holdBrick);
-
-        Font.loadFont(getClass().getClassLoader().getResource("fonts/PressStart2P.ttf").toExternalForm(), 38);
+        Font.loadFont(getClass().getClassLoader().getResource("fonts/PressStart2P.ttf").toExternalForm(), FONT_SIZE);
         gamePanel.setFocusTraversable(true);
         brickPanel.setManaged(false);
 
@@ -157,6 +157,16 @@ public class GuiController implements Initializable, GameLoopListener {
 
     public void setGameMode(AppNavigator.GameMode mode) {
         this.currentGameMode = mode;
+
+        BoardRenderConfiguration configuration;
+        if (currentGameMode == AppNavigator.GameMode.FOUR_WAY) {
+            configuration = BoardRenderConfiguration.fourWay();
+        } else {
+            configuration = BoardRenderConfiguration.standard();
+        }
+
+        this.gameRenderer = new GameRenderer(gamePanel, brickPanel, nextBrick, nextBrick2, nextBrick3, holdBrick, configuration);
+
     }
 
     public AppNavigator.GameMode getCurrentGameMode() {

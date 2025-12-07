@@ -86,8 +86,10 @@ public class AppNavigator {
             URL location = getClass().getClassLoader().getResource(fxmlFileName);
             FXMLLoader fxmlLoader = new FXMLLoader(location);
             Parent root = fxmlLoader.load();
+
             GuiController controller = fxmlLoader.getController();
 
+            controller.setGameMode(mode);
             Scene scene = new Scene(root);
             stage.setScene(scene);
 
@@ -99,8 +101,9 @@ public class AppNavigator {
             }
 
             GameController gameController = new GameController(controller, rules, board);
-            controller.setGameMode(mode);
+
             double speed = rules.getInitialSpeedDelay();
+
             controller.setAppNavigator(this);
             controller.setEventListener(gameController);
             controller.bindScore(gameController.scoreProperty());
@@ -108,6 +111,7 @@ public class AppNavigator {
             controller.bindLevel(gameController.levelProperty());
             controller.initGameView(gameController.getBoardMatrix(), gameController.getViewData());
             controller.startGameLoop(speed);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
