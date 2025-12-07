@@ -10,7 +10,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         AppNavigator appNavigator = new AppNavigator(primaryStage);
-        appNavigator.toStartScreen();
+        appNavigator.toPreSplash();
     }
 
     public static void main(String[] args) {

@@ -1,10 +1,6 @@
 package com.comp2042.application;
 
-import com.comp2042.controller.GameConfiguration;
-import com.comp2042.controller.GameController;
-import com.comp2042.controller.GameModeController;
-import com.comp2042.controller.MainMenuController;
-import com.comp2042.controller.StartScreenController;
+import com.comp2042.controller.*;
 import com.comp2042.logic.rules.*;
 import com.comp2042.model.board.*;
 import com.comp2042.model.bricks.tetromino.RandomBrickGenerator;
@@ -23,6 +19,11 @@ public class AppNavigator {
         this.stage = stage;
         this.stage.setResizable(false);
         this.stage.sizeToScene();
+    }
+
+    public void toPreSplash() {
+        loadScene("preSplashScreen.fxml");
+        SoundManager.getInstance().playGarbage();
     }
 
     public void toStartScreen() {
@@ -53,7 +54,9 @@ public class AppNavigator {
 
             Object controller = fxmlLoader.getController();
 
-            if (controller instanceof StartScreenController) {
+            if (controller instanceof PreSplashController) {
+                ((PreSplashController) controller).setNavigator(this);
+            } else if (controller instanceof StartScreenController) {
                 ((StartScreenController) controller).setNavigator(this);
             } else if (controller instanceof MainMenuController) {
                 ((MainMenuController) controller).setNavigator(this);
