@@ -18,6 +18,11 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Represents the standard Tetris board (10x20 grid).
+ * Implements the core logic for gravity, collision detection, and line clearing
+ * for Classic, Zen, and Survival modes.
+ */
 public class SimpleBoard implements Board {
     private static final int Y_OFFSET_IN_GARBAGE_ROW = -1;
 
@@ -38,6 +43,13 @@ public class SimpleBoard implements Board {
     private final Level level;
     private final BrickHolder brickHolder;
 
+    /**
+     * Constructs a new SimpleBoard.
+     *
+     * @param height         Number of rows.
+     * @param width          Number of columns.
+     * @param brickGenerator The generator used to create new bricks.
+     */
     public SimpleBoard(int height, int width, BrickGenerator brickGenerator) {
         this.height = height;
         this.width = width;
@@ -178,6 +190,13 @@ public class SimpleBoard implements Board {
         level.levelProperty().set(rules.getInitialLevel());
     }
 
+    /**
+     * Adds a row of "garbage" blocks at the bottom of the screen.
+     * Used in Survival Mode to increase difficulty.
+     *
+     * @param isIndestructible If true, the row cannot be cleared.
+     * @return True if adding the row pushes blocks off the top (Game Over), false otherwise.
+     */
     public boolean addGarbageRow(boolean isIndestructible) {
         if (MatrixOperations.isGameOver(currentGameMatrix)) {
             return true;
@@ -204,6 +223,10 @@ public class SimpleBoard implements Board {
         return swapped;
     }
 
+    /**
+     * Performs a hard drop, moving the brick instantly to the bottom.
+     * Adds score based on the distance dropped.
+     */
     public void hardDrop() {
         int rowsFallen = brickMover.hardDrop(
                 currentGameMatrix,

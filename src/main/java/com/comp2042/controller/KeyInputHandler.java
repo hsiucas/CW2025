@@ -13,6 +13,11 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+/**
+ * Handles raw keyboard input during the game loop.
+ * Converts JavaFX KeyEvents into semantic game events (like MOVE_LEFT, ROTATE)
+ * and dispatches them to the {@link InputEventListener}.
+ */
 public class KeyInputHandler implements EventHandler<KeyEvent> {
     private final InputEventListener eventListener;
     private final Runnable pauseToggleAction;
@@ -20,6 +25,15 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
     private final BooleanProperty isGameOver;
     private final GuiController guiController;
 
+    /**
+     * Constructs a new KeyInputHandler.
+     *
+     * @param eventListener     The listener that processes game logic events.
+     * @param pauseToggleAction A runnable to execute when the pause key is pressed.
+     * @param isPaused          Property indicating if the game is currently paused.
+     * @param isGameOver        Property indicating if the game is over.
+     * @param guiController     The main GUI controller for accessing game state/mode.
+     */
     public KeyInputHandler(InputEventListener eventListener, Runnable pauseToggleAction, BooleanProperty isPaused, BooleanProperty isGameOver,  GuiController guiController) {
         this.eventListener = eventListener;
         this.pauseToggleAction = pauseToggleAction;
@@ -28,6 +42,12 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
         this.guiController = guiController;
     }
 
+    /**
+     * Handles the key press event.
+     * Maps keys (WASD, Arrows, Space, etc.) to specific game actions based on the current Game Mode.
+     *
+     * @param keyEvent The key event to process.
+     */
     @Override
     public void handle(KeyEvent keyEvent) {
         if (isPaused.get() || isGameOver.get()) {

@@ -12,8 +12,18 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 
+/**
+ * Manages navigation between different scenes.
+ * Responsible for loading FXML files, setting up controllers and switching contents of the primary stage.
+ */
+
 public class AppNavigator {
     private final Stage stage;
+
+    /**
+     * Constructs new AppNavigator with given primary stage.
+     * @param stage Primary stage where scenes will be displayed.
+     */
 
     public AppNavigator(Stage stage) {
         this.stage = stage;
@@ -21,30 +31,60 @@ public class AppNavigator {
         this.stage.sizeToScene();
     }
 
+    /**
+     * Navigates to pre-splash screen with disclaimer and intro.
+     * Plays sound effect.
+     */
+
     public void toPreSplash() {
         loadScene("preSplashScreen.fxml");
         SoundManager.getInstance().playGarbage();
     }
+
+    /**
+     * Navigates to start screen.
+     * Plays title music.
+     */
 
     public void toStartScreen() {
         loadScene("startScreen.fxml");
         SoundManager.getInstance().playTitleMusic();
     }
 
+    /**
+     * Navigates to main menu.
+     * Plays title music.
+     */
+
     public void toMainMenu() {
         loadScene("mainMenu.fxml");
         SoundManager.getInstance().playTitleMusic();
     }
+
+    /**
+     * Navigates to game mode selection screen.
+     * Plays title music.
+     */
 
     public void toGameModeSelection() {
         loadScene("gameSelectionLayout.fxml");
         SoundManager.getInstance().playTitleMusic();
     }
 
+    /**
+     * Navigates to instructions (How-to) screen.
+     * Plays instructions music.
+     */
+
     public void toInstructionsScreen() {
         loadScene("instructionsLayout.fxml");
         SoundManager.getInstance().playInstructionsMusic();
     }
+
+    /**
+     * Helper method to load generic FXML scene and set navigator on its controller.
+     * @param fxmlPath Resource path to FXML file.
+     */
 
     private void loadScene(String fxmlPath) {
         try {
@@ -74,6 +114,12 @@ public class AppNavigator {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Loads main game scene based on selected game mode.
+     * Sets up Board, Rules, Renderer and GameController.
+     * @param mode Selected {@link GameMode}.
+     */
 
     public void loadGameScene(GameMode mode) {
         GameModeRules rules = createRules(mode);
@@ -128,9 +174,19 @@ public class AppNavigator {
         }
     }
 
+    /**
+     * Enumeration of game modes.
+     */
+
     public enum GameMode {
         CLASSIC, ZEN, SURVIVAL, FOUR_WAY
     }
+
+    /**
+     * Factory method to create appropriate rules object for given game modes.
+     * @param mode The game mode.
+     * @return A {@link GameModeRules} implementation for selected mode.
+     */
 
     public GameModeRules createRules(GameMode mode) {
         return switch (mode) {

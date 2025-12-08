@@ -7,6 +7,11 @@ import javafx.scene.media.MediaPlayer;
 
 import java.net.URL;
 
+/**
+ * Responsible for managing and playing all audio in the game.
+ * It handles background music (MediaPlayer) and sound effects (AudioClip).
+ */
+
 public class SoundManager {
     private static SoundManager instance;
 
@@ -52,10 +57,20 @@ public class SoundManager {
         }
     }
 
+    /**
+     * Returns the singleton instance of the SoundManager.
+     * @return The SoundManager instance.
+     */
+
     public static SoundManager getInstance() {
         if (instance == null) instance = new SoundManager();
         return instance;
     }
+
+    /**
+     * Plays the specific background music for a selected game mode.
+     * @param gameMode The game mode to play music for.
+     */
 
     public void playGameModeMusic(GameMode gameMode) {
         String path = switch (gameMode) {
@@ -67,17 +82,35 @@ public class SoundManager {
         playTrack(path, true);
     }
 
+    /**
+     * Plays the main title screen music.
+     */
+
     public void playTitleMusic() {
         playTrack(TITLE_MUSIC, true);
     }
+
+    /**
+     * Plays instructions music.
+     */
 
     public void playInstructionsMusic() {
         playTrack(INSTRUCTIONS_MUSIC, true);
     }
 
+    /**
+     * Plays game over jingle.
+     */
+
     public void playGameOverMusic() {
         playTrack(GAME_OVER_MUSIC, false);
     }
+
+    /**
+     * Internal method to play a music track.
+     * @param path The resource path to the music file.
+     * @param loop Whether the music should loop indefinitely.
+     */
 
     public void playTrack(String path, boolean loop) {
         if (isMusicMuted) return;
@@ -111,6 +144,10 @@ public class SoundManager {
         }
     }
 
+    /**
+     * Stops currently playing music.
+     */
+
     public void stopBackgroundMusic() {
         if (backgroundMusic != null) {
             backgroundMusic.stop();
@@ -119,10 +156,18 @@ public class SoundManager {
         currentSong = "";
     }
 
+    /**
+     * Loads sound effect.
+     */
+
     private AudioClip loadSound(String path) {
         URL url = getClass().getClassLoader().getResource(path);
         return (url != null) ? new AudioClip(url.toExternalForm()) : null;
     }
+
+    /**
+     * Plays sound effect.
+     */
 
     private void playSound(AudioClip audioClip) {
         if (!isMusicMuted && audioClip != null) {
@@ -130,38 +175,67 @@ public class SoundManager {
         }
     }
 
+    /**
+     * Plays movement SFX.
+     */
     public void playMove() {
         playSound(moveSound);
     }
 
+    /**
+     * Plays rotating SFX.
+     */
     public void playRotate() {
         playSound(rotateSound);
     }
 
+    /**
+     * Plays brick landing SFX.
+     */
     public void playLand() {
         playSound(landSound);
     }
 
+    /**
+     * Plays gravity SFX.
+     */
     public void playGravityFall() {
         playSound(gravityFallSound);
     }
 
+    /**
+     * Plays level-up SFX.
+     */
     public void playLevelUp() {
         playSound(levelUpSound);
     }
 
+    /**
+     * Plays garbage row spawn SFX.
+     */
     public void playGarbage() {
         playSound(garbageSound);
     }
 
+    /**
+     * Plays game over SFX.
+     */
     public void playGameOver() {
         playSound(gameOverNotifySound);
     }
 
+    /**
+     * Plays selection SFX.
+     */
     public void playSelectSound() {
         playSound(selectSound);
     }
 
+    /**
+     * Plays a sound effect based on the number of lines cleared.
+     * Plays a special sound for a "Tetris" (4 lines).
+     * @param lines The number of lines cleared.
+     */
     public void playClear(int lines) {
         if (lines >= 4) {
             playSound(clearTetrisSound);
@@ -170,12 +244,20 @@ public class SoundManager {
         }
     }
 
+    /**
+     * Pauses the currently playing background music.
+     * This is typically called when the game is paused or the window loses focus.
+     */
     public void pauseBGM() {
         if (backgroundMusic != null && !isMusicMuted) {
             backgroundMusic.pause();
         }
     }
 
+    /**
+     * Resumes the background music from where it was paused.
+     * Called when the game is unpaused.
+     */
     public void resumeBGM() {
         if (backgroundMusic != null && !isMusicMuted) {
             backgroundMusic.play();

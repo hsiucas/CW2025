@@ -1,5 +1,10 @@
 package com.comp2042.logic.rules;
 
+/**
+ * Implements the rules for 4-Way (Welltris-style) Mode.
+ * Gravity is essentially disabled (extremely slow) to allow the player to move the brick
+ * in any direction freely before manually locking it or hitting a wall.
+ */
 public class FourWayRules implements GameModeRules {
     private static final double FOUR_WAY_GRAVITY = 999999;
 

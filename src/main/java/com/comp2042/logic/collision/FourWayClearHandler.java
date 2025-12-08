@@ -1,8 +1,19 @@
 package com.comp2042.logic.collision;
 
+/**
+ * Handles the specialized line-clearing logic for the 4-Way game mode.
+ * In this mode, lines are cleared towards the center of the board rather than strictly downwards.
+ */
 public class FourWayClearHandler {
     private static final int SCORE_BONUS = 55;
 
+    /**
+     * Checks for and clears full rows and columns in the 4-Way board matrix.
+     * Cleared lines cause blocks to shift towards the center of the board.
+     *
+     * @param matrix The current game board matrix.
+     * @return A {@link ClearRow} object with the updated matrix and calculated score.
+     */
     public ClearRow handleClearFourWay(int[][] matrix) {
         int size = matrix.length;
         int linesCleared = 0;
@@ -26,7 +37,7 @@ public class FourWayClearHandler {
 
         return new ClearRow(linesCleared, matrix, scoreBonus);
     }
-
+    
     private boolean isRowFull(int[][] matrix, int row) {
         for (int col :  matrix[row]) {
             if (col == 0) return false;

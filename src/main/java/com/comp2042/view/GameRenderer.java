@@ -9,6 +9,10 @@ import java.util.List;
 
 import static com.comp2042.model.bricks.core.BrickColourFactory.getFillColor;
 
+/**
+ * Responsible for rendering the game state onto the JavaFX GridPanes.
+ * Draws the background grid, the active brick, the ghost brick, and the next/hold previews.
+ */
 public class GameRenderer {
     private static final int BRICK_SIZE = 20;
     private static final int SMALL_BRICK_SIZE = 19;
@@ -28,6 +32,17 @@ public class GameRenderer {
     private final List<Rectangle> ghostBricks = new ArrayList<>();
     private final BoardRenderConfiguration configuration;
 
+    /**
+     * Constructs a GameRenderer.
+     *
+     * @param gamePanel     The main grid for the board background.
+     * @param brickPanel    The overlay grid for the active brick.
+     * @param nextBrick     The grid for the primary next piece preview.
+     * @param nextBrick2    The grid for the secondary preview.
+     * @param nextBrick3    The grid for the tertiary preview.
+     * @param holdBrick     The grid for the held piece.
+     * @param configuration The configuration settings for board offsets.
+     */
     public GameRenderer(GridPane gamePanel, GridPane brickPanel, GridPane nextBrick, GridPane nextBrick2, GridPane nextBrick3, GridPane holdBrick, BoardRenderConfiguration configuration) {
         this.gamePanel = gamePanel;
         this.brickPanel = brickPanel;
@@ -38,6 +53,11 @@ public class GameRenderer {
         this.configuration = configuration;
     }
 
+    /**
+     * Initializes the background grid with empty rectangles.
+     *
+     * @param boardMatrix The initial board state.
+     */
     public void initBackground(int[][] boardMatrix) {
         displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
         gamePanel.getChildren().clear();
@@ -49,6 +69,11 @@ public class GameRenderer {
             }
     }
 
+    /**
+     * Initializes the rectangles for the active brick.
+     *
+     * @param brick The view data containing the brick's shape.
+     */
     public void initBrick(ViewData brick) {
         brickPanel.getChildren().clear();
         rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
@@ -61,12 +86,22 @@ public class GameRenderer {
             }
     }
 
+    /**
+     * Updates the colors of the background grid based on the board matrix.
+     *
+     * @param board The current state of the board.
+     */
     public void refreshGameBackground(int[][] board) {
         for (int row = configuration.getHiddenTopRows(); row < board.length; row++)
             for (int col = 0; col < board[row].length; col++)
                 displayMatrix[row][col].setFill(getFillColor(board[row][col]));
     }
 
+    /**
+     * Updates the position and color of the active brick, ghost brick, and previews.
+     *
+     * @param brick The current view data.
+     */
     public void refreshBrick(ViewData brick) {
         double xPos = configuration.getxOffset()
                         + brick.getxPosition()
@@ -93,6 +128,11 @@ public class GameRenderer {
         renderHoldBrick(brick.getHeldBrickData());
     }
 
+    /**
+     * Draws the ghost brick (landing preview) at the calculated landing position.
+     *
+     * @param brick The view data containing ghost coordinates.
+     */
     private void drawGhostBrick(ViewData brick) {
         if (!ghostBricks.isEmpty()) {
             brickPanel.getChildren().removeAll(ghostBricks);
@@ -118,6 +158,11 @@ public class GameRenderer {
         }
     }
 
+    /**
+     * Updates the "Next Piece" preview panels.
+     *
+     * @param nextBrickData A list of matrices for upcoming bricks.
+     */
     public void previewPanel(List<int[][]> nextBrickData){
         nextBrick.getChildren().clear();
         nextBrick2.getChildren().clear();
@@ -133,6 +178,13 @@ public class GameRenderer {
         }
     }
 
+    /**
+     * Helper to render a single brick into a target grid.
+     *
+     * @param targetGrid The GridPane to render into.
+     * @param brick      The brick shape matrix.
+     * @param brickSize  The size of the rectangles to draw.
+     */
     public void singlePreview(GridPane targetGrid, int[][] brick, int brickSize) {
         targetGrid.getChildren().clear();
         for (int row = 0; row < brick.length; row++)
@@ -142,6 +194,11 @@ public class GameRenderer {
 
     }
 
+    /**
+     * Updates the "Hold" panel with the currently held brick.
+     *
+     * @param heldBrickData The matrix of the held brick.
+     */
     public void renderHoldBrick(int[][] heldBrickData) {
         if (holdBrick != null) {
             holdBrick.getChildren().clear();

@@ -17,6 +17,11 @@ import com.comp2042.logic.board.ViewData;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Represents the board for the 4-Way game mode.
+ * In this mode, bricks spawn in the center and can move in all four directions.
+ * Line clearing works differently, clearing towards the center.
+ */
 public class FourWayBoard implements Board {
     private final int size;
     private int[][] currentGameMatrix;
@@ -36,6 +41,12 @@ public class FourWayBoard implements Board {
 
     private final Level level;
 
+    /**
+     * Constructs a new FourWayBoard.
+     *
+     * @param size           The dimension of the square board (size x size).
+     * @param brickGenerator The generator used to create new bricks.
+     */
     public FourWayBoard(int size, BrickGenerator brickGenerator) {
         this.size = size;
         currentGameMatrix = new int[size][size];
@@ -133,6 +144,11 @@ public class FourWayBoard implements Board {
         currentGameMatrix = landingHandler.mergeBrick(currentGameMatrix, rotationState.getCurrentShape(), currentOffset);
     }
 
+    /**
+     * Clears completed rows or columns using the 4-Way specific logic.
+     *
+     * @return A {@link ClearRow} object detailing the results.
+     */
     @Override
     public ClearRow clearRows() {
         ClearRow clearRow = fourWayClearHandler.handleClearFourWay(currentGameMatrix);
