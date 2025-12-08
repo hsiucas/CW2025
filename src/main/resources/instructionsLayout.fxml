@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+
+<StackPane fx:id="rootPane" onKeyPressed="#handleKeyPress" prefHeight="377.0" prefWidth="419.0" stylesheets="@window_style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.comp2042.controller.InstructionsController">
+   <children>
+      <Rectangle fill="#fce9d4" height="377.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="419.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fce9d4" height="361.0" layoutX="18.0" layoutY="18.0" stroke="#cd0000" strokeType="INSIDE" strokeWidth="4.0" width="403.0" />
+      <VBox alignment="CENTER" prefHeight="377.0" prefWidth="400.0">
+         <children>
+            <VBox fx:id="pageZen" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="400.0">
+               <children>
+                  <Label alignment="TOP_CENTER" styleClass="scoreText" text="How-to: SIMPLE">
+                     <VBox.margin>
+                        <Insets bottom="8.0" />
+                     </VBox.margin>
+                  </Label>
+                  <GridPane maxHeight="-Infinity" styleClass="instructionsText">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="30.0" prefWidth="30.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="1." />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="2." GridPane.rowIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="3." GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="4." GridPane.rowIndex="3" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="5." GridPane.rowIndex="4" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="6." GridPane.rowIndex="5" />
+                        <Text lineSpacing="4.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="instructionsText" text="Use WASD/Arrows to move." wrappingWidth="340.0" GridPane.columnIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Press Shift/Tab to hold." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Press Space to hard drop." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Press N to start new game." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Text lineSpacing="4.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="instructionsText" text="Press Esc/P to pause." wrappingWidth="340.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Text lineSpacing="4.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="instructionsText" text="Press Backspace to quit." wrappingWidth="340.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                     </children>
+                  </GridPane>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+            <VBox fx:id="pageFourWay" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="400.0">
+               <children>
+                  <Label alignment="TOP_CENTER" styleClass="scoreText" text="How-to: 4-WAY">
+                     <VBox.margin>
+                        <Insets bottom="8.0" />
+                     </VBox.margin>
+                  </Label>
+                  <GridPane styleClass="instructionsText">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="30.0" prefWidth="30.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="1." />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="2." GridPane.rowIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="3." GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="4." GridPane.rowIndex="3" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="5." GridPane.rowIndex="4" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="6." GridPane.rowIndex="5" />
+                        <Text lineSpacing="4.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="instructionsText" text="Use WASD/Arrows to move." wrappingWidth="340.0" GridPane.columnIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Press Shift/Tab to hold." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Press Space to rotate." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Press N to start new game." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Text lineSpacing="4.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="instructionsText" text="Press Esc/P to pause." wrappingWidth="340.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Text lineSpacing="4.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="instructionsText" text="Press Backspace to quit." wrappingWidth="340.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                     </children>
+                  </GridPane>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</StackPane>

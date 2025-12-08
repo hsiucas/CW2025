@@ -62,6 +62,8 @@ public class AppNavigator {
                 ((MainMenuController) controller).setNavigator(this);
             } else if (controller instanceof GameModeController) {
                 ((GameModeController) controller).setNavigator(this);
+            } else if (controller instanceof InstructionsController) {
+                ((InstructionsController) controller).setNavigator(this);
             }
 
             Scene scene = new Scene(root);
